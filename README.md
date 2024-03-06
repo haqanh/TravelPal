@@ -1,2 +1,1 @@
-# travelpal
-TravelPal
+### TravelPal: Journey Together, Share Forever
