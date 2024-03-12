@@ -14,7 +14,10 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "firebase": "^10.8.1",
+    "flag-icons": "^7.2.0",
     "pinia": "^2.1.7",
+    "tailwindcss-filters": "^3.0.0",
     "vue": "^3.4.15",
     "vue-router": "^4.2.5"
   },
