@@ -1,20 +1,23 @@
 <script setup>
-import { toRef} from 'vue'
+
 
 import {Dialog as HeadlessDialog, DialogPanel,DialogTitle, TransitionRoot,TransitionChild,} from '@headlessui/vue'
-import { RouterLink, useRouter} from 'vue-router'
+//import { RouterLink, useRouter } from 'vue-router'
 
-const props = defineProps({
-  isOpened: Boolean
-})
 
-const isOpen = toRef(props, 'isOpened')
-const router = useRouter()
+// const props = defineProps({
+//   isOpened: Boolean
+// })
 
-const closeModal = () => {
-  isOpen.value = false
-  router.push({ name: 'AddGuide2' })
-}
+// const isOpen = toRef(props, 'isOpened')
+// const router = useRouter()
+
+// const closeModal = () => {
+//   isOpen.value = false
+//   router.push({ name: 'AddGuide2' })
+// }
+
+
 </script>
 
 <template>
@@ -25,8 +28,8 @@ const closeModal = () => {
         <div class="fixed inset-0 bg-black/25" />
       </TransitionChild>
 
-      
-      <div class="fixed inset-0 bg-opacity-100 z-15" v-if="isOpen" @click="closeModal">
+
+      <div class="fixed inset-0 bg-opacity-100 z-15" v-if="isOpen" @click="goToNextGuide">
         <img src="../assets/forest.jpg">
         <div class="fixed inset-0 bg-black/25" />
       </div>
@@ -96,9 +99,12 @@ const closeModal = () => {
               </div>
 
               <div class="mt-4">
-                <button type="button" class= nextBtn_style @click="closeModal">
+                <!-- <button type="button" class= nextBtn_style @click="closeModal">
                   <RouterLink to="/add-guide/second" class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">Next</RouterLink>
-                  <!-- <router-view/> -->
+                </button> -->
+
+                <button type="button" class= nextBtn_style @click="goToNextGuide">
+                  Next
                 </button>
               </div>
             </DialogPanel>
