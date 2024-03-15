@@ -15,11 +15,18 @@ const closeModal = () => {
   router.push({ name: 'AddGuide1' })
 }
 
+const places = ref([{}]); // Array to store AddPlaces components
+
+// Function to add a new AddPlaces component
+const addPlace = () => {
+  places.value.push({});
+};
+
 </script>
 
 <template>
 
-<div class="fixed inset-0 bg-white bg-opacity-100 z-15" v-if="isOpen" @click="closeModal">
+<div class=" bg-white bg-opacity-100 z-15" v-if="isOpen" @click="closeModal">
 
 <TransitionRoot appear :show="isOpen" as="template">
     <HeadlessDialog as="div" class="relative z-10">
@@ -104,7 +111,24 @@ const closeModal = () => {
                       
                     </DisclosureButton>
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
-                      <AddPlaces/>
+                      <div class="flex flex-col w-full">
+                        
+                        <div v-for="(place,index) in places" :key="index">
+                          <AddPlaces/>
+                          <br>
+                        </div>
+
+                        <div class="flex flex-row justify-end mt-2">
+                          <button @click="addPlace">
+                            <div className="w-7 h-7  bg-neutral-700 rounded-[7px]">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"
+                                class="w-7 h-7">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                              </svg>
+                            </div>
+                          </button>
+                        </div>
+                      </div>
                     </DisclosurePanel>
                 </Disclosure>
                 <br>
