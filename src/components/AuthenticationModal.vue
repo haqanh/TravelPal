@@ -53,22 +53,21 @@
                 </div>
 
                   <button
-                    class="bg-blue-500 hover:bg-blue-700 text-white block w-full py-2 px-4 mb-8 rounded focus:outline-none focus:shadow-outline"
+                    class="bg-blue-500 hover:bg-blue-700 text-white block w-full py-2 px-4 mb-4 rounded focus:outline-none focus:shadow-outline"
                     type="button" @click="SignIn">
                     Sign in
                   </button>
 
+                  <hr className="rounded-full border-2"/>
 
                   <button
-                    class="bg-gray-700 hover:bg-gray-900 text-white block w-full py-2 px-4 mb-4 rounded focus:outline-none focus:shadow-outline"
+                    class="bg-gray-700 hover:bg-gray-900 text-white block w-full py-2 px-4 mt-4 mb-4 rounded focus:outline-none focus:shadow-outline justify-center align-middle"
                     type="button" @click="SignInWithGoogle">
-                    or sign in with Google
+                    <span>
+                      <img src="../assets/google.png" class="w-6 h-6 mb-0.5 mr-1 inline-block" />
+                      or sign in with Google
+                    </span>
                   </button>
-
-
-
-
-
                   
                   <div className="flex justify-center items-center text-center gap-1">
                     <div className="Description text-zinc-900 text-xs font-normal font-['Poppins']">Don't have an account?</div>
@@ -134,15 +133,21 @@
 
 
                 <button
-                    class="bg-blue-500 hover:bg-blue-700 text-white block w-full py-2 px-4 mb-8 rounded focus:outline-none focus:shadow-outline"
+                    class="bg-blue-500 hover:bg-blue-700 text-white block w-full py-2 px-4 mb-4 rounded focus:outline-none focus:shadow-outline"
                     type="button" @click="SignUp">
                     Sign up
                 </button>
 
+                <hr className="rounded-full border-2"/>
+
                 <button
-                    class="bg-gray-700 hover:bg-gray-900 text-white block w-full py-2 px-4 mb-4 rounded focus:outline-none focus:shadow-outline"
+                    class="bg-gray-700 hover:bg-gray-900 text-white block w-full py-2 px-4 mt-4 mb-4 rounded focus:outline-none focus:shadow-outline"
                     type="button" @click="SignInWithGoogle">
-                    or sign in with Google
+                    <span>
+                      <img src="../assets/google.png" class="w-6 h-6 mb-0.5 mr-1 inline-block" />
+                      or sign in with Google
+                    </span>
+                    
                 </button>
 
 
@@ -164,7 +169,7 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import firebaseApp from "@/firebase";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useRouter } from 'vue-router';
