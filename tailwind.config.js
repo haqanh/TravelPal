@@ -1,8 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx,vue}",],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'customBlue': '#4285F4',
+      },
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
+      }
+    },
   },
   plugins: [],
 }
