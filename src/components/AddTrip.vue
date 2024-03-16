@@ -86,7 +86,7 @@
                             <img src="../assets/Airplane Take Off.png" width="15" height="15" fill="currentColor" viewBox="0 0 1792 1792">
                             <path d="M1792 710v794q0 66-47 113t-113 47h-1472q-66 0-113-47t-47-113v-794q44 49 101 87 362 246 497 345 57 42 92.5 65.5t94.5 48 110 24.5h2q51 0 110-24.5t94.5-48 92.5-65.5q170-123 498-345 57-39 100-87zm0-294q0 79-49 151t-122 123q-376 261-468 325-10 7-42.5 30.5t-54 38-52 32.5-57.5 27-50 9h-2q-23 0-50-9t-57.5-27-52-32.5-54-38-42.5-30.5q-91-64-262-182.5t-205-142.5q-62-42-117-115.5t-55-136.5q0-78 41.5-130t118.5-52h1472q65 0 112.5 47t47.5 113z"></path>
                         </span>
-                        <input type="text" id="trip-name-with-icon" class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="location" placeholder="Where?" />
+                        <input type="text" id="trip-location-with-icon" class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="location" placeholder="Where?" />
                     </div>
                 </div>
 
@@ -228,31 +228,26 @@ function handleFileChange(event) {
 </script>
 
 <style>
-  /* Style for the scrollbar */
   .scrollbar::-webkit-scrollbar {
-    width: 10px; /* Width of the scrollbar */
-    height: 10px; /* Height of the scrollbar */
+    width: 10px; 
+    height: 10px; 
   }
 
-  /* Track */
   .scrollbar::-webkit-scrollbar-track {
-    background: transparent; /* Transparent track */
+    background: transparent; 
   }
 
-  /* Handle */
   .scrollbar::-webkit-scrollbar-thumb {
-    background: #888; /* Color of the scrollbar handle */
-    border-radius: 8px; /* Radius of the scrollbar handle */
+    background: #888; 
+    border-radius: 8px;
   }
 
-  /* Handle on hover */
   .scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #555; /* Color of the scrollbar handle on hover */
+    background: #555; 
   }
 
-  /* Hide scrollbar arrows */
   .scrollbar::-webkit-scrollbar-button {
-    display: none; /* Hide the scrollbar arrows */
+    display: none; 
   }
 </style>
 
