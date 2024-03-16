@@ -32,6 +32,9 @@
               >
                 Add Trip
               </DialogTitle>
+              <button class="absolute top-4 right-4" @click="closeModal">
+                <img src="../assets/Multiply.png" alt="Close Icon" class="w-4 h-4">
+              </button>
               <div class="mt-2">
             <form>
                 <div class="mb-10">

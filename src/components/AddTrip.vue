@@ -24,11 +24,6 @@
 
       <div class="fixed inset-0 flex items-center justify-center overflow-y-auto" v-if="isfirstDialog">
         <div class="p-4 text-center">
-          <!-- Left forest background -->
-          <div class="absolute inset-0 z-0 bg-left bg-no-repeat bg-cover" style="background-image: url('../assets/forest_left.jpg');"></div>
-    
-          <!-- Right forest background -->
-          <div class="absolute inset-0 z-0 bg-right bg-no-repeat bg-cover" style="background-image: url('../assets/forest_right.jpg');"></div>
           <TransitionChild
             as="template"
             enter="duration-300 ease-out"
@@ -47,6 +42,9 @@
               >
                 Add Trip
               </DialogTitle>
+              <button class="absolute top-4 right-4" @click="closeDialog">
+                <img src="../assets/Multiply.png" alt="Close Icon" class="w-4 h-4">
+              </button>
               <div class="mt-2">
             <form>
               <div class="mb-4 text-center relative">
@@ -206,6 +204,11 @@ function openModal() {
   isfirstDialog.value = true
   isSecondDialog.value = false
 
+}
+
+function closeDialog() {
+  isfirstDialog.value = false
+  isSecondDialog.value = false
 }
 
 function handleFileChange(event) {
