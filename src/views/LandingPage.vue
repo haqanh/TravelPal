@@ -21,7 +21,7 @@ export default {
       <div className="pic " id="pic1" />
     </div>
 
-    <div className="Rectangle w-full h-full left-0 top-0 absolute bg-black bg-opacity-30" />
+    <div className="overlay w-full h-full left-0 top-0 absolute bg-black bg-opacity-30" />
 
     <div className="container ml-20 pl-16 block">
       <img
