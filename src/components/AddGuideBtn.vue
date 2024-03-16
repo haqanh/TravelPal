@@ -21,6 +21,24 @@ function openSecondModal() {
   isFirstOpen.value = false
   isSecondOpen.value = true
 }
+
+const selectedPhoto = ref(null);
+
+function handleFileChange(event) {
+  const file = event.target.files[0];
+  if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      selectedPhoto.value = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    console.log(selectedPhoto)
+  } else {
+    // Reset selectedPhoto or show error message
+    selectedPhoto.value = null;
+    alert('Please select a JPEG or JPG or PNG file.');
+  }
+}
 </script>
 
 <template>
@@ -59,9 +77,21 @@ function openSecondModal() {
               <br />
 
               <div class="mt-2">
-                <div class="relative">
-                  <input type="file" id="rounded-email" class="photoInput_style" />
-                </div>
+                  <div class="place-self-auto items-center justify-center flex">
+                    <label for="dropzone-file" class=" flex items-center justify-center border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-500 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600" @contextmenu.prevent="confirmRemove">
+                        <div class=" flex flex-col items-center justify-center w-52 h-40">
+
+                            <!-- Show uploaded image or camera icon based on whether an image has been uploaded -->
+                            <img v-if="selectedPhoto" :src="selectedPhoto" alt="Uploaded Image" class="object-contain w-52 h-40">
+                            <template v-else>
+                              <img class=" text-gray-500 dark:text-gray-400" aria-hidden="true" src="../assets/Camera.png">
+                              <p class="mb-2 text-sm text-gray-500 dark:text-gray-400 font-semibold">Add Photo</p>
+                            </template>
+                        </div>
+                        <input id="dropzone-file" type="file" class="hidden"  @change="handleFileChange" accept=".jpg, .jpeg, .png"/>
+                    </label>
+                  </div> 
+                
                 <br />
 
                 <h5>Guide Title</h5>
@@ -92,7 +122,7 @@ function openSecondModal() {
                   <input
                     type="text"
                     id="email-with-icon"
-                    class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                    class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-transparent"
                     name="guideTitle"
                     placeholder="Guide Title"
                   />
@@ -127,7 +157,7 @@ function openSecondModal() {
                   <input
                     type="text"
                     id="destination"
-                    class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                    class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-transparent"
                     name="destination"
                     placeholder="Where?"
                   />
@@ -138,7 +168,7 @@ function openSecondModal() {
 
                 <label class="text-gray-700" for="name">
                   <textarea
-                    class="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                    class="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-transparent"
                     id="comment"
                     placeholder="Enter your comment"
                     name="comment"

@@ -16,12 +16,17 @@ import AddGeneralAdvice from './AddGeneralAdvice.vue'
 
 const isOpen = ref(true)
 
-const places = ref([{}]) // Array to store AddPlaces components
+const places = ref([{id: 1, visible: true}]) // Array to store AddPlaces components
 const advices = ref([{ id: 1, content: '', visible: true }])
 
 // Function to add a new AddPlaces component
+let pId = 2;
 const addPlace = () => {
-  places.value.push({})
+  const newPlace = {
+    id: `place-${pId++}`, // Increment the id for each new advice
+    visible: true
+  };
+  places.value.push({newPlace})
 }
 
 // Initialize an id counter
@@ -45,6 +50,17 @@ function deleteAdvice(advice) {
     const index = this.advices.indexOf(advice);
     if (index !== -1) {
       this.advices.splice(index, 1);
+    }
+  }
+}
+
+//either v-show or deletePlace is the issue
+function deletePlace(place) {
+  if(confirm('Are you sure you want to remove the image?')) {
+    place.visible = !place.visible;
+    const index = this.places.indexOf(place);
+    if (index !== -1) {
+      this.places.splice(index, 1);
     }
   }
 }
@@ -94,6 +110,7 @@ function updateContent(advice, content) {
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                         <div v-for="(advice) in advices" :key="advice.id" @contextmenu.prevent="deleteAdvice(advice)">
+              
                             <AddGeneralAdvice v-show="advice.visible" :content="advice.content" @content-updated="updateContent(advice, $event)"/>
                             <br>
                         </div>
@@ -135,8 +152,12 @@ function updateContent(advice, content) {
                     </DisclosureButton>
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
-                        <div v-for="(place, index) in places" :key="index">
-                          <AddPlaces />
+                        <!-- <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
+                            <AddPlaces v-show="place.visible"/> -->
+
+                          <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
+                            <div v-if="place.visible"></div>
+                            <AddPlaces />
                           <br />
                         </div>
 
@@ -170,8 +191,9 @@ function updateContent(advice, content) {
                     </DisclosureButton>
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
-                        <div v-for="(place, index) in places" :key="index">
-                          <AddPlaces />
+                        <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
+                            <div v-if="place.visible"></div>
+                            <AddPlaces/>
                           <br />
                         </div>
 
@@ -209,8 +231,9 @@ function updateContent(advice, content) {
                     </DisclosureButton>
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
-                        <div v-for="(place, index) in places" :key="index">
-                          <AddPlaces />
+                        <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
+                            <div v-if="place.visible"></div>
+                            <AddPlaces/>
                           <br />
                         </div>
 
@@ -248,8 +271,9 @@ function updateContent(advice, content) {
                     </DisclosureButton>
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
-                        <div v-for="(place, index) in places" :key="index">
-                          <AddPlaces />
+                        <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
+                            <div v-if="place.visible"></div>
+                            <AddPlaces/>
                           <br />
                         </div>
 

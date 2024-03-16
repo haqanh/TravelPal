@@ -1,10 +1,6 @@
 <script setup>
 import { ref } from 'vue';
 
-// Define props
-const props = {
-  content: String
-};
 
 // Define data
 const inputContent = ref("");
