@@ -1,46 +1,57 @@
 <script lang="ts">
-import { ref } from 'vue';
-import AuthenticationModal from '@/components/AuthenticationModal.vue';
+import { ref } from 'vue'
+import AuthenticationModal from '@/components/AuthenticationModal.vue'
 
 export default {
   components: {
     AuthenticationModal
   },
   setup() {
-    const showModal = ref(false);
-    return { showModal };
+    const showModal = ref(false)
+    return { showModal }
   }
-};
+}
 </script>
 
-<template> 
-<div className="LandingPage">
-  
-  <div className="backgroundcontainer object-cover block bg-center w-screen h-screen">
-        <div className='pic ' id='pic3' />
-        <div className='pic ' id='pic2' />
-        <div className='pic ' id='pic1' />
-  </div>
-
-  <div className="Rectangle w-full h-full left-0 top-0 absolute bg-black bg-opacity-30" />
-
-  <div className="container ml-20 pl-16 block">  
-    <img className="Logo w-32 h-32 left-[73px] top-[376px] absolute shadow" src='@/assets/logo.svg'/>
-    <div className="TravelPal w-96 h-48 left-[227px] top-[376px] absolute text-white text-9xl font-semibold font-['Poppins']">TravelPal</div>
-    <div className="Slogan h-20 left-[73px] top-[525px] absolute">
-      <span className="SloganFirst text-white text-5xl font-semibold font-['Poppins']">Journey Together, </span>
-      <span className="SloganSecond text-yellow-600 text-5xl font-semibold font-['Poppins']">Share Forever</span>
-      
+<template>
+  <div className="LandingPage">
+    <div className="backgroundcontainer object-cover block bg-center w-screen h-screen">
+      <div className="pic " id="pic3" />
+      <div className="pic " id="pic2" />
+      <div className="pic " id="pic1" />
     </div>
-    <div>
-    <button @click="showModal = true" className="LoginButton w-60 h-16 left-[73px] top-[612px] absolute bg-yellow-600 hover:bg-yellow-600 rounded-full shadow text-white text-xl text-center hover:translate-x-1 hover:transition-transform hover:-translate-y-1 hover:shadow-xl font-semibold font-['Poppins']"> Start Traveling </button>
+
+    <div className="Rectangle w-full h-full left-0 top-0 absolute bg-black bg-opacity-30" />
+
+    <div className="container ml-20 pl-16 block">
+      <img
+        className="Logo w-32 h-32 left-[73px] top-[376px] absolute shadow"
+        src="@/assets/logo.svg"
+      />
+      <div
+        className="TravelPal w-96 h-48 left-[227px] top-[376px] absolute text-white text-9xl font-semibold font-['Poppins']"
+      >
+        TravelPal
+      </div>
+      <div className="Slogan h-20 left-[73px] top-[525px] absolute">
+        <span className="SloganFirst text-white text-5xl font-semibold font-['Poppins']"
+          >Journey Together,
+        </span>
+        <span className="SloganSecond text-yellow-600 text-5xl font-semibold font-['Poppins']"
+          >Share Forever</span
+        >
+      </div>
+      <div>
+        <button
+          @click="showModal = true"
+          className="LoginButton w-60 h-16 left-[73px] top-[612px] absolute bg-yellow-600 hover:bg-yellow-600 rounded-full shadow text-white text-xl text-center hover:translate-x-1 hover:transition-transform hover:-translate-y-1 hover:shadow-xl font-semibold font-['Poppins']"
+        >
+          Start Traveling
+        </button>
+      </div>
+      <AuthenticationModal :open="showModal" @close="showModal = false" />
     </div>
-    <AuthenticationModal :open="showModal" @close="showModal = false" />
-
   </div>
-  
-
-</div>
 </template>
 
 <style scoped>
@@ -62,7 +73,7 @@ export default {
   }
   100% {
     transform: translateY(0);
-    opacity: 1; 
+    opacity: 1;
   }
 }
 
@@ -75,7 +86,7 @@ export default {
   }
 }
 
-.TravelPal{
+.TravelPal {
   opacity: 0;
   animation: slideIn 1.25s ease-in-out 1 forwards;
   animation-delay: 0.2s;

@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import { useRouter } from 'vue-router'
-import LandingPage from './views/LandingPage.vue'
+import { RouterView } from 'vue-router'
+
 
 import { onMounted, ref } from 'vue'
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-
-const router = useRouter()
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const isLoggedIn = ref(false);
 
-let auth;
+let auth : any;
 
 onMounted(() => {
   auth = getAuth();
@@ -23,17 +20,12 @@ onMounted(() => {
   });
 });
 
-const handleSignOut = () => {
-  signOut(auth).then(() => {
-    router.push('/');
-  });
-};
 
 
 </script>
 
 <template>
-<!--button @click="handleSignOut">Sign Out</button-->
+
 <router-view></router-view>
 </template>
 
