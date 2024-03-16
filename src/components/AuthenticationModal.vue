@@ -173,9 +173,9 @@ import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessu
 import firebaseApp from "@/firebase";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useRouter } from 'vue-router';
-
-
-
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+const $toast = useToast();
 
 // Props declaration if not already done
 const props = defineProps({
@@ -212,11 +212,16 @@ const SignIn = () => {
       // Signed in 
       const user = userCredential.user;
       console.log(user);
+      $toast.success("Welcome back!", {
+        position: 'top',}
+        );
       router.push('/about')
   })
   .catch((error) => {
       const errorMessage = error.message;
-      alert(errorMessage);
+      $toast.error(errorMessage, {
+        position: 'top',}
+        );
   });
 };
 
@@ -224,7 +229,9 @@ const SignIn = () => {
 const SignUp = () => {
 
 if (signUpPassword.value !== signUpConfirmPassword.value) {
-  alert("Passwords do not match");
+    $toast.error("Passwords do not match!", {
+                position: 'top',}
+                );
 } else {
     const auth = getAuth(firebaseApp);
         createUserWithEmailAndPassword(auth, signUpEmail.value, signUpPassword.value)
@@ -232,11 +239,16 @@ if (signUpPassword.value !== signUpConfirmPassword.value) {
             // Signed in 
             const user = userCredential.user;
             console.log(user);
+            $toast.success("Welcome to TravelPal!", {
+                          position: 'top',}
+                          );
             router.push('/about')
         })
         .catch((error) => {
             const errorMessage = error.message;
-            alert(errorMessage);
+            $toast.error(errorMessage, {
+                        position: 'top',}
+                        );
         });
     };
 };
@@ -263,13 +275,13 @@ const SignInWithGoogle = () => {
     // The AuthCredential type that was used.
     const credential = GoogleAuthProvider.credentialFromError(error);
     // ...
-    alert(errorMessage);
+    $toast.error(errorMessage, {
+        position: 'top',}
+        );
   });
 }
 
 const emit = defineEmits(['close']);
-
-
 
 function closeModal() {
 
@@ -277,6 +289,4 @@ function closeModal() {
   emit('close');
   
   }
-
-
 </script>

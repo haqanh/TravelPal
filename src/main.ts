@@ -8,6 +8,9 @@ import router from './router'
 
 import firebase from "firebase/compat/app";
 
+import ToastPlugin from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-bootstrap.css';
+
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 const firebaseConfig = {
@@ -28,5 +31,6 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+app.use(ToastPlugin)
 
 app.mount('#app')
