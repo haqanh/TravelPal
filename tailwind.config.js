@@ -7,7 +7,7 @@ export default{
         'secondary': '#91959D',
       },
       fontFamily: {
-        'poppins': ['Poppins', 'sans-serif'],
+        'sans': ['Poppins', 'sans-serif'],
       },
       container: {
         padding: "2rem",

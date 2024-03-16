@@ -148,7 +148,7 @@ function openSecondModal() {
                   </textarea>
                 </label>
               </div>
-              <div class="mt-4">
+              <div class="mt-4 justify-center flex items-center">
                 <button @click="openSecondModal" class="nextBtn_style">Next</button>
 
                 <!-- <button
@@ -170,13 +170,13 @@ function openSecondModal() {
   <AddGuide2 v-if="isSecondOpen" />
 </template>
 
-<style>
+<style scoped>
 .addBtn_position {
   @apply fixed inset-0 flex items-center justify-center;
 }
 
 .addBtn_style {
-  @apply rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75;
+  @apply rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75;
 }
 
 .panel_style {
@@ -192,6 +192,6 @@ function openSecondModal() {
 }
 
 .nextBtn_style {
-  @apply inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
+  @apply inline-flex justify-center rounded-lg border-2 shadow-lg border-[#C1C1C1] px-3 py-1 text-sm font-normal text-[#434343] hover:bg-[#C1C1C1] hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1C1C1] focus-visible:ring-offset-2;
 }
 </style>

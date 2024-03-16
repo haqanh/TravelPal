@@ -1,7 +1,7 @@
 <script setup>
 
 
-import {Dialog as HeadlessDialog, DialogPanel,DialogTitle, TransitionRoot,TransitionChild,} from '@headlessui/vue'
+import {Dialog as HeadlessDialog, DialogPanel, DialogTitle, TransitionRoot,TransitionChild,} from '@headlessui/vue'
 //import { RouterLink, useRouter } from 'vue-router'
 
 
