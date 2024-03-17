@@ -16,18 +16,15 @@ import AddGeneralAdvice from './AddGeneralAdvice.vue'
 
 const isOpen = ref(true)
 
-const places = ref([{id: 1, visible: true}]) // Array to store AddPlaces components
-const advices = ref([{ id: 1, content: '', visible: true }])
-
-// Function to add a new AddPlaces component
-let pId = 2;
-const addPlace = () => {
-  const newPlace = {
-    id: `place-${pId++}`, // Increment the id for each new advice
-    visible: true
-  };
-  places.value.push({newPlace})
+function submit() {
+  isOpen.value = false
 }
+
+const advices = ref([{ id: 1, content: '', visible: true }])
+const places = ref([{id: 1, visible: true}])
+const placesToEat = ref([{id:1, visible: true}])
+const placesToStay = ref([{id:1, visible: true}])
+const placesNearby = ref([{id:1, visible: true}])
 
 // Initialize an id counter
 let adId = 2;
@@ -40,12 +37,8 @@ const addAdvice = (content) => {
   advices.value.push(newAdvice);
 }
 
-function submit() {
-  isOpen.value = false
-}
-
 function deleteAdvice(advice) {
-  if(confirm('Are you sure you want to remove the image?')) {
+  if(confirm('Are you sure you want to remove the Advice?')) {
     advice.visible = !advice.visible;
     const index = this.advices.indexOf(advice);
     if (index !== -1) {
@@ -54,9 +47,22 @@ function deleteAdvice(advice) {
   }
 }
 
-//either v-show or deletePlace is the issue
+function updateContent(advice, content) {
+      advice.content = content;
+}
+
+// Function to add a new AddPlaces component
+let pId = 2;
+const addPlace = () => {
+  const newPlace = {
+    id: `place-${pId++}`, 
+    visible: true
+  };
+  places.value.push({newPlace})
+}
+
 function deletePlace(place) {
-  if(confirm('Are you sure you want to remove the image?')) {
+  if(confirm('Are you sure you want to remove the Place?')) {
     place.visible = !place.visible;
     const index = this.places.indexOf(place);
     if (index !== -1) {
@@ -65,8 +71,62 @@ function deletePlace(place) {
   }
 }
 
-function updateContent(advice, content) {
-      advice.content = content;
+let peId = 2;
+const addPlaceToEat = () => {
+  const newPlace = {
+    id: `place-${peId++}`, // Increment the id for each new advice
+    visible: true
+  };
+  placesToEat.value.push({newPlace})
+}
+
+function deletePlaceToEat(place) {
+  if(confirm('Are you sure you want to remove the Place?')) {
+    place.visible = !place.visible;
+    const index = this.placesToEat.indexOf(place);
+    if (index !== -1) {
+      this.placesToEat.splice(index, 1);
+    }
+  }
+}
+
+
+let psId = 2;
+const addPlaceToStay = () => {
+  const newPlace = {
+    id: `place-${psId++}`, // Increment the id for each new advice
+    visible: true
+  };
+  placesToStay.value.push({newPlace})
+}
+
+function deletePlaceToStay(place) {
+  if(confirm('Are you sure you want to remove the Place?')) {
+    place.visible = !place.visible;
+    const index = this.placesToStay.indexOf(place);
+    if (index !== -1) {
+      this.placesToStay.splice(index, 1);
+    }
+  }
+}
+
+let pnId = 2;
+const addPlaceNearby = () => {
+  const newPlace = {
+    id: `place-${pnId++}`, // Increment the id for each new advice
+    visible: true
+  };
+  placesNearby.value.push({newPlace})
+}
+
+function deletePlaceNearby(place) {
+  if(confirm('Are you sure you want to remove the Place?')) {
+    place.visible = !place.visible;
+    const index = this.placesNearby.indexOf(place);
+    if (index !== -1) {
+      this.placesNearby.splice(index, 1);
+    }
+  }
 }
 
 </script>
@@ -191,14 +251,14 @@ function updateContent(advice, content) {
                     </DisclosureButton>
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
-                        <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
+                        <div v-for="(place) in placesToEat" :key="place.id" @contextmenu.prevent="deletePlaceToEat(place)">
                             <div v-if="place.visible"></div>
                             <AddPlaces/>
                           <br />
                         </div>
 
                         <div class="flex flex-row justify-end mt-2">
-                          <button @click="addPlace">
+                          <button @click="addPlaceToEat">
                             <div className="w-7 h-7  bg-neutral-700 rounded-[7px]">
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="white" class="w-7 h-7">
@@ -231,14 +291,14 @@ function updateContent(advice, content) {
                     </DisclosureButton>
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
-                        <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
+                        <div v-for="(place) in placesToStay" :key="place.id" @contextmenu.prevent="deletePlaceToStay(place)">
                             <div v-if="place.visible"></div>
                             <AddPlaces/>
                           <br />
                         </div>
 
                         <div class="flex flex-row justify-end mt-2">
-                          <button @click="addPlace">
+                          <button @click="addPlaceToStay">
                             <div className="w-7 h-7  bg-neutral-700 rounded-[7px]">
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="white" class="w-7 h-7">
@@ -271,14 +331,14 @@ function updateContent(advice, content) {
                     </DisclosureButton>
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
-                        <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
+                        <div v-for="(place) in placesNearby" :key="place.id" @contextmenu.prevent="deletePlaceNearby(place)">
                             <div v-if="place.visible"></div>
                             <AddPlaces/>
                           <br />
                         </div>
 
                         <div class="flex flex-row justify-end mt-2">
-                          <button @click="addPlace">
+                          <button @click="addPlaceNearby">
                             <div className="w-7 h-7  bg-neutral-700 rounded-[7px]">
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="white" class="w-7 h-7">

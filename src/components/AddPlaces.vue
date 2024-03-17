@@ -100,7 +100,7 @@
 }
 
 .input_style {
-  @apply mr-8 rounded-r-lg border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-transparent
+  @apply mr-8 rounded-r-lg border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-white shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-transparent
   /* @apply mr-8 flex-1 rounded-r-lg w-full py-2 px-4 text-gray-700 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-neutral-700 bg-neutral-700; */
 }
 </style>
