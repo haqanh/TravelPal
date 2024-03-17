@@ -4,7 +4,7 @@
       <svg class="w-7 h-7 mt-0.5 text-customBlue dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
       </svg>
-      <p class="ml-2 text-xl text-customBlue">Back</p>
+      <p class="ml-2 text-xl text-customBlue select-none">Back</p>
     </div>
     <div v-else></div>
     <div class="flex justify-between w-36 pt-1 justify-self-center">
@@ -29,8 +29,8 @@
       <div v-else class="rounded-full bg-gray-300 my-1 w-3 h-3"></div>
     </div>
     <div @click="goNextPage(), pageChange()" class="flex cursor-pointer justify-self-end">
-      <div v-if="page == 5" class="mr-2 text-xl text-customBlue">Finish</div>
-      <div v-else class="mr-2 text-xl text-customBlue">Next</div>
+      <div v-if="page == 5" class="mr-2 text-xl text-customBlue select-none">Finish</div>
+      <div v-else class="mr-2 text-xl text-customBlue select-none">Next</div>
       <svg class="w-7 h-7 mt-0.5 text-customBlue dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
       </svg>

@@ -10,31 +10,31 @@
       <p class="text-left text-lg self-center">Have you used TravelPal before?</p>
       <div class="flex items-center ml-16">
         <input @change="$emit('update-used-travelpal-before', $event.target.value)" :checked="usedTravelpalBefore === 'yes'" type="radio" value="yes" id="radio1yes" />
-        <label for="radio1yes" class="h-fit text-lg ml-2 mb-0.5">Yes</label>
+        <label for="radio1yes" class="h-fit text-lg ml-2 mb-0.5 select-none">Yes</label>
       </div>
       <div class="flex items-center ml-16">
         <input @change="$emit('update-used-travelpal-before', $event.target.value)" :checked="usedTravelpalBefore === 'no'" type="radio" value="no" id="radio1no" />
-        <label for="radio1no" class="h-fit text-lg ml-2 mb-0.5">No</label>
+        <label for="radio1no" class="h-fit text-lg ml-2 mb-0.5 select-none">No</label>
       </div>
 
       <p class="text-left text-lg self-center">Have you used other similar apps before?</p>
       <div class="flex items-center ml-16">
         <input @change="$emit('update-used-similar-apps-before', $event.target.value)" :checked="usedSimilarAppsBefore === 'yes'" type="radio" value="yes" id="radio2yes" />
-        <label for="radio2yes" class="h-fit text-lg ml-2 mb-0.5">Yes</label>
+        <label for="radio2yes" class="h-fit text-lg ml-2 mb-0.5 select-none">Yes</label>
       </div>
       <div class="flex items-center ml-16">
         <input @change="$emit('update-used-similar-apps-before', $event.target.value)" :checked="usedSimilarAppsBefore === 'no'" type="radio" value="no" id="radio2no" />
-        <label for="radio2no" class="h-fit text-lg ml-2 mb-0.5">No</label>
+        <label for="radio2no" class="h-fit text-lg ml-2 mb-0.5 select-none">No</label>
       </div>
 
       <p class="text-left text-lg self-center">Do you want to make your activity private or public?</p>
       <div class="flex items-center ml-16">
         <input @change="$emit('update-private-or-public', $event.target.value)" :checked="privateOrPublic === 'public'" type="radio" value="public" id="public" />
-        <label for="public" class="h-fit text-lg ml-2 mb-0.5">Public</label>
+        <label for="public" class="h-fit text-lg ml-2 mb-0.5 select-none">Public</label>
       </div>
       <div class="flex items-center ml-16">
         <input @change="$emit('update-private-or-public', $event.target.value)" :checked="privateOrPublic === 'private'" type="radio" value="private" id="private" />
-        <label for="private" class="h-fit text-lg ml-2 mb-0.5">Private</label>
+        <label for="private" class="h-fit text-lg ml-2 mb-0.5 select-none">Private</label>
       </div>
     </div>
   </div> 
