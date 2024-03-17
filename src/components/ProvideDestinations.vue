@@ -6,7 +6,7 @@
     <div class="py-5">
       <p class="w-8/12 m-auto text-xl mb-2">We will help you create a bucket list of the top countries you want to visit</p>
     </div>
-    <div class="w-10/12 m-auto h-[290px] mb-6 flex justify-between">
+    <div class="m-auto h-[290px] mb-6 flex justify-center">
       <SearchCountries :selectedCountries="selectedCountries" @toggle-country="toggleCountry"/>
     </div>
   </div>
