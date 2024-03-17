@@ -9,14 +9,23 @@
     <div v-else></div>
     <div class="flex justify-between w-36 pt-1 justify-self-center">
       <div v-if="page == 1" class="rounded-full bg-blue-500 w-5 h-5"></div>
+      <div v-else-if="page > 1" class="rounded-full bg-blue-500 my-1 w-3 h-3"></div>
       <div v-else class="rounded-full bg-gray-300 my-1 w-3 h-3"></div>
+
       <div v-if="page == 2" class="rounded-full bg-blue-500 w-5 h-5"></div>
+      <div v-else-if="page > 2" class="rounded-full bg-blue-500 my-1 w-3 h-3"></div>
       <div v-else class="rounded-full bg-gray-300 my-1 w-3 h-3"></div>
+
       <div v-if="page == 3" class="rounded-full bg-blue-500 w-5 h-5"></div>
+      <div v-else-if="page > 3" class="rounded-full bg-blue-500 my-1 w-3 h-3"></div>
       <div v-else class="rounded-full bg-gray-300 my-1 w-3 h-3"></div>
+
       <div v-if="page == 4" class="rounded-full bg-blue-500 w-5 h-5"></div>
+      <div v-else-if="page > 4" class="rounded-full bg-blue-500 my-1 w-3 h-3"></div>
       <div v-else class="rounded-full bg-gray-300 my-1 w-3 h-3"></div>
+      
       <div v-if="page == 5" class="rounded-full bg-blue-500 w-5 h-5"></div>
+      <div v-else-if="page > 5" class="rounded-full bg-blue-500 my-1 w-3 h-3"></div>
       <div v-else class="rounded-full bg-gray-300 my-1 w-3 h-3"></div>
     </div>
     <div @click="goNextPage(), pageChange()" class="flex cursor-pointer justify-self-end">

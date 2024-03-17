@@ -9,7 +9,7 @@
     <div>
       <div class="w-8/12 m-auto mt-5 mb-10 flex justify-between">
         <div class="text-lg mt-0.5">Travel frequency</div>
-        <select class="block px-3 py-2 w-[200px] text-gray-700 bg-white border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500" name="travelFrequency">
+        <select @change="$emit('update-travel-freq', $event.target.value)" class="block px-3 py-2 w-[200px] text-gray-700 bg-white border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
           <option value="">
             Prefer not to say
           </option>
@@ -29,7 +29,7 @@
       </div>
       <div class="w-8/12 m-auto mt-5 mb-10 flex justify-between">
         <div class="text-lg mt-0.5">Travel companions</div>
-        <select class="block px-3 py-2 w-[200px] text-gray-700 bg-white border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500" name="travelCompanions">
+        <select @change="$emit('update-travel-companions', $event.target.value)" class="block px-3 py-2 w-[200px] text-gray-700 bg-white border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
           <option value="">
             Prefer not to say
           </option>
@@ -50,6 +50,14 @@
 
 <script>
 export default {
-
+  data() {
+    return {
+    }
+  },
+  props: {
+  },
+  emits:['update-travel-freq', 'update-travel-companions'],
+  methods: {
+  }
 }
 </script>

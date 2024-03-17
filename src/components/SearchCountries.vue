@@ -2,7 +2,7 @@
   <div class="border-2 border-gray-400 rounded relative overflow-auto">
     <input type="search" placeholder="Search Countries..." class="sticky w-11/12 mx-auto top-0 text-xl pt-3 pb-2 pl-3 border-b-2 border-gray-400 outline-none" />
     <div class="grid grid-cols-3 gap-y-2 w-11/12 py-4 mx-auto">
-      <CountryCheckbox v-for="country in countries" :country="country" :key="country" />
+      <CountryCheckbox v-for="country in countries" @toggle-country="toggleCountry" :country="country" :selectedCountries="selectedCountries" :key="country" />
     </div>
   </div>
 </template>
@@ -42,6 +42,14 @@ export default {
   },
   components: {
     CountryCheckbox
+  },
+  props: {
+    selectedCountries: Array,
+  },
+  methods: {
+    toggleCountry(country) {
+      this.$emit('toggle-country', country)
+    }
   }
 }
 </script>
