@@ -5,6 +5,9 @@ import AddTrip from '../components/AddTrip.vue'
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import LandingPage from '@/views/LandingPage.vue'
 
+import Home from '../views/Home.vue'
+import ViewTrip from '../views/ViewTrip.vue'
+import Sidebar from '../components/SideBar.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,7 +43,15 @@ const router = createRouter({
       name: 'GuideView',
       component: GuideView,
     },
-  
+    {
+      path: '/viewtrip',
+      name: 'viewtrip',
+      component: ViewTrip
+    },
+    { path: '/sidebar',
+      name: 'sidebar',
+      component: Sidebar
+  }
   ]
 });
 
