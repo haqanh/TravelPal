@@ -172,7 +172,7 @@ function handleFileChange(event) {
                     id="comment"
                     placeholder="Enter your comment"
                     name="comment"
-                    rows="5"
+                    rows="2"
                     cols="40"
                   >
                   </textarea>
