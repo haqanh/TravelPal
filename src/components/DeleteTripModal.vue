@@ -2,7 +2,7 @@
     <div class="fixed inset-0 flex items-center justify-center bg-white shadow-lg rounded-2xl dark:bg-gray-800">
       <div class="w-1/2 h-auto text-center border border-2 rounded-[4rem] shadow-lg p-10 flex flex-col justify-between">
         <div class="flex flex-row items-center justify-start mr-8 h-full">
-          <img src="../assets/Delete Warning.png" class="w-25 h-25">
+          <img src="../assets/Delete Warning.svg" class="w-25 h-25">
           <p class="mt-4 ml-4 justify-center text-[40px] font-bold text-gray-800 dark:text-gray-200">
             Confirm Deletion
           </p>
