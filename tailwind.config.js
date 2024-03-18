@@ -13,8 +13,8 @@ export default {
 
       fontFamily: {
         'sans': ['Poppins', 'sans-serif'],
+        'poppins': ['Poppins', 'sans-serif'],
       },
-
       container: {
         padding: "2rem",
         center: true,
@@ -29,5 +29,4 @@ export default {
     }
   },
   plugins: [],
-}
-
+};
