@@ -6,7 +6,7 @@ import GuideCard from './components/GuideCard.vue'
 
 <template>
   <!-- <AddGuideBtn/> -->
-  <GuideCard />
+  <!-- <GuideCard /> -->
   <router-view/>
 </template>
 
