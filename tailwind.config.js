@@ -1,13 +1,19 @@
-export default{
-  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    './index.html',
+    './src/**/*.{vue,js,ts,jsx,tsx}',
+  ],
   theme: {
     extend: {
       colors: {
         'primary': '#3F3D3D',
         'secondary': '#91959D',
       },
+
       fontFamily: {
         'sans': ['Poppins', 'sans-serif'],
+        'poppins': ['Poppins', 'sans-serif'],
       },
       container: {
         padding: "2rem",

@@ -11,9 +11,13 @@
       "path": "./tsconfig.vitest.json"
     }
   ],
+<<<<<<< HEAD
   "compilerOptions": {
     "types": ["vue"],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   }
 }
+=======
+}
+>>>>>>> main
