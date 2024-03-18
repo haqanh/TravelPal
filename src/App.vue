@@ -7,9 +7,9 @@ import ViewTrip from '@/views/ViewTrip.vue'
 
 <template>
   <div id="app" class="flex flex-col min-h-screen">
-    <NavBar />
-    <SideBar />
-    <!-- <ViewTrip /> -->
+    <!-- <NavBar />
+    <SideBar /> -->
+    <ViewTrip />
     <RouterView />
   </div>
 </template>
