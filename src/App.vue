@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import AddTrip from './components/TripCard.vue'
+import AddTrip from './components/AddTrip.vue'
 
 </script>
 
