@@ -9,6 +9,7 @@ import Home from '../views/Home.vue'
 import ViewTrip from '../views/ViewTrip.vue'
 import Sidebar from '../components/SideBar.vue'
 import UserProfiling from '../components/UserProfiling.vue'
+import AddGuideBtn from '../components/AddGuideBtn.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,19 @@ const router = createRouter({
     path: '/add-guide/second',
       name: 'AddGuide2',
       component: AddGuide2,
+    },
+    {
+      path: '/add-guide',
+      name: 'AddGuideBtn',
+      component: AddGuideBtn,
+    },
+    {
+      path: '/home',
+      name: 'Home',
+      component: Home,
+      meta: {
+        requiresAuth: true,
+      }
     },
     {
       path: '/guide-view',
