@@ -74,13 +74,4 @@ export default {
         this.$router = useRouter()
     }
 }
-
-// const isVisible = ref(true)
-// const router = useRouter()
-
-// const openGuide = () => {
-//     isVisible.value = false
-//     router.push({ name: 'GuideView' })
-// }
-
 </script>

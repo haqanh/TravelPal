@@ -1,8 +1,8 @@
 <template>
-    <div class="flex flex-col items-center justify-center min-h-screen">
-        <div class="flex flex-col items-start space-y-5">
-            <div class="bg-gray shadow-lg w-64 rounded-2xl" v-on:click="openGuide" v-if="isVisible">
-                <div class="relative h-48 overflow-hidden bg-gray-200 rounded-2xl">
+    <div class="flex flex-col items-center justify-center">
+        <div class="flex flex-col items-start space-y-3">
+            <div class="bg-gray shadow-lg w-56 rounded-2xl" v-on:click="openGuide" v-if="isVisible">
+                <div class="relative h-48 overflow-hidden bg-gray-200 rounded-3xl">
                     <img src='../assets/MountTaranaki.jpg' alt="Image" class="object-cover rounded-t-2xl h-full w-full">
                     <div class="flex absolute top-0 right-0 p-3">
                         <img src="../assets/ProfilePicWoman.jpg" alt="profile"
@@ -10,12 +10,12 @@
                     </div>
                     <div class="flex items-center absolute bottom-0 left-0 p-3">
                         <img src="../assets/NZflag.svg" alt="flag">
-                        <span class="ml-2 text-white text-semibold">Mount Taranaki</span>
+                        <span class="ml-2 text-white text-semibold text-xs">Mount Taranaki</span>
                     </div>
                 </div>
             </div>
-            <div class="w-64 flex justify-between items-center">
-                <span class="px-4 py-1 text-semibold text-sm rounded-full text-green-700 border border-green-700">
+            <div class="w-56 flex justify-between items-center">
+                <span class="px-4 py-1 text-semibold text-xs rounded-lg text-green-700 border border-green-700">
                     Nature
                 </span>
                 <div @click="likeGuide">
