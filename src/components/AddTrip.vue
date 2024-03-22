@@ -9,7 +9,7 @@
     </button>
   </div>
   <TransitionRoot appear :show="isfirstDialog" as="template">
-    <Dialog as="div" class="relative z-10">
+    <HeadlessDialog as="div" class="relative z-10">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -162,67 +162,76 @@
           </TransitionChild>
         </div>
       </div>
-    </Dialog>
+    </HeadlessDialog>
   </TransitionRoot>
   <AddTripSecondPopUp v-if="isSecondDialog" />
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script>
 import {
   TransitionRoot,
   TransitionChild,
-  Dialog,
+  Dialog as HeadlessDialog,
   DialogPanel,
   DialogTitle,
 } from '@headlessui/vue'
 import AddTripSecondPopUp from './AddTripSecondPopUp.vue'
 import Datepicker from 'vue3-datepicker';
 
-const isfirstDialog = ref(false)
-const isSecondDialog = ref(false)
-const selectedPhoto = ref(null)
-const selectedStartDate = ref(null);
-const selectedEndDate = ref(null);
-const showStartDatepicker = ref(false);
-const showEndDatepicker = ref(false);
-
-function clearStartDate() {
-  selectedStartDate.value = null;
-}
-
-function clearEndDate() {
-  selectedEndDate.value = null;
-}
-
-function navigateToNextStep() {
-  isfirstDialog.value = false
-  isSecondDialog.value = true
-}
-
-function openModal() {
-  isfirstDialog.value = true
-  isSecondDialog.value = false
-
-}
-
-function closeDialog() {
-  isfirstDialog.value = false
-  isSecondDialog.value = false
-}
-
-function handleFileChange(event) {
-  const file = event.target.files[0];
-  if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      selectedPhoto.value = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  } else {
-    // Reset selectedPhoto or show error message
-    selectedPhoto.value = null;
-    alert('Please select a JPEG or JPG or PNG file.');
+export default {
+  data() {
+    return {
+      isfirstDialog: false,
+      isSecondDialog: false,
+      selectedPhoto: null,
+      selectedStartDate: null,
+      selectedEndDate: null,
+      showStartDatepicker: false,
+      showEndDatepicker: false,
+    }
+  },
+  methods: {
+    clearStartDate() {
+      this.selectedStartDate = null;
+    },
+    clearEndDate() {
+      this.selectedEndDate = null;
+    },
+    navigateToNextStep() {
+      this.isfirstDialog = false;
+      this.isSecondDialog = true;
+    },
+    openModal() {
+      this.isfirstDialog = true;
+      this.isSecondDialog = false;
+    },
+    closeDialog() {
+      this.isfirstDialog = false;
+      this.isSecondDialog = false;
+    },
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.selectedPhoto = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        // Reset selectedPhoto or show error message
+        this.selectedPhoto = null;
+        alert('Please select a JPEG or JPG or PNG file.');
+      }
+    }
+  },
+  components: {
+    TransitionRoot,
+    TransitionChild,
+    HeadlessDialog,
+    DialogPanel,
+    DialogTitle,
+    AddTripSecondPopUp,
+    Datepicker,
   }
 }
 </script>

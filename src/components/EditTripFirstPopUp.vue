@@ -9,7 +9,7 @@
       </button>
     </div>
     <TransitionRoot appear :show="isfirstDialog" as="template">
-      <Dialog as="div" class="relative z-10">
+      <HeadlessDialog as="div" class="relative z-10">
         <TransitionChild
           as="template"
           enter="duration-300 ease-out"
@@ -162,70 +162,81 @@
             </TransitionChild>
           </div>
         </div>
-      </Dialog>
+      </HeadlessDialog>
     </TransitionRoot>
     <EditTripSecondPopUp v-if="isSecondDialog" />
   </template>
   
-  <script setup>
-  import { ref } from 'vue'
-  import {
+  <script>
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog as HeadlessDialog,
+  DialogPanel,
+  DialogTitle,
+} from '@headlessui/vue';
+import EditTripSecondPopUp from './EditTripSecondPopUp.vue';
+import Datepicker from 'vue3-datepicker';
+
+export default {
+  data() {
+    return {
+      isOpen: false,
+      isfirstDialog: false,
+      isSecondDialog: false,
+      selectedPhoto: null,
+      selectedStartDate: null,
+      selectedEndDate: null,
+      showStartDatepicker: false,
+      showEndDatepicker: false,
+    };
+  },
+  methods: {
+    clearStartDate() {
+      this.selectedStartDate = null;
+    },
+    clearEndDate() {
+      this.selectedEndDate = null;
+    },
+    navigateToNextStep() {
+      this.isfirstDialog = false;
+      this.isSecondDialog = true;
+    },
+    openModal() {
+      this.isOpen = true;
+      this.isfirstDialog = true;
+    },
+    closeDialog() {
+      this.isOpen = false;
+      this.isfirstDialog = false;
+      this.isSecondDialog = false;
+    },
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.selectedPhoto = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        // Reset selectedPhoto or show error message
+        this.selectedPhoto = null;
+        alert('Please select a JPEG, JPG, or PNG file.');
+      }
+    },
+  },
+  components: {
     TransitionRoot,
     TransitionChild,
-    Dialog,
+    HeadlessDialog,
     DialogPanel,
     DialogTitle,
-  } from '@headlessui/vue'
-  import EditTripSecondPopUp from './EditTripSecondPopUp.vue'
-  import Datepicker from 'vue3-datepicker';
-  
-  const isfirstDialog = ref(false)
-  const isSecondDialog = ref(false)
-  const selectedPhoto = ref(null)
-  const selectedStartDate = ref(null);
-  const selectedEndDate = ref(null);
-  const showStartDatepicker = ref(false);
-  const showEndDatepicker = ref(false);
-  
-  function clearStartDate() {
-    selectedStartDate.value = null;
-  }
-  
-  function clearEndDate() {
-    selectedEndDate.value = null;
-  }
-  
-  function navigateToNextStep() {
-    isfirstDialog.value = false
-    isSecondDialog.value = true
-  }
-  
-  function openModal() {
-    isfirstDialog.value = true
-    isSecondDialog.value = false
-  
-  }
-  
-  function closeDialog() {
-    isfirstDialog.value = false
-    isSecondDialog.value = false
-  }
-  
-  function handleFileChange(event) {
-    const file = event.target.files[0];
-    if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        selectedPhoto.value = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    } else {
-      // Reset selectedPhoto or show error message
-      selectedPhoto.value = null;
-      alert('Please select a JPEG or JPG or PNG file.');
-    }
-  }
-  </script>
+    EditTripSecondPopUp,
+    Datepicker,
+  },
+};
+</script>
   
   <style>
     .scrollbar::-webkit-scrollbar {

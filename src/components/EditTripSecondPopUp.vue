@@ -1,6 +1,6 @@
 <template>
     <TransitionRoot appear :show="isOpen"  as="template" v-if="isOpen">
-        <Dialog as="div" class="relative z-10">
+        <HeadlessDialog as="div" class="relative z-10">
           <TransitionChild
             as="template"
             enter="duration-300 ease-out"
@@ -75,24 +75,36 @@
               </TransitionChild>
             </div>
           </div>
-        </Dialog>
+        </HeadlessDialog>
       </TransitionRoot>
       </template>
-      
-      <script setup>
-      import { ref } from 'vue'
+
+      <script>
       import {
         TransitionRoot,
         TransitionChild,
-        Dialog,
+        Dialog as HeadlessDialog,
         DialogPanel,
         DialogTitle,
-      } from '@headlessui/vue'
+      } from '@headlessui/vue';
       
-      const isOpen = ref(true)
-      
-      function closeModal() {
-        isOpen.value = false
-      }
+      export default {
+        data() {
+          return {
+            isOpen: true,
+          };
+        },
+        methods: {
+          closeModal() {
+            this.isOpen = false;
+          },
+        },
+        components: {
+          TransitionRoot,
+          TransitionChild,
+          HeadlessDialog,
+          DialogPanel,
+          DialogTitle,
+        },
+      };
       </script>
-      
