@@ -1,5 +1,4 @@
 <template>
-
     <div class="fixed inset-0 justify-center items-center flex" v-on:click="openGuide" v-if="isVisible">
         <div class="mx-auto bg-gray shadow-lg w-64 rounded-2xl">
             <div class="relative h-48 overflow-hidden bg-gray-200 rounded-t-2xl">
@@ -56,30 +55,32 @@
     </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script>
 import { useRouter } from 'vue-router'
 
-const isVisible = ref(true)
-const router = useRouter()
-
-const openGuide = () => {
-    isVisible.value = false
-    router.push({ name: 'GuideView' })
+export default {
+    data() {
+        return {
+            isVisible: true
+        }
+    },
+    methods: {
+        openGuide() {
+            this.isVisible = false
+            this.$router.push({ name: 'GuideView' })
+        }
+    },
+    created() {
+        this.$router = useRouter()
+    }
 }
 
-// import { defineProps } from 'vue';
+// const isVisible = ref(true)
+// const router = useRouter()
 
-// Declare props
-// defineProps({
-//   fromDate: {
-//     type: String,
-//     required: true
-//   },
-//   toDate: {
-//     type: String,
-//     required: true
-//   }
-// });
+// const openGuide = () => {
+//     isVisible.value = false
+//     router.push({ name: 'GuideView' })
+// }
 
 </script>

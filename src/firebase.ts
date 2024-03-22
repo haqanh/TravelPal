@@ -20,5 +20,4 @@ export default firebaseApp
 
 // Initialize Firestore and export
 // const db = getFirestore(firebaseApp)
-
 // export { firebaseApp, db }

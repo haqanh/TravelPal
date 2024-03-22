@@ -12,7 +12,7 @@
                 d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
             </svg>
           </span>
-
+          
           <label for="location">
             <input v-model= "location" type="text" id="location" class="input_style" name="location" placeholder="Location" />
           </label>
@@ -101,10 +101,10 @@
 
 .input_style {
   @apply mr-8 rounded-r-lg border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-white shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-transparent
-  /* @apply mr-8 flex-1 rounded-r-lg w-full py-2 px-4 text-gray-700 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-neutral-700 bg-neutral-700; */
 }
 </style>
 
+<<<<<<< Updated upstream
 <script setup>
 import { ref } from 'vue';
 
@@ -121,6 +121,18 @@ function handleFileChange(event) {
     const reader = new FileReader();
     reader.onload = (e) => {
       selectedPhoto.value = e.target.result;
+=======
+<script>
+
+export default {
+  data() {
+    return {
+      location: "",
+      tags: "",
+      cost: "",
+      summary: "",
+      selectedPhoto: null,
+>>>>>>> Stashed changes
     };
     reader.readAsDataURL(file);
     console.log(selectedPhoto)
