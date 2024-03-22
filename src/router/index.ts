@@ -9,11 +9,10 @@ import Home from '../views/Home.vue'
 import ViewTrip from '../views/ViewTrip.vue'
 import Sidebar from '../components/SideBar.vue'
 import UserProfiling from '../components/UserProfiling.vue'
-<<<<<<< Updated upstream
-=======
 import AddGuideBtn from '../components/AddGuideBtn.vue';
 import ExploreCard from '../components/ExploreCard.vue';
->>>>>>> Stashed changes
+import Explore from '../views/ExploreView.vue';
+import GuideCard from '../components/GuideCard.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,6 +63,11 @@ const router = createRouter({
     component: UserProfiling
   },
   {
+    path: '/add-guide-btn',
+    name: 'addGuideBtn',
+    component: AddGuideBtn
+  },
+  {
     path: '/explore-card',
     name: 'exploreCard',
     component: ExploreCard
@@ -71,7 +75,12 @@ const router = createRouter({
   {
     path: '/guide-card',
     name: 'guideCard',
-    component: () => import('../components/GuideCard.vue')
+    component: GuideCard
+  },
+  {
+    path: '/explore',
+    name: 'explore',
+    component: Explore
   }
   ]
 });

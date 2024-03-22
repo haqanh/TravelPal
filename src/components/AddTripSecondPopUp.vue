@@ -28,7 +28,7 @@
             >
               <DialogTitle
                 as="h3"
-                class="mb-5 text-center text-lg font-medium leading-6 text-[#3F3D3D] font-semibold text-[26px]"
+                class="mb-5 text-center text-lg leading-6 text-[#3F3D3D] font-semibold text-[26px]"
               >
                 Add Trip
               </DialogTitle>
@@ -65,7 +65,7 @@
               <div class="mt-4 text-center">
                 <button
                   type="button"
-                  class="inline-flex justify-center rounded-lg border border-[#C1C1C1] border-2 shadow-lg px-3 py-1 text-sm font-regular text-[#434343] hover:bg-[#C1C1C1] hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1C1C1] focus-visible:ring-offset-2"
+                  class="inline-flex justify-center rounded-lg border-[#C1C1C1] border-2 shadow-lg px-3 py-1 text-sm font-regular text-[#434343] hover:bg-[#C1C1C1] hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1C1C1] focus-visible:ring-offset-2"
                   @click="closeModal"
                 >
                   Save Trip

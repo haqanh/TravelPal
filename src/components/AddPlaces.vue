@@ -104,26 +104,7 @@
 }
 </style>
 
-<<<<<<< Updated upstream
-<script setup>
-import { ref } from 'vue';
-
-// Define reactive properties for data
-const location = ref('');
-const tags = ref('');
-const cost = ref('');
-const summary = ref('');
-const selectedPhoto = ref(null);
-
-function handleFileChange(event) {
-  const file = event.target.files[0];
-  if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      selectedPhoto.value = e.target.result;
-=======
 <script>
-
 export default {
   data() {
     return {
@@ -132,21 +113,30 @@ export default {
       cost: "",
       summary: "",
       selectedPhoto: null,
->>>>>>> Stashed changes
     };
-    reader.readAsDataURL(file);
-    console.log(selectedPhoto)
-  } else {
-    // Reset selectedPhoto or show error message
-    selectedPhoto.value = null;
-    alert('Please select a JPEG or JPG or PNG file.');
+  },
+  methods: {
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.selectedPhoto = e.target.result;
+        };
+        reader.readAsDataURL(file);
+        console.log(this.selectedPhoto)
+      } else {
+        // Reset selectedPhoto or show error message
+        this.selectedPhoto = null;
+        alert('Please select a JPEG or JPG or PNG file.');
+      }
+    },
+    confirmRemove(event) {
+      event.preventDefault();
+      if (confirm('Are you sure you want to remove the image?')) {
+        this.selectedPhoto = null;
+      }
+    }
   }
-}
-
-function confirmRemove(event) {
-  event.preventDefault();
-  if (confirm('Are you sure you want to remove the image?')) {
-    selectedPhoto.value = null;
-  }
-}
+};
 </script>

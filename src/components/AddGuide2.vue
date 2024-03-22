@@ -1,6 +1,4 @@
-<script setup>
-import { ref } from 'vue'
-
+<script>
 import {
   Dialog as HeadlessDialog,
   DialogPanel,
@@ -14,117 +12,105 @@ import {
 import AddPlaces from './AddPlaces.vue'
 import AddGeneralAdvice from './AddGeneralAdvice.vue'
 
-const isOpen = ref(true)
-
-function submit() {
-  isOpen.value = false
-}
-
-const advices = ref([{ id: 1, content: '', visible: true }])
-const places = ref([{id: 1, visible: true}])
-const placesToEat = ref([{id:1, visible: true}])
-const placesToStay = ref([{id:1, visible: true}])
-const placesNearby = ref([{id:1, visible: true}])
-
-// Initialize an id counter
-let adId = 2;
-const addAdvice = (content) => {
-  const newAdvice = {
-    id: `advice-${adId++}`, // Increment the id for each new advice
-    content: content,
-    visible: true
-  };
-  advices.value.push(newAdvice);
-}
-
-function deleteAdvice(advice) {
-  if(confirm('Are you sure you want to remove the Advice?')) {
-    advice.visible = !advice.visible;
-    const index = this.advices.indexOf(advice);
-    if (index !== -1) {
-      this.advices.splice(index, 1);
+export default {
+  components: {
+    HeadlessDialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionRoot,
+    TransitionChild,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    AddPlaces,
+    AddGeneralAdvice
+  }, 
+  data() {
+    return {
+      isOpen: true,
+      advices: [
+        { id: 1, content: '', visible: true }
+      ],
+      places: [
+        { id: 1, visible: true }
+      ],
+      placesToEat: [
+        { id: 1, visible: true }
+      ],
+      placesToStay: [
+        { id: 1, visible: true }
+      ],
+      placesNearby: [
+        { id: 1, visible: true }
+      ]
     }
-  }
-}
-
-function updateContent(advice, content) {
+  },
+  methods: {
+    submit() {
+      this.isOpen = false
+    },
+    addAdvice() {
+      this.advices.push({ id: this.advices.length + 1, content: '', visible: true })
+    },
+    deleteAdvice(advice) {
+      if(confirm('Are you sure you want to remove the Advice?')) {
+        advice.visible = !advice.visible;
+        const index = this.advices.indexOf(advice);
+        if (index !== -1) {
+          this.advices.splice(index, 1);
+        }
+      }
+    },
+    updateContent(advice, content) {
       advice.content = content;
-}
-
-// Function to add a new AddPlaces component
-let pId = 2;
-const addPlace = () => {
-  const newPlace = {
-    id: `place-${pId++}`, 
-    visible: true
-  };
-  places.value.push({newPlace})
-}
-
-function deletePlace(place) {
-  if(confirm('Are you sure you want to remove the Place?')) {
-    place.visible = !place.visible;
-    const index = this.places.indexOf(place);
-    if (index !== -1) {
-      this.places.splice(index, 1);
-    }
-  }
-}
-
-let peId = 2;
-const addPlaceToEat = () => {
-  const newPlace = {
-    id: `place-${peId++}`, // Increment the id for each new advice
-    visible: true
-  };
-  placesToEat.value.push({newPlace})
-}
-
-function deletePlaceToEat(place) {
-  if(confirm('Are you sure you want to remove the Place?')) {
-    place.visible = !place.visible;
-    const index = this.placesToEat.indexOf(place);
-    if (index !== -1) {
-      this.placesToEat.splice(index, 1);
-    }
-  }
-}
-
-
-let psId = 2;
-const addPlaceToStay = () => {
-  const newPlace = {
-    id: `place-${psId++}`, // Increment the id for each new advice
-    visible: true
-  };
-  placesToStay.value.push({newPlace})
-}
-
-function deletePlaceToStay(place) {
-  if(confirm('Are you sure you want to remove the Place?')) {
-    place.visible = !place.visible;
-    const index = this.placesToStay.indexOf(place);
-    if (index !== -1) {
-      this.placesToStay.splice(index, 1);
-    }
-  }
-}
-
-let pnId = 2;
-const addPlaceNearby = () => {
-  const newPlace = {
-    id: `place-${pnId++}`, // Increment the id for each new advice
-    visible: true
-  };
-  placesNearby.value.push({newPlace})
-}
-
-function deletePlaceNearby(place) {
-  if(confirm('Are you sure you want to remove the Place?')) {
-    place.visible = !place.visible;
-    const index = this.placesNearby.indexOf(place);
-    if (index !== -1) {
-      this.placesNearby.splice(index, 1);
+    },
+    addPlace() {
+      this.places.push({ id: this.places.length + 1, visible: true })
+    },
+    deletePlace(place) {
+      if(confirm('Are you sure you want to remove the Place?')) {
+        place.visible = !place.visible;
+        const index = this.places.indexOf(place);
+        if (index !== -1) {
+          this.places.splice(index, 1);
+        }
+      }
+    },
+    addPlaceToEat() {
+      this.placesToEat.push({ id: this.placesToEat.length + 1, visible: true })
+    },
+    deletePlaceToEat(place) {
+      if(confirm('Are you sure you want to remove the Place?')) {
+        place.visible = !place.visible;
+        const index = this.placesToEat.indexOf(place);
+        if (index !== -1) {
+          this.placesToEat.splice(index, 1);
+        }
+      }
+    },
+    addPlaceToStay() {
+      this.placesToStay.push({ id: this.placesToStay.length + 1, visible: true })
+    },
+    deletePlaceToStay(place) {
+      if(confirm('Are you sure you want to remove the Place?')) {
+        place.visible = !place.visible;
+        const index = this.placesToStay.indexOf(place);
+        if (index !== -1) {
+          this.placesToStay.splice(index, 1);
+        }
+      }
+    },
+    addPlaceNearby() {
+      this.placesNearby.push({ id: this.placesNearby.length + 1, visible: true })
+    },
+    deletePlaceNearby(place) {
+      if(confirm('Are you sure you want to remove the Place?')) {
+        place.visible = !place.visible;
+        const index = this.placesNearby.indexOf(place);
+        if (index !== -1) {
+          this.placesNearby.splice(index, 1);
+        }
+      }
     }
   }
 }

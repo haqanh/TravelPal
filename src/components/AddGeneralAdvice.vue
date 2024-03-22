@@ -1,15 +1,16 @@
-<script setup>
-import { ref } from 'vue';
-
-
-// Define data
-const inputContent = ref("");
-
-// Define methods
-const updateContent = () => {
-  emit('content-updated', inputContent.value);
+<script>
+export default {
+  data() {
+    return {
+      inputContent: "",
+    };
+  },
+  methods: {
+    updateContent() {
+      this.$emit('content-updated', this.inputContent);
+    },
+  },
 };
-
 </script>
 
 <template>

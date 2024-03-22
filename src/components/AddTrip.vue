@@ -38,7 +38,7 @@
             >
               <DialogTitle
                 as="h3"
-                class="text-center text-lg font-medium leading-6 text-[#3F3D3D] font-semibold text-[26px]"
+                class="text-center text-lg leading-6 text-[#3F3D3D] font-semibold text-[26px]"
               >
                 Add Trip
               </DialogTitle>
@@ -94,7 +94,7 @@
                 <!-- Select Dates Inputs -->
                 <div class="mb-4">
                   <div class="flex items-center mb-2">
-                      <div class="text-[#3F3D3D] text-lg font-semibold mr-2 font-[20px]">Dates</div>
+                      <div class="text-[#3F3D3D] text-lg font-semibold mr-2">Dates</div>
                       <div class="mr-2">
                           <img src="../assets/Calendar.svg" alt="Calendar Icon" class="w-6 h-6">
                       </div>
@@ -131,7 +131,7 @@
                 
               <!-- Cost Input -->
                 <div class="mb-4">
-                <label for="cost" class="text-[#3F3D3D] text-lg font-semibold mr-2 font-[20px]">
+                <label for="cost" class="text-[#3F3D3D] text-lg font-semibold mr-2">
                     Cost
                 </label>
                 <div class="mb-4">
@@ -152,7 +152,7 @@
               <div class="mt-4 text-center font-[]">
                 <button
                   type="button"
-                  class="inline-flex justify-center rounded-lg border border-[#C1C1C1] border-2 shadow-lg px-3 py-1 text-sm font-regular text-[#434343] hover:bg-[#C1C1C1] hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1C1C1] focus-visible:ring-offset-2"
+                  class="inline-flex justify-center rounded-lg border-[#C1C1C1] border-2 shadow-lg px-3 py-1 text-sm font-regular text-[#434343] hover:bg-[#C1C1C1] hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1C1C1] focus-visible:ring-offset-2"
                   @click="navigateToNextStep"
                 >
                   Next
