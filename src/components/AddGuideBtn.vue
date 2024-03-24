@@ -1,5 +1,4 @@
-<script setup>
-import { ref } from 'vue'
+<script>
 import AddGuide2 from './AddGuide2.vue'
 import {
   Dialog as HeadlessDialog,
@@ -9,44 +8,50 @@ import {
   TransitionChild
 } from '@headlessui/vue'
 
-const isFirstOpen = ref(false)
-const isSecondOpen = ref(false)
-
-function openFirstModal() {
-  isFirstOpen.value = true
-  isSecondOpen.value = false
-}
-
-function openSecondModal() {
-  isFirstOpen.value = false
-  isSecondOpen.value = true
-}
-
-const selectedPhoto = ref(null);
-
-function handleFileChange(event) {
-  const file = event.target.files[0];
-  if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      selectedPhoto.value = e.target.result;
-    };
-    reader.readAsDataURL(file);
-    console.log(selectedPhoto)
-  } else {
-    // Reset selectedPhoto or show error message
-    selectedPhoto.value = null;
-    alert('Please select a JPEG or JPG or PNG file.');
+export default {
+  components: {
+    AddGuide2,
+    HeadlessDialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionRoot,
+    TransitionChild
+  },
+  data() {
+    return {
+      isFirstOpen: true,
+      isSecondOpen: false,
+      selectedPhoto: null
+    }
+  },
+  methods: {
+    openSecondModal() {
+      this.isFirstOpen = false
+      this.isSecondOpen = true
+    },
+    closeModal() {
+      this.$emit('close')
+    },
+    handleFileChange(event) {
+      const file = event.target.files[0]
+      if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          this.selectedPhoto = e.target.result
+        }
+        reader.readAsDataURL(file)
+        console.log(this.selectedPhoto)
+      } else {
+        // Reset selectedPhoto or show error message
+        this.selectedPhoto = null
+        alert('Please select a JPEG, JPG, or PNG file.')
+      }
+    }
   }
 }
 </script>
 
 <template>
-  <!-- button to open modal -->
-  <div class="addBtn_position">
-    <button type="button" @click="openFirstModal" class="addBtn_style">Add Guide</button>
-  </div>
-
   <TransitionRoot appear :show="isFirstOpen" class="bg-white z-15" as="template">
     <HeadlessDialog as="div" class="relative z-10">
       <TransitionChild
@@ -72,19 +77,23 @@ function handleFileChange(event) {
             leave-from="opacity-100 scale-100"
             leave-to="opacity-0 scale-95"
           >
-            <DialogPanel class="panel_style">
-              <DialogTitle as="h3" class="addGuide_style"> Add Guide </DialogTitle>
+            <DialogPanel class="panel_style relative">
+              <div class="flex justify-between items-center">
+                  <DialogTitle class="addGuide_style text-center flex-grow"> Add Guide </DialogTitle>
+                  <img src="../assets/Multiply.svg" alt="Close" class="cursor-pointer w-6 h-6" @click="closeModal" />
+              </div>
               <br />
 
               <div class="mt-2">
                   <div class="place-self-auto items-center justify-center flex">
-                    <label for="dropzone-file" class=" flex items-center justify-center border border-gray-300 rounded-lg cursor-pointer bg-white dark:hover:bg-bray-800 dark:bg-gray-500 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600" @contextmenu.prevent="confirmRemove">
-                        <div class=" flex flex-col items-center justify-center w-52 h-40">
-
+                    <label for="dropzone-file" 
+                      :class="selectedPhoto ? 'flex items-center justify-center rounded-lg cursor-pointer' : 'flex items-center justify-center border border-gray-300 border-dashed rounded-lg cursor-pointer bg-white dark:hover:bg-bray-800 dark:bg-gray-500 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600'"
+                      @contextmenu.prevent="confirmRemove">
+                        <div class="flex flex-col items-center justify-center w-52 h-40">
                             <!-- Show uploaded image or camera icon based on whether an image has been uploaded -->
-                            <img v-if="selectedPhoto" :src="selectedPhoto" alt="Uploaded Image" class="object-contain w-52 h-40">
+                            <img v-if="selectedPhoto" :src="selectedPhoto" alt="Uploaded Image" class="object-cover rounded-lg w-52 h-40">
                             <template v-else>
-                              <img class=" text-gray-500 dark:text-gray-400" aria-hidden="true" src="../assets/Camera.png">
+                              <img class="text-gray-500 dark:text-gray-400" aria-hidden="true" src="../assets/Camera.svg">
                               <p class="mb-2 text-sm text-gray-500 dark:text-gray-400 font-semibold">Add Photo</p>
                             </template>
                         </div>
@@ -170,12 +179,12 @@ function handleFileChange(event) {
                   <textarea
                     class="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-transparent"
                     id="comment"
-                    placeholder="Enter your comment"
+                    type="text"
+                    placeholder="Write your description here"
                     name="comment"
                     rows="2"
                     cols="40"
-                  >
-                  </textarea>
+                ></textarea>
                 </label>
               </div>
               <div class="mt-4 justify-center flex items-center">
@@ -197,24 +206,16 @@ function handleFileChange(event) {
       </div>
     </HeadlessDialog>
   </TransitionRoot>
-  <AddGuide2 v-if="isSecondOpen" />
+  <AddGuide2 v-if="isSecondOpen" @close="closeModal" />
 </template>
 
 <style scoped>
-.addBtn_position {
-  @apply fixed inset-0 flex items-center justify-center;
-}
-
-.addBtn_style {
-  @apply rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75;
-}
-
 .panel_style {
   @apply w-full max-w-screen-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all;
 }
 
 .addGuide_style {
-  @apply text-lg font-medium leading-6 text-gray-900 justify-center flex items-center;
+  @apply text-2xl font-semibold leading-6 text-gray-900 justify-center ml-10 items-center;
 }
 
 .photoInput_style {

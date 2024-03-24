@@ -10,6 +10,7 @@ import Home from '../views/Home.vue'
 import ViewTrip from '../views/ViewTrip.vue'
 import Sidebar from '../components/SideBar.vue'
 import UserProfiling from '../components/UserProfiling.vue'
+import Dashboard from '../views/DashboardView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,6 +65,11 @@ const router = createRouter({
     name: 'edit-trip',
     component: EditTrip
   },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: Dashboard
+  }
   ]
 });
 

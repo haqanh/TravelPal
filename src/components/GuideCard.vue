@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center justify-center min-h-screen">
+    <div class="flex mb-10 ">
         <div class="relative max-w-[200px] h-[245px] bg-white border border-gray-200 rounded-[20px] custom-shadow dark:bg-gray-800 dark:border-gray-700">
             <img class="rounded-t-[20px] h-[180px] w-[200px] custom-shadow object-cover object-bottom" src="../assets/Marbella.jpg" alt="" />
             <div class="absolute top-0 right-0 mt-2 mr-2 flex items-center">
