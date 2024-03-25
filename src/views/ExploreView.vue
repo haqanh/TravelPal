@@ -153,33 +153,45 @@ export default {
             }
         },
     },
+    
     async mounted() {
-        const editorsChoiceData = await this.fetchEditorsChoice();
-        for (const data of editorsChoiceData) {
-            // const guidePic = await this.fetchPhoto(data.guidePicPath);
-            // const flag = await this.fetchPhoto(data.flagPath);
-            // const profilePic = await this.fetchPhoto(data.profilePicPath);
-            this.editorsChoices.push({
-                ...data,
-                guidePicPath: await this.fetchPhoto(data.guidePicPath),
-                flagPath: await this.fetchPhoto(data.flagPath),
-                profilePicPath: await this.fetchPhoto(data.profilePicPath),
-            });
-        }
-        const regionalFavData = await this.fetchRegionalFav();
-        for (const data of regionalFavData) {
-            this.regionalFavs.push({
-                ...data,
-                guidePicPath: await this.fetchPhoto(data.guidePicPath),
-                flagPath: await this.fetchPhoto(data.flagPath),
-                profilePicPath: await this.fetchPhoto(data.profilePicPath),
-            
+        const [editorsChoiceData, regionalFavData] = await Promise.all([
+            this.fetchEditorsChoice(),
+            this.fetchRegionalFav()
+        ]);
 
-            })
-        }
-        // this.guidePic = await this.fetchPhoto('guides/MountTaranaki/MountTaranaki.jpg')
-        // this.flag = await this.fetchPhoto('guides/MountTaranaki/NZflag.svg')
-        // this.profilePic = await this.fetchPhoto('guides/MountTaranaki/ProfilePicWoman.jpg')
+        const editorsChoicesPromises = editorsChoiceData.map(async data => {
+            const [guidePicPath, flagPath, profilePicPath] = await Promise.all([
+            this.fetchPhoto(data.guidePicPath),
+            this.fetchPhoto(data.flagPath),
+            this.fetchPhoto(data.profilePicPath)
+            ]);
+
+            return {
+            ...data,
+            guidePicPath,
+            flagPath,
+            profilePicPath
+            };
+        });
+
+        const regionalFavsPromises = regionalFavData.map(async data => {
+            const [guidePicPath, flagPath, profilePicPath] = await Promise.all([
+            this.fetchPhoto(data.guidePicPath),
+            this.fetchPhoto(data.flagPath),
+            this.fetchPhoto(data.profilePicPath)
+            ]);
+
+            return {
+            ...data,
+            guidePicPath,
+            flagPath,
+            profilePicPath
+            };
+        });
+
+        this.editorsChoices = await Promise.all(editorsChoicesPromises);
+        this.regionalFavs = await Promise.all(regionalFavsPromises);
     },
 }
 
