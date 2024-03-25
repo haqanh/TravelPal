@@ -1,15 +1,6 @@
 <template>
-  <div class="fixed inset-0 flex items-center justify-center">
-    <button
-      type="button"
-      @click="openModal"
-      class="rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
-    >
-      Open dialog
-    </button>
-  </div>
   <TransitionRoot appear :show="isfirstDialog" as="template">
-    <HeadlessDialog as="div" class="relative z-10">
+    <HeadlessDialog as="div" class="relative">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -54,8 +45,8 @@
                 <!-- Label for the file input, shows the camera icon if no photo selected -->
                 <label
                   for="photo-input"
-                  class="relative ml-40 mr-40 mt-5 h-20 w-15 flex items-center justify-center cursor-pointer overflow-hidden"
-                  :class="{ 'border border-dashed border-gray-500 rounded-lg': !selectedPhoto }"
+                  class="relative ml-40 mr-40 mt-5 h-20 w-15 flex items-center justify-center cursor-pointer overflow-hidden rounded-lg"
+                  :class="{ 'border border-dashed border-gray-500 rounded-lg dark:hover:bg-bray-800 dark:bg-gray-500 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600': !selectedPhoto }"
                 >
                   <div class="absolute inset-0 flex items-center justify-center">
                     <img v-if="selectedPhoto" :src="selectedPhoto" alt="Selected Photo" class="h-auto w-auto object-cover cursor-pointer" @click="openFileInput">
@@ -164,7 +155,7 @@
       </div>
     </HeadlessDialog>
   </TransitionRoot>
-  <AddTripSecondPopUp v-if="isSecondDialog" />
+  <AddTripSecondPopUp v-if="isSecondDialog" @closetrip="closeDialog" />
 </template>
 
 <script>
@@ -181,7 +172,7 @@ import Datepicker from 'vue3-datepicker';
 export default {
   data() {
     return {
-      isfirstDialog: false,
+      isfirstDialog: true,
       isSecondDialog: false,
       selectedPhoto: null,
       selectedStartDate: null,
@@ -201,13 +192,8 @@ export default {
       this.isfirstDialog = false;
       this.isSecondDialog = true;
     },
-    openModal() {
-      this.isfirstDialog = true;
-      this.isSecondDialog = false;
-    },
     closeDialog() {
-      this.isfirstDialog = false;
-      this.isSecondDialog = false;
+      this.$emit('closetrip')
     },
     handleFileChange(event) {
       const file = event.target.files[0];

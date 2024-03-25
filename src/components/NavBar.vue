@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="top-0 sticky z-50 bg-white bg-opacity-0 backdrop-filter backdrop-blur-lg border-gray-200"
+    class="top-0 sticky z-0 bg-white bg-opacity-0 backdrop-filter backdrop-blur-lg border-gray-200"
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16 items-center">

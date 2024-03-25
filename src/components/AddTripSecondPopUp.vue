@@ -97,6 +97,7 @@
     methods: {
       closeModal() {
         this.isOpen = false;
+        this.$emit('closetrip')
       },
     },
     components: {
