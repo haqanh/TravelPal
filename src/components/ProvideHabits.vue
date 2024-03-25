@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <div class="border-b-2 border-gray-400 pt-8 pb-6">
+    <div class="pt-8 pb-6">
       <p class="font-bold text-3xl">Tell us about your travel habits!</p>
     </div>
     <div class="py-5">

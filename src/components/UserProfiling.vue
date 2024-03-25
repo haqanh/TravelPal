@@ -1,7 +1,9 @@
 <template>
   <div class="flex justify-center items-center align-middle min-h-screen min-w-full font-poppins absolute top-0 backdrop-filter backdrop-brightness-75 backdrop-blur-md">
-    <div class="flex flex-col justify-between h-[600px] max-w-[600px] shadow-2xl rounded-3xl bg-white">
+    <div class="flex flex-col justify-between h-[600px] w-[600px] shadow-2xl rounded-3xl bg-white relative">
+      <hr class="relative h-[1px] border-0 bg-gray-600 top-[6rem]" />
       <keep-alive>
+        <Transition name="slide" mode="out-in">
         <component 
           :is="components[page]" 
           :name="name" @update-name="updateName" 
@@ -15,31 +17,11 @@
           :selectedCountries="selectedCountries" @toggle-country="toggleCountry"
           :selectedInterests="selectedInterests" @toggle-interest="toggleInterest"
         />
+        </Transition>
       </keep-alive>
       <TheFooter @page-change="updatePage"/>
     </div>
   </div>
-  <div>
-    {{ name }}
-    <br/>
-    {{ ageRange }}
-    <br/>
-    {{ gender }}
-    <br/>
-    {{ travelFreq }}
-    <br/>
-    {{ travelCompanions }}
-    <br/>
-    {{ usedTravelpalBefore }}
-    <br/>
-    {{ usedSimilarAppsBefore }}
-    <br/>
-    {{ privateOrPublic }}
-    <br/>
-    {{ selectedCountries }}
-    <br/>
-    {{ selectedInterests }}
-</div>
 </template>
 
 <script lang="ts">
@@ -80,6 +62,9 @@ export default {
   },
   methods: {
     updatePage(page: number) {
+      if (page === 6) {
+        this.$router.push('dashboard')
+      }
       this.page = page
     },
     updateName(name: string) {
@@ -131,3 +116,42 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.slide-enter-active {
+  animation: slideRight 0.3s ease;
+}
+
+.slide-leave-active {
+  animation: slideLeft 0.3s ease;
+}
+
+@keyframes slideLeft {
+  0% { transform: translateX(0px); width: 600px }
+  /* 50% { transform: translateX(-30px); opacity: 1; position: absolute } */
+  100% { transform: translateX(-40px); opacity: 1; width: 600px }
+}
+
+@keyframes slideRight {
+  0% { transform: translateX(30px); opacity: 0; width: 600px }
+  50% { transform: translateX(-30px); opacity: 1; width: 600px }
+  100% { transform: translateX(0); width: 600px }
+}
+
+
+/* .slide-enter-active,
+.slide-leave-active {
+  transition: opacity 0.5s linear;
+}
+
+.slide-enter-from {
+  position: absolute;
+  opacity: 0;
+  transform: translateX(60px)
+}
+.slide-leave-to {
+  position: absolute;
+  opacity: 0;
+  transform: translateX(-60px)
+} */
+</style>
