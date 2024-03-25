@@ -13,6 +13,7 @@ import AddGuideBtn from '../components/AddGuideBtn.vue';
 import ExploreCard from '../components/ExploreCard.vue';
 import Explore from '../views/ExploreView.vue';
 import GuideCard from '../components/GuideCard.vue';
+import GlobalTag from '../components/GlobalTag.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -81,6 +82,11 @@ const router = createRouter({
     path: '/explore',
     name: 'explore',
     component: Explore
+  },
+  {
+    path: '/global-tag',
+    name: 'globalTag',
+    component: GlobalTag
   }
   ]
 });
