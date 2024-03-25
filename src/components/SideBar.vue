@@ -5,7 +5,7 @@
         <h5 class="text-xl font-semibold mb-4 text-left">Bucket List 🌍</h5>
         <!-- Dynamically generate this list using v-for in your real app -->
         <ul class="grid grid-cols-2 gap-2">
-          <li class="flex items-center mt-2"><span class="fi fi-jp mr-2"></span> Japan</li>
+          <!-- <li class="flex items-center mt-2"><span class="fi fi-jp mr-2"></span> Japan</li>
           <li class="flex items-center mt-2"><span class="fi fi-no mr-2"></span> Norway</li>
           <li class="flex items-center mt-2"><span class="fi fi-ca mr-2"></span> Canada</li>
           <li class="flex items-center mt-2"><span class="fi fi-dk mr-2"></span> Denmark</li>
@@ -14,30 +14,30 @@
           <li class="flex items-center mt-2"><span class="fi fi-ca mr-2"></span> Canada</li>
           <li class="flex items-center mt-2"><span class="fi fi-dk mr-2"></span> Denmark</li>
           <li class="flex items-center mt-2"><span class="fi fi-ca mr-2"></span> Canada</li>
-          <li class="flex items-center mt-2"><span class="fi fi-dk mr-2"></span> Denmark</li>
+          <li class="flex items-center mt-2"><span class="fi fi-dk mr-2"></span> Denmark</li> -->
           <!-- Repeat for each country -->
         </ul>
       </li>
       <li>
         <div class="flex justify-between items-center mb-4">
           <h5 class="text-l font-semibold text-left">Distance Travelled</h5>
-          <span class="text-gray-600">27 km</span>
+          <span class="text-gray-600">0 km</span>
         </div>
         <div class="w-full bg-gray-300 h-1.5 rounded-full">
-          <div class="bg-primary h-1.5 rounded-full" style="width: 75%"></div>
+          <div class="bg-primary h-1.5 rounded-full" style="width: 0%"></div>
         </div>
       </li>
       <div class="grid grid-cols-2 gap-4">
         <div class="info-card">
           <h3 class="text-l font-semibold mb-2">You've been to</h3>
           <div class="stats-container text-white">
-            <span class="text-lg font-semibold">3</span> Countries
+            <span class="text-lg font-semibold">0</span> Countries
           </div>
         </div>
         <div class="info-card2">
           <h3 class="text-l font-semibold mb-2">You've walked</h3>
           <div class="stats-container text-white">
-            <span class="text-lg font-semibold">274,698</span> Steps
+            <span class="text-lg font-semibold">0</span> Steps
           </div>
         </div>
       </div>

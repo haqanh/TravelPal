@@ -1,6 +1,6 @@
 <template>
-  <div class="flex justify-center items-center align-middle min-h-screen min-w-full font-poppins">
-    <div class="flex flex-col justify-between h-[600px] max-w-[600px] shadow-2xl rounded-3xl">
+  <div class="flex justify-center items-center align-middle min-h-screen min-w-full font-poppins absolute top-0 backdrop-filter backdrop-brightness-75 backdrop-blur-md">
+    <div class="flex flex-col justify-between h-[600px] max-w-[600px] shadow-2xl rounded-3xl bg-white">
       <keep-alive>
         <component 
           :is="components[page]" 

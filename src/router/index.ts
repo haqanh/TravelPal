@@ -8,7 +8,7 @@ import LandingPage from '@/views/LandingPage.vue'
 import Home from '../views/Home.vue'
 import ViewTrip from '../views/ViewTrip.vue'
 import Sidebar from '../components/SideBar.vue'
-import UserProfiling from '../components/UserProfiling.vue'
+import UserProfilingView from '../views/UserProfilingView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,7 +56,7 @@ const router = createRouter({
   {
     path: '/userprofiling',
     name: 'userprofiling',
-    component: UserProfiling
+    component: UserProfilingView
   },
   ]
 });
