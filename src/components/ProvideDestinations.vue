@@ -22,7 +22,7 @@ export default {
   props: {
     selectedCountries: Array,
   },
-  emits:[],
+  emits:['toggle-country'],
   components: {
     SearchCountries
   },
