@@ -77,7 +77,7 @@ export default {
             leave-from="opacity-100 scale-100"
             leave-to="opacity-0 scale-95"
           >
-            <DialogPanel class="panel_style relative">
+            <DialogPanel class="panel_style scrollbar relative">
               <div class="flex justify-between items-center">
                   <DialogTitle class="addGuide_style text-center flex-grow"> Add Guide </DialogTitle>
                   <img src="../assets/Multiply.svg" alt="Close" class="cursor-pointer w-6 h-6" @click="closeModal" />
@@ -211,7 +211,7 @@ export default {
 
 <style scoped>
 .panel_style {
-  @apply w-full max-w-screen-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all;
+  @apply h-[85vh] w-[50vw] overflow-y-auto transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all;
 }
 
 .addGuide_style {
@@ -225,4 +225,26 @@ export default {
 .nextBtn_style {
   @apply inline-flex justify-center rounded-lg border-2 shadow-lg border-[#C1C1C1] px-3 py-1 text-sm font-normal text-[#434343] hover:bg-[#C1C1C1] hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1C1C1] focus-visible:ring-offset-2;
 }
+
+.scrollbar::-webkit-scrollbar {
+    width: 10px; 
+    height: 10px; 
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    background: transparent; 
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 8px;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+
+  .scrollbar::-webkit-scrollbar-button {
+    display: none; 
+  }
 </style>

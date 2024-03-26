@@ -16,13 +16,13 @@
         </div>
         <div class="flex justify-between items-center my-10 mb-10 min-w-full -mx-10">
             <h1 class="text-[2vw] font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">My Travels</h1>
-            <div class="border-b border-[#D9D9D9] w-3/5 mx-5 ml-20 flex-shrink-0"></div>
+            <div class="border-b border-[#D9D9D9] w-[100vh] mx-[2.6vh] ml-[10.5vh] flex-shrink-0"></div>
             <button class="flex-shrink-0" @click="toggleAddTrip">
                 <img src="../assets/Add Button.svg" alt="Add Trip" />
             </button>
         </div>
         <AddTrip v-if="showAddTrip" @closetrip="resetAddTrip"/>
-        <div class="TripCardWrapper grid grid-cols-4 min-w-full gap-8">
+        <div class="TripCardWrapper grid grid-cols-4 min-w-full gap-4">
             <TripCard />
             <TripCard />
             <TripCard />
@@ -30,13 +30,13 @@
         </div>
         <div class="flex justify-between items-center my-10 mb-10 min-w-full -mx-10">
             <h1 class="text-[2vw] font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">My Guides</h1>
-            <div class="border-b border-[#D9D9D9] w-3/5 mx-5 ml-20 flex-shrink-0"></div>
+            <div class="border-b border-[#D9D9D9] w-[90vh] mx-[2.6vh] ml-[20.5vh] flex-shrink-0"></div>
             <button class="flex-shrink-0" @click="toggleAddGuide">
                 <img src="../assets/Add Button.svg" alt="Add Guide" />
             </button>
         </div>
         <AddGuide v-if="showAddGuide" @close="resetAddGuide"/>
-        <div class="GuideCardWrapper grid grid-cols-4 min-w-full gap-8">
+        <div class="GuideCardWrapper grid grid-cols-4 min-w-full gap-4">
             <GuideCard />
             <GuideCard />
             <GuideCard />

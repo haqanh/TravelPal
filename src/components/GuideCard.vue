@@ -1,24 +1,24 @@
 <template>
-    <div class="flex mb-10 ">
-        <div class="relative max-w-[200px] h-[245px] bg-white border border-gray-200 rounded-[20px] custom-shadow dark:bg-gray-800 dark:border-gray-700">
-            <img class="rounded-t-[20px] h-[180px] w-[200px] custom-shadow object-cover object-bottom" src="../assets/Marbella.jpg" alt="" />
-            <div class="absolute top-0 right-0 mt-2 mr-2 flex items-center">
-                <img class="h-3 w-3 relative" src="../assets/map-pin.svg" alt="" />
-                <span class="ml-1 font-medium text-sky-50 text-[10px] text-[#E1F1FF]">Marbella, Spain</span>
+    <div class="flex items-center">
+        <div class="guide-card relative w-[32.8vh] h-[33.4vh] bg-white border border-gray-200 rounded-[2.63vh] custom-shadow dark:bg-gray-800 dark:border-gray-700">
+            <img class="rounded-t-[2.63vh] h-[23.7vh] w-[32.8vh] custom-shadow object-cover object-bottom" src="../assets/Marbella.jpg" alt="" />
+            <div class="absolute top-0 right-0 mt-[1.05vh] mr-[1.05vh] flex items-center">
+                <img class="h-[1.8vh] w-[1.8vh] relative" src="../assets/map-pin.svg" alt="" />
+                <span class="ml-[0.53vh] font-medium text-sky-50 text-[1.8vh] text-[#E1F1FF]">Marbella, Spain</span>
             </div>
-            <div class="p-2">
+            <div class="p-[1.05vh]">
                 <div class="flex justify-between items-center">
-                    <p class="mb-[1px] text-[18px] font-semibold tracking-tight text-[#3F3D3D] dark:text-white">Marbella</p>
+                    <p class="mb-[0.13vh] text-[3vh] font-semibold tracking-tight text-[#3F3D3D] dark:text-white">Marbella</p>
                     <div class="flex items-center flex-shrink-0 space-x-0">
-                        <img class="mb-2 mr-2 h-[5px] w-[5px]" src="../assets/Dot Split.svg" alt="" />
-                        <img class="mb-2 h-4" src="../assets/Union.svg" alt="" />
-                        <img class="mb-2 h-4" src="../assets/Union.svg" alt="" />
-                        <img class="mb-2 h-4" src="../assets/Union.svg" alt="" />
+                        <img class="mb-[0.4vh] mr-[1.05vh] h-[1.1vh] w-[1.1vh]" src="../assets/Dot Split.svg" alt="" />
+                        <img class="mb-[0.9vh] h-[2.8vh]" src="../assets/Union.svg" alt="" />
+                        <img class="mb-[0.9vh] h-[2.8vh]" src="../assets/Union.svg" alt="" />
+                        <img class="mb-[0.9vh] h-[2.8vh]" src="../assets/Union.svg" alt="" />
                     </div>
                 </div>
                 <div class="flex justify-between items-center">
-                    <p class="pt-1 text-[10px] font-medium text-[#3F3D3D] text-opacity-60">Aug 27 ‘19 - Sep 12 ‘19</p>
-                    <span class="px-2 font-semibold text-center text-[10px] rounded-full guide-colour border undefined ">
+                    <p class="pt-[0.3vh] text-[1.7vh] font-medium text-[#3F3D3D] text-opacity-60">Aug 27 ‘19 - Sep 12 ‘19</p>
+                    <span class="px-[1.05vh] font-semibold text-center text-[1.7vh] rounded-full guide-colour border undefined ">
                         Guide
                     </span>
                 </div>
@@ -39,5 +39,16 @@
 .guide-colour {
     color: rgba(215, 135, 15, 0.75);
     border-color: rgba(215, 135, 15, 0.75);
+}
+
+.guide-card {
+    box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23); 
+    transition: transform 0.3s ease-in-out; 
+}
+
+.guide-card:hover {
+  transform: scale(1.05); /* Slightly larger on hover for a popping effect */
 }
 </style>
