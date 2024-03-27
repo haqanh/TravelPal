@@ -33,7 +33,9 @@ import StateFamiliarityAndPrivacy from './StateFamiliarityAndPrivacy.vue';
 import TheFooter from './TheFooter.vue';
 import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
-const $toast = useToast()
+import { firebaseApp, db } from '@/firebase'
+import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { getAuth } from 'firebase/auth'
 
 export default {
   data() {
@@ -51,6 +53,7 @@ export default {
       selectedCountries: [""],
       selectedInterests: [""],
       slideRight: true,
+      auth: null,
     }
   },
   computed: {
@@ -67,12 +70,32 @@ export default {
     TheFooter
   },
   methods: {
-    updatePage(page: number) {
+    async updatePage(page: number) {
       if (page === 6) {
+        try {
+          const auth = getAuth()
+          const user = auth.currentUser
+          await updateDoc(doc(db, 'users', user!.email!), {
+            name: this.name,
+            ageRange: this.ageRange,
+            gender: this.gender,
+            travelFreq: this.travelFreq,
+            travelCompanions: this.travelCompanions,
+            usedTravelpalBefore: this.usedTravelpalBefore,
+            usedSimilarAppsBefore: this.usedSimilarAppsBefore,
+            privateOrPublic: this.privateOrPublic,
+            selectedCountries: this.selectedCountries,
+            selectedInterests: this.selectedInterests
+          })
+          console.log('Doc updated')
+        } catch (e) {
+          console.error('Error updating document: ', e)
+        }
         this.$router.push('dashboard')
+      } else {
+        this.slideRight = page > this.page ? true : false
+        this.page = page
       }
-      this.slideRight = page > this.page ? true : false
-      this.page = page
     },
     updateName(name: string) {
       this.name = name
@@ -103,11 +126,7 @@ export default {
         const index = this.selectedCountries.indexOf(country)
         this.selectedCountries.splice(index, 1)
       } else {
-        if (this.selectedCountries.length > 10) {
-          $toast.error('Maximum 10 countries!', {
-            position: 'top'
-          })
-        } else{
+        if (this.selectedCountries.length <= 10) {
           this.selectedCountries.push(country)
         }
       }

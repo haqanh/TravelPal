@@ -22,7 +22,7 @@ export default {
   props: {
     selectedInterests: Array,
   },
-  emits:[],
+  emits:['toggle-interest'],
   components: {
     SearchInterests
   },
