@@ -1,8 +1,9 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
+
 
 // TODO: Replace the following with your app's Firebase project configuration
 const firebaseConfig = {
@@ -14,10 +15,12 @@ const firebaseConfig = {
   appId: "1:356625691288:web:0547868dfe171ffa8dd6ed"
 };
 
+export const firebaseApp = initializeApp(firebaseConfig);
 
-const firebaseApp = initializeApp(firebaseConfig);
+// Initialize Firestore and export
+export const db = getFirestore(firebaseApp)
 
-const db = getFirestore(firebaseApp)
+//export const storage = getStorage(firebaseApp)
 export const storage = getStorage(firebaseApp)
+
 export default { firebaseApp, db, storage }
-// export default firebaseApp
