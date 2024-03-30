@@ -50,8 +50,8 @@ export default {
       usedTravelpalBefore: "no",
       usedSimilarAppsBefore: "no",
       privateOrPublic: "private",
-      selectedCountries: [""],
-      selectedInterests: [""],
+      selectedCountries: [],
+      selectedInterests: [],
       slideRight: true,
       auth: null,
     }
