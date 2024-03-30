@@ -76,16 +76,16 @@ export default {
           const auth = getAuth()
           const user = auth.currentUser
           await updateDoc(doc(db, 'users', user!.email!), {
-            name: this.name,
-            ageRange: this.ageRange,
-            gender: this.gender,
-            travelFreq: this.travelFreq,
-            travelCompanions: this.travelCompanions,
-            usedTravelpalBefore: this.usedTravelpalBefore,
-            usedSimilarAppsBefore: this.usedSimilarAppsBefore,
-            privateOrPublic: this.privateOrPublic,
-            selectedCountries: this.selectedCountries,
-            selectedInterests: this.selectedInterests
+            Name: this.name,
+            Age_Range: this.ageRange,
+            Gender: this.gender,
+            Travel_Freq: this.travelFreq,
+            Travel_Comp: this.travelCompanions,
+            Used_Before: this.usedTravelpalBefore == "yes" ? true : false,
+            Used_Similar: this.usedSimilarAppsBefore == "yes" ? true : false,
+            Is_Public: this.privateOrPublic == "public" ? true : false,
+            Bucket_List: this.selectedCountries,
+            Interests: this.selectedInterests
           })
           console.log('Doc updated')
         } catch (e) {
