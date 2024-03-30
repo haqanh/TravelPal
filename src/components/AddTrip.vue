@@ -168,7 +168,7 @@ import {
 } from '@headlessui/vue'
 import AddTripSecondPopUp from './AddTripSecondPopUp.vue'
 import Datepicker from 'vue3-datepicker';
-import { db } from '@/firebase'
+import { firebaseApp, db } from '@/firebase'
 import { doc, setDoc, collection } from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
 
@@ -216,8 +216,6 @@ export default {
     async saveTrip() {
       const auth = getAuth();
       const user = auth.currentUser;
-
-      console.log(user.email);
       const userRef = doc(db, 'users', user.email);
       await setDoc(userRef, {});
 

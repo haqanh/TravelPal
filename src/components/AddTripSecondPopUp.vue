@@ -62,8 +62,7 @@
                             placeholder="Enter a Tag"
                             @keydown.enter='addTag'
                             @keydown.delete='removeLastTag'
-                            class="mx-2"
-                            style="border: none; outline: none;"
+                            style="border: none; outline: none; background-color: transparent;"
                           />
                         </div>
                       </div>
@@ -121,16 +120,6 @@
         }
 
         const userRef = doc(db, 'users', user.email);
-        const userDoc = await getDoc(userRef);
-
-        if (!userDoc.exists) {
-          await setDoc(userRef, {});
-        }
-
-        if (!this.tripName) {
-          console.log('Trip name is undefined or empty');
-          return;
-        }
 
         const tripRef = doc(collection(userRef, 'trips'), this.tripName);
         await updateDoc(tripRef, {
