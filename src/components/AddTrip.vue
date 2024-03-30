@@ -66,7 +66,7 @@
                             <path d="M1792 710v794q0 66-47 113t-113 47h-1472q-66 0-113-47t-47-113v-794q44 49 101 87 362 246 497 345 57 42 92.5 65.5t94.5 48 110 24.5h2q51 0 110-24.5t94.5-48 92.5-65.5q170-123 498-345 57-39 100-87zm0-294q0 79-49 151t-122 123q-376 261-468 325-10 7-42.5 30.5t-54 38-52 32.5-57.5 27-50 9h-2q-23 0-50-9t-57.5-27-52-32.5-54-38-42.5-30.5q-91-64-262-182.5t-205-142.5q-62-42-117-115.5t-55-136.5q0-78 41.5-130t118.5-52h1472q65 0 112.5 47t47.5 113z">
                             </path>
                     </span>
-                    <input type="text" id="trip-name-with-icon" class=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-[1.05vh] px-[2.1vh] bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="email" placeholder="Trip Name"/>
+                    <input v-model="tripName" type="text" id="trip-name-with-icon" class=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-[1.05vh] px-[2.1vh] bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="email" placeholder="Trip Name"/>
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@
                         <span class="rounded-l-md inline-flex items-center px-[1.6vh] border-t bg-white border-l border-b border-gray-300 text-gray-500 shadow-sm text-[1.8vh]">
                             <img src="../assets/Airplane Take Off.svg" width="15" height="15" fill="currentColor" viewBox="0 0 1792 1792">
                         </span>
-                        <input type="text" id="trip-location-with-icon" class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-[1.05vh] px-[2.1vh] bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="location" placeholder="Where?" />
+                        <input v-model="tripLocation" type="text" id="trip-location-with-icon" class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-[1.05vh] px-[2.1vh] bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="location" placeholder="Where?" />
                     </div>
                 </div>
 
@@ -132,7 +132,7 @@
                             <path d="M1792 710v794q0 66-47 113t-113 47h-1472q-66 0-113-47t-47-113v-794q44 49 101 87 362 246 497 345 57 42 92.5 65.5t94.5 48 110 24.5h2q51 0 110-24.5t94.5-48 92.5-65.5q170-123 498-345 57-39 100-87zm0-294q0 79-49 151t-122 123q-376 261-468 325-10 7-42.5 30.5t-54 38-52 32.5-57.5 27-50 9h-2q-23 0-50-9t-57.5-27-52-32.5-54-38-42.5-30.5q-91-64-262-182.5t-205-142.5q-62-42-117-115.5t-55-136.5q0-78 41.5-130t118.5-52h1472q65 0 112.5 47t47.5 113z">
                             </path>
                     </span>
-                    <input type="text" id="cost-input" class=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-[1.05vh] px-[2.05vh] bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="cost" placeholder="Cost (In SGD)"/>
+                    <input type="number" v-model="tripCost" id="cost-input" class=" appearance-none rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-[1.05vh] px-[2.05vh] bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="cost" placeholder="Cost (In SGD)"/>
                     </div>
                 </div>
                 </div>
@@ -155,7 +155,7 @@
       </div>
     </HeadlessDialog>
   </TransitionRoot>
-  <AddTripSecondPopUp v-if="isSecondDialog" @closetrip="closeDialog" />
+  <AddTripSecondPopUp v-if="isSecondDialog" @closetrip="closeDialog" :tripName="this.tripName" />
 </template>
 
 <script>
@@ -168,6 +168,9 @@ import {
 } from '@headlessui/vue'
 import AddTripSecondPopUp from './AddTripSecondPopUp.vue'
 import Datepicker from 'vue3-datepicker';
+import { db } from '@/firebase'
+import { doc, setDoc, collection } from "firebase/firestore";
+import { getAuth } from 'firebase/auth'
 
 export default {
   data() {
@@ -191,6 +194,7 @@ export default {
     navigateToNextStep() {
       this.isfirstDialog = false;
       this.isSecondDialog = true;
+      this.saveTrip();
     },
     closeDialog() {
       this.$emit('closetrip')
@@ -208,7 +212,25 @@ export default {
         this.selectedPhoto = null;
         alert('Please select a JPEG or JPG or PNG file.');
       }
-    }
+    },
+    async saveTrip() {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      console.log(user.email);
+      const userRef = doc(db, 'users', user.email);
+      await setDoc(userRef, {});
+
+      const tripRef = doc(collection(userRef, 'trips'), this.tripName);
+      await setDoc(tripRef, {
+        Name: this.tripName,
+        Location: this.tripLocation,
+        Start_Date : this.selectedStartDate,
+        End_Date: this.selectedEndDate,
+        Cost: this.tripCost,
+      });
+      console.log('Trip saved successfully');
+    },
   },
   components: {
     TransitionRoot,
@@ -243,6 +265,13 @@ export default {
 
   .scrollbar::-webkit-scrollbar-button {
     display: none; 
+  }
+
+  input[type=number]::-webkit-inner-spin-button,
+
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 </style>
 

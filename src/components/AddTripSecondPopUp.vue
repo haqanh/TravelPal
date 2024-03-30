@@ -44,7 +44,7 @@
                             <path d="M1792 710v794q0 66-47 113t-113 47h-1472q-66 0-113-47t-47-113v-794q44 49 101 87 362 246 497 345 57 42 92.5 65.5t94.5 48 110 24.5h2q51 0 110-24.5t94.5-48 92.5-65.5q170-123 498-345 57-39 100-87zm0-294q0 79-49 151t-122 123q-376 261-468 325-10 7-42.5 30.5t-54 38-52 32.5-57.5 27-50 9h-2q-23 0-50-9t-57.5-27-52-32.5-54-38-42.5-30.5q-91-64-262-182.5t-205-142.5q-62-42-117-115.5t-55-136.5q0-78 41.5-130t118.5-52h1472q65 0 112.5 47t47.5 113z">
                             </path>
                     </span>
-                    <textarea type="text" id="summary" class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-[455px] h-[200px] py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="email" placeholder="Write a short summary"></textarea>
+                    <textarea v-model="summary" type="text" id="summary" class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-[455px] h-[200px] py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="email" placeholder="Write a short summary"></textarea>
                     </div>
                 </div>
 
@@ -55,8 +55,18 @@
                             <img src="../assets/Add Tag.svg" width="15" height="15" fill="currentColor" viewBox="0 0 1792 1792">
                             <path d="M1792 710v794q0 66-47 113t-113 47h-1472q-66 0-113-47t-47-113v-794q44 49 101 87 362 246 497 345 57 42 92.5 65.5t94.5 48 110 24.5h2q51 0 110-24.5t94.5-48 92.5-65.5q170-123 498-345 57-39 100-87zm0-294q0 79-49 151t-122 123q-376 261-468 325-10 7-42.5 30.5t-54 38-52 32.5-57.5 27-50 9h-2q-23 0-50-9t-57.5-27-52-32.5-54-38-42.5-30.5q-91-64-262-182.5t-205-142.5q-62-42-117-115.5t-55-136.5q0-78 41.5-130t118.5-52h1472q65 0 112.5 47t47.5 113z"></path>
                         </span>
-                        <input type="text" id="add-tags" class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="location" placeholder="Add Tags" />
-                    </div>
+                        <div class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent">
+                          <global_tags v-for='(tag, index) in tags' :key='tag' :tagCategory='tag' @click="removeTag(index)" class="mr-2"/>
+                          <input
+                            type='text'
+                            placeholder="Enter a Tag"
+                            @keydown.enter='addTag'
+                            @keydown.delete='removeLastTag'
+                            class="mx-2"
+                            style="border: none; outline: none;"
+                          />
+                        </div>
+                      </div>
                 </div>
             </form>
             </div>
@@ -87,18 +97,77 @@
     DialogPanel,
     DialogTitle,
   } from '@headlessui/vue';
+  import { db } from '@/firebase'
+  import { doc, getDoc, updateDoc, collection } from "firebase/firestore";
+  import { getAuth } from 'firebase/auth'
+  import global_tags from './GlobalTag.vue'
   
   export default {
     data() {
       return {
         isOpen: true,
+        tags: [],
       };
     },
+    props: ['tripName'],
     methods: {
-      closeModal() {
+      async saveTrip2() {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        
+        if (!user || !user.email) {
+          console.log('User or user email is undefined');
+          return;
+        }
+
+        const userRef = doc(db, 'users', user.email);
+        const userDoc = await getDoc(userRef);
+
+        if (!userDoc.exists) {
+          await setDoc(userRef, {});
+        }
+
+        if (!this.tripName) {
+          console.log('Trip name is undefined or empty');
+          return;
+        }
+
+        const tripRef = doc(collection(userRef, 'trips'), this.tripName);
+        await updateDoc(tripRef, {
+          Summary: this.summary,
+          Tags: this.tags,
+        });
+        console.log('Trip part 2 saved successfully');
+    },
+    closeModal() {
         this.isOpen = false;
         this.$emit('closetrip')
+        this.saveTrip2();
       },
+      addTag(event) {
+        event.preventDefault()
+        let val = event.target.value.trim()
+        if (val.length > 0) {
+          if (this.tags.length >= 1) {
+            for (let i = 0; i < this.tags.length; i++) {
+              if (this.tags[i] === val) {
+                return false
+              }
+            }
+          }
+          this.tags.push(val)
+          event.target.value = ''
+          console.log(this.tags)
+        }
+      },
+      removeTag(index) {
+        this.tags.splice(index, 1)
+      },
+      removeLastTag(event) {
+        if (event.target.value.length === 0) {
+          this.removeTag(this.tags.length - 1)
+        }
+      }
     },
     components: {
       TransitionRoot,
@@ -106,7 +175,7 @@
       HeadlessDialog,
       DialogPanel,
       DialogTitle,
+      global_tags,
     },
   };
   </script>
-  
