@@ -11,9 +11,10 @@ import {
 } from '@headlessui/vue'
 import AddPlaces from './AddPlaces.vue'
 import AddGeneralAdvice from './AddGeneralAdvice.vue'
-import { firebaseApp, db } from '@/firebase'
-import { doc, setDoc, updateDoc, collection, addDoc} from "firebase/firestore";
+import { db, storage} from '@/firebase'
+import { collection, addDoc} from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
+import { ref, uploadString, getDownloadURL} from 'firebase/storage'
 
 
 export default {
@@ -39,8 +40,8 @@ export default {
     return {
       isOpen: true,
       advices: [{ id: 1, content: '', visible: true }],
-      places: [{ id: 1, visible: true }],
-      placesToEat: [{ id: 1, visible: true }],
+      places: [{ id: 1, location: '', tags: '', cost: '', summary: '', selectedPhoto: '', visible: true }],
+      placesToEat: [{ id: 1, location: '', tags: '', cost: '', summary: '', selectedPhoto: '', visible: true }],
       placesToStay: [{ id: 1, visible: true }],
       placesNearby: [{ id: 1, visible: true }]
     }
@@ -63,6 +64,63 @@ export default {
           })
           console.log("Advice document written with ID: ", newAdviceRef.id);
         }
+
+        for (let place of this.places) {
+          console.log('user.email:', user.email);
+          console.log('this.guideId:', this.guideId);
+          console.log('place.location:', place.location);
+          console.log('place.tags:', place.tags);
+          console.log('place.cost:', place.cost);
+          console.log('place.summary:', place.summary);
+          console.log('place.selectedPhoto:', place.selectedPhoto);
+
+          //create storage reference
+          const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/places/${place.location}`)
+
+          // Upload the selectedPhoto to Firebase Storage
+          const uploadTask = await uploadString(storageRef, place.selectedPhoto, 'data_url');
+
+          // Get the URL of the uploaded image
+          const photoURL = await getDownloadURL(uploadTask.ref);
+
+          const newPlaceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'places'), {
+            location: place.location,
+            tags: place.tags,
+            cost: place.cost,
+            summary: place.summary,
+            photo: photoURL,
+          })
+          console.log("Place document written with ID: ", newPlaceRef.id);
+        }
+
+        for (let place of this.placesToEat) {
+          console.log('user.email:', user.email);
+          console.log('this.guideId:', this.guideId);
+          console.log('place.location:', place.location);
+          console.log('place.tags:', place.tags);
+          console.log('place.cost:', place.cost);
+          console.log('place.summary:', place.summary);
+          console.log('place.selectedPhoto:', place.selectedPhoto);
+
+          //create storage reference
+          const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToEat/${place.location}`)
+
+          // Upload the selectedPhoto to Firebase Storage
+          const uploadTask = await uploadString(storageRef, place.selectedPhoto, 'data_url');
+
+          // Get the URL of the uploaded image
+          const photoURL = await getDownloadURL(uploadTask.ref);
+
+          const newPlaceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'places'), {
+            location: place.location,
+            tags: place.tags,
+            cost: place.cost,
+            summary: place.summary,
+            photo: photoURL,
+          })
+          console.log("Place document written with ID: ", newPlaceRef.id);
+        }
+
       } catch (e) {
         console.error("Error adding document: ", e);
       }
@@ -91,9 +149,30 @@ export default {
     updateContent(advice, content) {
       advice.content = content
     },
+    updateLocation(place, location) {
+      place.location = location
+    },
+    updateTags(place, tags) {
+      place.tags = tags
+    },
+    updateCost(place, cost) {
+      place.cost = cost
+    },
+    updateSummary(place, summary) {
+      place.summary = summary
+    },
+    updatePhoto(place, photo) {
+      place.selectedPhoto = photo
+      console.log(place.selectedPhoto, "WHAT IS THIS STORED AS?")
+    },
     addPlace() {
       const newPlace = {
         id: `place-${this.places.length + 1}`,
+        location: '', 
+        tags: '', 
+        cost: '', 
+        summary: '', 
+        selectedPhoto: '',
         visible: true
       }
       this.places.push(newPlace)
@@ -263,7 +342,7 @@ export default {
                       <div class="flex flex-col w-full">
                           <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
                             <div v-if="place.visible"></div>
-                            <AddPlaces :id="place.id"/>
+                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
                           <br />
                         </div>
 
@@ -308,7 +387,7 @@ export default {
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesToEat" :key="place.id" @contextmenu.prevent="deletePlaceToEat(place)">
                             <div v-if="place.visible"></div>
-                            <AddPlaces :id="place.id"/>
+                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
                           <br />
                         </div>
 

@@ -7,10 +7,9 @@ import {
   TransitionRoot,
   TransitionChild
 } from '@headlessui/vue'
-import {getFirestore} from 'firebase/firestore'
-import {getStorage, ref} from 'firebase/storage'
-import { firebaseApp, db } from '@/firebase'
-import { doc, setDoc, updateDoc, collection, addDoc} from "firebase/firestore";
+import {ref, uploadString, getDownloadURL} from 'firebase/storage'
+import { db, storage } from '@/firebase'
+import { collection, addDoc} from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
 
 export default {
@@ -59,16 +58,27 @@ export default {
     },
     async addGuide() {
 
-      let fields = [this.guideTitle, this.destination, this.description]
+      let fields = [this.guideTitle, this.destination, this.description, this.selectedPhoto]
 
       if (fields.every(field => field !== '')) {
         try {
           const auth = getAuth()
           const user = auth.currentUser
+
+          //create storage reference
+          const storageRef = ref(storage,`users/${user.email}/guides/${this.guideTitle}/coverPhoto`)
+
+          // Upload the selectedPhoto to Firebase Storage
+          const uploadTask = await uploadString(storageRef, this.selectedPhoto, 'data_url');
+
+          // Get the URL of the uploaded image
+          const photoURL = await getDownloadURL(uploadTask.ref);
+
           const docRef = await addDoc(collection(db, 'users', user.email, "guides"), {
             title: this.guideTitle,
             destination: this.destination,
             description: this.description,
+            coverPhoto: photoURL,
           })
           console.log('Doc updated')
 
