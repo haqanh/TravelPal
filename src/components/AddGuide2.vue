@@ -12,7 +12,7 @@ import {
 import AddPlaces from './AddPlaces.vue'
 import AddGeneralAdvice from './AddGeneralAdvice.vue'
 import { db, storage} from '@/firebase'
-import { collection, addDoc} from "firebase/firestore";
+import { collection, addDoc, deleteDoc, doc} from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
 import { ref, uploadString, getDownloadURL} from 'firebase/storage'
 
@@ -40,10 +40,10 @@ export default {
     return {
       isOpen: true,
       advices: [{ id: 1, content: '', visible: true }],
-      places: [{ id: 1, location: '', tags: '', cost: '', summary: '', selectedPhoto: '', visible: true }],
-      placesToEat: [{ id: 1, location: '', tags: '', cost: '', summary: '', selectedPhoto: '', visible: true }],
-      placesToStay: [{ id: 1, visible: true }],
-      placesNearby: [{ id: 1, visible: true }]
+      places: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
+      placesToEat: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
+      placesToStay: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
+      placesNearby: [{ id: 1, location: '', tags: [], cost: '', summary:'', selectedPhoto: '', visible: true }]
     }
   },
   methods: {
@@ -56,23 +56,13 @@ export default {
         const user = auth.currentUser
 
         for (let advice of this.advices) {
-          console.log('user.email:', user.email);
-          console.log('this.guideId:', this.guideId);
-          console.log('advice.content:', advice.content);
           const newAdviceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'advices'), {
-            content: advice.content,
+            Content: advice.content,
           })
           console.log("Advice document written with ID: ", newAdviceRef.id);
         }
 
         for (let place of this.places) {
-          console.log('user.email:', user.email);
-          console.log('this.guideId:', this.guideId);
-          console.log('place.location:', place.location);
-          console.log('place.tags:', place.tags);
-          console.log('place.cost:', place.cost);
-          console.log('place.summary:', place.summary);
-          console.log('place.selectedPhoto:', place.selectedPhoto);
 
           //create storage reference
           const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/places/${place.location}`)
@@ -84,24 +74,16 @@ export default {
           const photoURL = await getDownloadURL(uploadTask.ref);
 
           const newPlaceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'places'), {
-            location: place.location,
-            tags: place.tags,
-            cost: place.cost,
-            summary: place.summary,
-            photo: photoURL,
+            Location: place.location,
+            Tags: place.tags,
+            Cost: place.cost,
+            Summary: place.summary,
+            Photo: photoURL,
           })
           console.log("Place document written with ID: ", newPlaceRef.id);
         }
 
         for (let place of this.placesToEat) {
-          console.log('user.email:', user.email);
-          console.log('this.guideId:', this.guideId);
-          console.log('place.location:', place.location);
-          console.log('place.tags:', place.tags);
-          console.log('place.cost:', place.cost);
-          console.log('place.summary:', place.summary);
-          console.log('place.selectedPhoto:', place.selectedPhoto);
-
           //create storage reference
           const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToEat/${place.location}`)
 
@@ -112,11 +94,51 @@ export default {
           const photoURL = await getDownloadURL(uploadTask.ref);
 
           const newPlaceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'places'), {
-            location: place.location,
-            tags: place.tags,
-            cost: place.cost,
-            summary: place.summary,
-            photo: photoURL,
+            Location: place.location,
+            Tags: place.tags,
+            Cost: place.cost,
+            Summary: place.summary,
+            Photo: photoURL,
+          })
+          console.log("Place document written with ID: ", newPlaceRef.id);
+        }
+
+        for (let place of this.placesToStay) {
+          //create storage reference
+          const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToStay/${place.location}`)
+
+          // Upload the selectedPhoto to Firebase Storage
+          const uploadTask = await uploadString(storageRef, place.selectedPhoto, 'data_url');
+
+          // Get the URL of the uploaded image
+          const photoURL = await getDownloadURL(uploadTask.ref);
+
+          const newPlaceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'places'), {
+            Location: place.location,
+            Tags: place.tags,
+            Cost: place.cost,
+            Summary: place.summary,
+            Photo: photoURL,
+          })
+          console.log("Place document written with ID: ", newPlaceRef.id);
+        }
+
+        for (let place of this.placesNearby) {
+          //create storage reference
+          const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesNearby/${place.location}`)
+
+          // Upload the selectedPhoto to Firebase Storage
+          const uploadTask = await uploadString(storageRef, place.selectedPhoto, 'data_url');
+
+          // Get the URL of the uploaded image
+          const photoURL = await getDownloadURL(uploadTask.ref);
+
+          const newPlaceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'places'), {
+            Location: place.location,
+            Tags: place.tags,
+            Cost: place.cost,
+            Summary: place.summary,
+            Photo: photoURL,
           })
           console.log("Place document written with ID: ", newPlaceRef.id);
         }
@@ -125,9 +147,17 @@ export default {
         console.error("Error adding document: ", e);
       }
     },
-    exit() {
-      this.isOpen = false
-      this.$emit('close')
+    async exit() {
+      try {
+        this.isOpen = false
+        this.$emit('close')
+        const auth = getAuth()
+        const user = auth.currentUser
+        await deleteDoc(doc(db, 'users', user.email, "guides", this.guideId))
+        console.log("Document successfully deleted!")
+      } catch(e) {
+        console.error("Error deleting document: ", e);
+      }
     },
     addAdvice(content) {
       const newAdvice = {
@@ -163,13 +193,12 @@ export default {
     },
     updatePhoto(place, photo) {
       place.selectedPhoto = photo
-      console.log(place.selectedPhoto, "WHAT IS THIS STORED AS?")
     },
     addPlace() {
       const newPlace = {
         id: `place-${this.places.length + 1}`,
         location: '', 
-        tags: '', 
+        tags: [], 
         cost: '', 
         summary: '', 
         selectedPhoto: '',
@@ -189,6 +218,11 @@ export default {
     addPlaceToEat() {
       const newPlace = {
         id: `place-${this.placesToEat.length + 1}`,
+        location: '', 
+        tags: [], 
+        cost: '', 
+        summary: '', 
+        selectedPhoto: '',
         visible: true
       }
       this.placesToEat.push(newPlace)
@@ -205,6 +239,11 @@ export default {
     addPlaceToStay() {
       const newPlace = {
         id: `place-${this.placesToStay.length + 1}`,
+        location: '', 
+        tags: [], 
+        cost: '', 
+        summary: '', 
+        selectedPhoto: '',
         visible: true
       }
       this.placesToStay.push(newPlace)
@@ -221,6 +260,11 @@ export default {
     addPlaceNearby() {
       const newPlace = {
         id: `place-${this.placesNearby.length + 1}`,
+        location: '', 
+        tags: [], 
+        cost: '', 
+        summary: '', 
+        selectedPhoto: '',
         visible: true
       }
       this.placesNearby.push(newPlace)
@@ -287,6 +331,7 @@ export default {
                       leave-from-class="transform scale-100 opacity-100"
                       leave-to-class="transform scale-95 opacity-0"
                     >
+                    <!-- Add General Advice Components -->
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                         <div v-for="(advice) in advices" :key="advice.id" @contextmenu.prevent="deleteAdvice(advice)">
@@ -305,7 +350,6 @@ export default {
                           </button>
                         </div>
                       </div>
-
                     </DisclosurePanel>
                     </transition>
                   </Disclosure>
@@ -338,6 +382,7 @@ export default {
                       leave-from-class="transform scale-100 opacity-100"
                       leave-to-class="transform scale-95 opacity-0"
                     >
+                    <!-- Places to Visit Components -->
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                           <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
@@ -368,7 +413,6 @@ export default {
                         <img src="../assets/cutleryIcon.png" class="w-5 h-5 stroke-width-1.5" />
                         <h4>Places to Eat</h4>
                       </span>
-                      <!-- <span>Places to Eat</span> -->
 
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6" :class="{ 'rotate-180': open, 'w-6': true, 'h-6': true }">
@@ -383,6 +427,7 @@ export default {
                       leave-from-class="transform scale-100 opacity-100"
                       leave-to-class="transform scale-95 opacity-0"
                     >
+                    <!-- Places to Eat Components -->
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesToEat" :key="place.id" @contextmenu.prevent="deletePlaceToEat(place)">
@@ -432,11 +477,12 @@ export default {
                       leave-from-class="transform scale-100 opacity-100"
                       leave-to-class="transform scale-95 opacity-0"
                     >
+                    <!-- Places To Stay Component -->
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesToStay" :key="place.id" @contextmenu.prevent="deletePlaceToStay(place)">
                             <div v-if="place.visible"></div>
-                            <AddPlaces/>
+                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
                           <br />
                         </div>
 
@@ -481,11 +527,12 @@ export default {
                       leave-from-class="transform scale-100 opacity-100"
                       leave-to-class="transform scale-95 opacity-0"
                     >
+                    <!-- Nearby Places Components -->
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesNearby" :key="place.id" @contextmenu.prevent="deletePlaceNearby(place)">
                             <div v-if="place.visible"></div>
-                            <AddPlaces/>
+                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
                           <br />
                         </div>
 
@@ -506,6 +553,7 @@ export default {
                   <br />
                 </div>
 
+                <!-- Submit Button -->
                 <div class="mt-4 justify-center flex items-center">
                   <button type="button" class="nextBtn_style" @click="submit">Submit</button>
                 </div>

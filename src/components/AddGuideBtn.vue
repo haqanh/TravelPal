@@ -9,7 +9,7 @@ import {
 } from '@headlessui/vue'
 import {ref, uploadString, getDownloadURL} from 'firebase/storage'
 import { db, storage } from '@/firebase'
-import { collection, addDoc} from "firebase/firestore";
+import { collection, addDoc, updateDoc} from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
 
 export default {
@@ -64,9 +64,19 @@ export default {
         try {
           const auth = getAuth()
           const user = auth.currentUser
+          const docRef = await  addDoc(collection(db, 'users', user.email, "guides"), {
+            Guide_Title: this.guideTitle,
+            Destination: this.destination,
+            Description: this.description,
+          })
+          console.log('Doc created')
 
-          //create storage reference
-          const storageRef = ref(storage,`users/${user.email}/guides/${this.guideTitle}/coverPhoto`)
+          //Get the generated ID
+          this.guideId = docRef.id
+          console.log('Guide ID:', this.guideId); // Check guideId value
+
+          // Create storage reference using the generated ID
+          const storageRef = ref(storage, `users/${user.email}/guides/${this.guideId}/coverPhoto`)
 
           // Upload the selectedPhoto to Firebase Storage
           const uploadTask = await uploadString(storageRef, this.selectedPhoto, 'data_url');
@@ -74,18 +84,16 @@ export default {
           // Get the URL of the uploaded image
           const photoURL = await getDownloadURL(uploadTask.ref);
 
-          const docRef = await addDoc(collection(db, 'users', user.email, "guides"), {
-            title: this.guideTitle,
-            destination: this.destination,
-            description: this.description,
-            coverPhoto: photoURL,
+          // Update the guide document to include the coverPhoto
+          await updateDoc(docRef, {
+            Cover_Photo: photoURL,
           })
+
           console.log('Doc updated')
 
           // Emit custom event with guideID
-          this.guideId = docRef.id
-          console.log('Guide ID:', this.guideId); // Check guideId value
           this.$emit('update-guide-id', this.guideId)
+
         } catch (e) {
           console.error('Error updating document: ', e)
         }
@@ -93,6 +101,7 @@ export default {
       } else {
         alert('Please fill out all fields')
         console.log('All fields must be non-empty')
+        return
       }
     }
   },
