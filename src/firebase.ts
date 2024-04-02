@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+import { getFirestore } from 'firebase/firestore'
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
 
@@ -16,9 +16,6 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 
-// export default firebaseApp
+export default firebaseApp;
+export const db = getFirestore(firebaseApp)
 
-// Initialize Firestore and export
-const db = getFirestore(firebaseApp)
-
-export { firebaseApp, db }
