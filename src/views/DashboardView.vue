@@ -23,7 +23,7 @@
         </div>
         <AddTrip v-if="showAddTrip" @closetrip="resetAddTrip" @closetriponly="backToDashboard"/>
         <div class="TripCardWrapper grid grid-cols-4 min-w-full gap-4">
-            <TripCard v-for="trip in trips" :key="trip.id" :TripName="trip.Name" :Location="trip.Location" :TripStartDate="trip.Start_Date" :TripEndDate="trip.End_Date" :TripImage="trip.Photos[0]" :TripCost="trip.Cost"/>
+            <TripCard class="cursor-pointer" @click="viewTrip(trip)" v-for="trip in trips" :key="trip.id" :TripName="trip.Name" :Location="trip.Location" :TripStartDate="trip.Start_Date" :TripEndDate="trip.End_Date" :TripImage="trip.Photos[0]" :TripCost="trip.Cost"/>
         </div>
         <div class="flex justify-between items-center my-10 mb-10 min-w-full -mx-10">
             <h1 class="text-[2vw] font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">My Guides</h1>
@@ -88,7 +88,16 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
         },
         backToDashboard() {
             this.showAddTrip = false;
-        }
+        },
+        viewTrip(trip) {
+            this.$router.push({ 
+            name: 'viewtrip', 
+            params: { 
+                id: trip.id,
+                name: trip.Name 
+            } 
+            });
+        },
     },
     mounted() {
         const auth = getAuth();
