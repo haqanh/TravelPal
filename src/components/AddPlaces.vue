@@ -41,12 +41,12 @@
             <!-- <label class="text-neutral-700" for="tags">
               <input @keyup.enter="updateTags" @input="updateTags($event.target.value, place)" v-model= "tags" type="text" id="tags" class="input_style" name="tags" placeholder="Add Tags" />
             </label> -->
-
-            
         
-            <div class="input_style">    
-              <GlobalTag v-for='(tag, index) in tags' :key='index' :tagCategory='tag' @click="removeTag(index)" class="mr-2"/>     
-              <div class="flex-auto">
+            <div class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-1/2 py-2 px-4 mr-2 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent">    
+              
+              <div class="flex-wrap flex">
+                <GlobalTag v-for='(tag, index) in tags' :key='index' :tagCategory='tag' @click="removeTag(index)" class="mr-2 mb-2"/>  
+              </div>
               <input
                   type='text'
                   placeholder="Enter a Tag"
@@ -57,7 +57,7 @@
                   @keydown.delete='removeLastTag'
                   style="border: none; outline: none; background-color: transparent;"
                   />
-              </div>
+            
             </div>
             
           </div>
