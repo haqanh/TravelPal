@@ -267,9 +267,9 @@ export default {
       const tripData = await getDoc(trip_ref);
 
       if (tripData.exists()) {
-        const photos = tripData.data().photos || [];
+        const photos = tripData.data().Photos || [];
         photos.push(fileUrl);
-        await updateDoc(trip_ref, { photos });
+        await updateDoc(trip_ref, { Photos });
       }
     },
   },
