@@ -21,12 +21,9 @@
                 <img src="../assets/Add Button.svg" alt="Add Trip" />
             </button>
         </div>
-        <AddTrip v-if="showAddTrip" @closetrip="resetAddTrip"/>
+        <AddTrip v-if="showAddTrip" @closetrip="resetAddTrip" @closetriponly="backToDashboard"/>
         <div class="TripCardWrapper grid grid-cols-4 min-w-full gap-4">
-            <TripCard />
-            <TripCard />
-            <TripCard />
-            <TripCard />
+            <TripCard v-for="trip in trips" :key="trip.id" :TripName="trip.Name" :Location="trip.Location" :TripStartDate="trip.Start_Date" :TripEndDate="trip.End_Date" :TripImage="trip.photos[0]" :TripCost="trip.Cost"/>
         </div>
         <div class="flex justify-between items-center my-10 mb-10 min-w-full -mx-10">
             <h1 class="text-[2vw] font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">My Guides</h1>
@@ -37,23 +34,23 @@
         </div>
         <AddGuide v-if="showAddGuide" @close="resetAddGuide"/>
         <div class="GuideCardWrapper grid grid-cols-4 min-w-full gap-4">
-            <GuideCard />
-            <GuideCard />
-            <GuideCard />
-            <GuideCard />
+            <GuideCard v-for="guide in guides" :key="guide.id" :GuideName="guide.title" :Location="guide.destination" :GuideImage="guide.coverPhoto" :GuideStartDate="guide.Start_Date" :GuideEndDate="guide.End_Date"/>
         </div>
     </div>
     </div> 
 </template>
   
-  <script lang="ts">
-  import NavBar from '../components/NavBar.vue'
-  import SideBar from '../components/SideBar.vue'
-  import TripCard from '../components/TripCard.vue'
-  import GuideCard from '../components/GuideCard.vue'
-  import AddGuide from '../components/AddGuideBtn.vue'
-  import AddTrip from '../components/AddTrip.vue'
-  
+<script lang="ts">
+import NavBar from '../components/NavBar.vue'
+import SideBar from '../components/SideBar.vue'
+import TripCard from '../components/TripCard.vue'
+import GuideCard from '../components/GuideCard.vue'
+import AddGuide from '../components/AddGuideBtn.vue'
+import AddTrip from '../components/AddTrip.vue'
+import { db } from '@/firebase'
+import { doc, collection, getDocs } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+
   export default {
     components: {
       NavBar,
@@ -67,6 +64,8 @@
       return {
         showAddGuide: false,
         showAddTrip: false,
+        trips: [],
+        guides: [],
       }
     },
     methods: {
@@ -76,6 +75,7 @@
         
         resetAddGuide() {
             this.showAddGuide = false 
+            location.reload();
         },
 
         toggleAddTrip() {
@@ -83,11 +83,32 @@
         },
 
         resetAddTrip() {
-            this.showAddTrip = false
+            this.showAddTrip = false;
+            location.reload();
         },
+        backToDashboard() {
+            this.showAddTrip = false;
+        }
     },
-  }
-  </script>
+    mounted() {
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userRef = doc(db, "users", user.email);
+                const querySnapshotTrips = await getDocs(collection(userRef, 'trips'));
+                const querySnapshotGuides = await getDocs(collection(userRef, 'guides')); 
+
+                const trips = querySnapshotTrips.docs.map(doc => doc.data());
+                const guides = querySnapshotGuides.docs.map(doc => doc.data());
+                this.trips = trips;
+                this.guides = guides;
+            } else {
+                console.log("User is not signed in");
+            }
+        });
+    },
+}
+</script>
   
   <style scoped>
   .NavBarImage {

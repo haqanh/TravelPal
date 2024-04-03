@@ -33,26 +33,30 @@
               >
                 Add Trip
               </DialogTitle>
-              <button class="absolute top-[3.2vh] right-[3.2vh]" @click="closeDialog">
+              <button class="absolute top-[3.2vh] right-[3.2vh]" @click="closeDialogOnly">
                 <img src="../assets/Multiply.svg" alt="Close Icon" class="w-[3vh] h-[3vh]">
               </button>
               <div class="mt-[0.53vh]">
             <form>
               <div class="mb-[2.1vh] text-center relative">
                 <!-- Hidden file input to trigger file selection -->
-                <input type="file" id="photo-input" accept=".jpg, .jpeg, .png" class="hidden" @change="handleFileChange">
+                <input type="file" id="photo-input" accept=".jpg, .jpeg, .png" class="hidden" multiple @change="handleFileChange">
                 
                 <!-- Label for the file input, shows the camera icon if no photo selected -->
                 <label
                     for="photo-input"
-                    class="relative block mx-auto mt-[2.6vh] h-[16.8vh] w-[18.9vh] flex items-center justify-center cursor-pointer overflow-hidden rounded-lg"
-                    :class="{ 'border border-dashed border-gray-500 rounded-lg dark:hover:bg-bray-800 dark:bg-gray-500 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600': !selectedPhoto }"
+                    class="relative block mx-[9vw] mt-[2.6vh] h-[30vh] w-[60vh] flex items-center justify-center cursor-pointer rounded-lg"
                   >
-                  <div class="absolute inset-0 flex items-center justify-center">
-                    <img v-if="selectedPhoto" :src="selectedPhoto" alt="Selected Photo" class="h-auto w-auto object-cover cursor-pointer rounded-lg" @click="openFileInput">
-                    <div v-else class="flex flex-col items-center justify-center">
-                      <img src="../assets/Camera.svg" alt="Add Photo" class="h-[3.7vh] w-[3.7vh] mb-[0.53vh] mx-auto">
-                      <p class="text-[1.8vh] text-[#3F3D3D] font-semibold">Add Photos</p>
+                  <div v-if="selectedPhoto.length === 0" class=" h-[20vh] w-[25vh] items-center justify-center"
+                  :class="{ 'border border-dashed border-gray-500 rounded-lg dark:hover:bg-bray-800 dark:bg-gray-500 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600': selectedPhoto }">
+                    <img src="../assets/Camera.svg" alt="Add Photo" class="h-[8vh] w-[8vh] mb-[0.9vh] mx-auto mt-[5vh]">
+                    <p class="text-[1.8vh] text-[#3F3D3D] font-semibold">Add Photos</p>
+                  </div>
+                  <div class="flex flex items-center justify-center mx-[0vw] ">
+                    <div v-for="(photo, index) in selectedPhoto" :key="index" class="m-[0.5vw]">
+                      <img :src="photo" alt="Selected Photo" class="h-[15vh] w-[20vh] object-fit-cover cursor-pointer rounded-lg" @click="openFileInput">
+                    </div>
+                      <div v-if="selectedPhoto.length === 0" class="flex flex-col items-center justify-center">
                     </div>
                   </div>
                 </label>
@@ -155,7 +159,7 @@
       </div>
     </HeadlessDialog>
   </TransitionRoot>
-  <AddTripSecondPopUp v-if="isSecondDialog" @closetrip="closeDialog" :tripName="this.tripName" />
+  <AddTripSecondPopUp v-if="isSecondDialog" @closetrip="closeDialog" @closetriponly="closeDialogOnly" :tripName="this.tripName" />
 </template>
 
 <script>
@@ -169,15 +173,16 @@ import {
 import AddTripSecondPopUp from './AddTripSecondPopUp.vue'
 import Datepicker from 'vue3-datepicker';
 import { firebaseApp, db } from '@/firebase'
-import { doc, setDoc, collection } from "firebase/firestore";
+import { doc, setDoc, collection, getDoc, updateDoc } from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 export default {
   data() {
     return {
       isfirstDialog: true,
       isSecondDialog: false,
-      selectedPhoto: null,
+      selectedPhoto: [],
       selectedStartDate: null,
       selectedEndDate: null,
       showStartDatepicker: false,
@@ -199,18 +204,24 @@ export default {
     closeDialog() {
       this.$emit('closetrip')
     },
+    closeDialogOnly() {
+      this.$emit('closetriponly')
+    },
     handleFileChange(event) {
-      const file = event.target.files[0];
-      if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.selectedPhoto = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      } else {
-        // Reset selectedPhoto or show error message
-        this.selectedPhoto = null;
-        alert('Please select a JPEG or JPG or PNG file.');
+      const files = event.target.files;
+      this.selectedPhoto = []; // clear the array before adding new photos
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.selectedPhoto.push(e.target.result); // push the result into the array
+          };
+          reader.readAsDataURL(file);
+        } else {
+          // Show error message
+          alert('Please select a JPEG or PNG file.');
+        }
       }
     },
     async saveTrip() {
@@ -227,7 +238,39 @@ export default {
         End_Date: this.selectedEndDate,
         Cost: this.tripCost,
       });
+
+      for(let i = 0; i < this.selectedPhoto.length; i++) {
+        this.uploadImage(this.selectedPhoto[i], user.email, this.tripName, tripRef, i)
+      }
       console.log('Trip saved successfully');
+    },
+    dataURLtoFile(dataURL, filename) {
+      const arr = dataURL.split(',');
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
+    async uploadImage(file_url, user_email, trip_name, trip_ref, image_num) {
+      const storage = getStorage(firebaseApp);
+      const file = this.dataURLtoFile(file_url, `image_${image_num}.jpg`);
+      const fileRef = ref(storage, `users/${user_email}/trips/${trip_name}/${file.name}`);
+      const uploadTask = uploadBytesResumable(fileRef, file);
+      await uploadTask;
+
+      const fileUrl = await getDownloadURL(fileRef);
+
+      const tripData = await getDoc(trip_ref);
+
+      if (tripData.exists()) {
+        const photos = tripData.data().photos || [];
+        photos.push(fileUrl);
+        await updateDoc(trip_ref, { photos });
+      }
     },
   },
   components: {

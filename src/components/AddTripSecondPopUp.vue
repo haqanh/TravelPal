@@ -32,7 +32,7 @@
               >
                 Add Trip
               </DialogTitle>
-              <button class="absolute top-4 right-4" @click="closeModal">
+              <button class="absolute top-4 right-4" @click="closeModalOnly">
                 <img src="../assets/Multiply.svg" alt="Close Icon" class="w-4 h-4">
               </button>
               <div class="mt-2">
@@ -97,7 +97,7 @@
     DialogTitle,
   } from '@headlessui/vue';
   import { db } from '@/firebase'
-  import { doc, getDoc, updateDoc, collection } from "firebase/firestore";
+  import { doc, updateDoc, collection } from "firebase/firestore";
   import { getAuth } from 'firebase/auth'
   import global_tags from './GlobalTag.vue'
   
@@ -132,6 +132,10 @@
         this.isOpen = false;
         this.$emit('closetrip')
         this.saveTrip2();
+      },
+      closeModalOnly() {
+        this.isOpen = false;
+        this.$emit('closetriponly')
       },
       addTag(event) {
         event.preventDefault()
