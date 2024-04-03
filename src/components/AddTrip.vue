@@ -228,6 +228,7 @@ export default {
       const auth = getAuth();
       const user = auth.currentUser;
       const userRef = doc(db, 'users', user.email);
+      const currentTimestamp = new Date();
       await setDoc(userRef, {});
 
       const tripRef = doc(collection(userRef, 'trips'), this.tripName);
@@ -237,6 +238,7 @@ export default {
         Start_Date : this.selectedStartDate,
         End_Date: this.selectedEndDate,
         Cost: this.tripCost,
+        Last_Edit: currentTimestamp,
       });
 
       for(let i = 0; i < this.selectedPhoto.length; i++) {
@@ -267,8 +269,8 @@ export default {
       const tripData = await getDoc(trip_ref);
 
       if (tripData.exists()) {
-        const photos = tripData.data().Photos || [];
-        photos.push(fileUrl);
+        const Photos = tripData.data().Photos || [];
+        Photos.push(fileUrl);
         await updateDoc(trip_ref, { Photos });
       }
     },
