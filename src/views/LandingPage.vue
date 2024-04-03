@@ -28,6 +28,7 @@ export default {
     <!-- Content Container -->
     <div class="flex flex-col justify-center items-start h-full px-5 md:px-20 lg:pl-32 space-y-8">
       <!-- Logo and Title Container -->
+
     <div class="flex items-center space-x-4 lg:space-x-8">
       <!-- Logo -->
       <img
@@ -46,13 +47,16 @@ export default {
           Journey Together,
         </span>
         <span class="SloganSecond text-yellow-600 text-3xl md:text-4xl lg:text-5xl font-semibold">
+
           Share Forever
         </span>
       </div>
       <!-- Button -->
       <button
         @click="showModal = true"
+
         class="LoginButton bg-yellow-600 hover:bg-yellow-700 text-white text-sm md:text-xl lg:text-2xl font-semibold rounded-full px-6 py-2 md:px-8 md:py-3 lg:px-10 lg:py-4 hover:shadow-xl transition transform hover:-translate-y-1 hover:translate-x-1" 
+
       >
         Start Traveling
       </button>
