@@ -14,43 +14,59 @@ export default {
 </script>
 
 <template>
-  <div className="LandingPage">
-    <div className="backgroundcontainer object-cover block bg-center w-screen h-screen">
-      <div className="pic " id="pic3" />
-      <div className="pic " id="pic2" />
-      <div className="pic " id="pic1" />
+  <div class="relative w-screen h-screen">
+    <!-- Background Container -->
+    <div class="absolute inset-0">
+      <!-- Background Images -->
+      <div class="pic absolute w-full h-full bg-cover bg-center" id="pic3" />
+      <div class="pic absolute w-full h-full bg-cover bg-center" id="pic2" />
+      <div class="pic absolute w-full h-full bg-cover bg-center" id="pic1" />
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-black bg-opacity-30"></div>
     </div>
 
-    <div className="overlay w-full h-full left-0 top-0 absolute bg-black bg-opacity-30" />
-
-    <div className="container ml-20 pl-16 block">
+    <!-- Content Container -->
+    <div class="flex flex-col justify-center items-start h-full px-5 md:px-20 lg:pl-32 space-y-8">
+      <!-- Logo and Title Container -->
+    <div class="flex items-center space-x-4 lg:space-x-8">
+      <!-- Logo -->
       <img
-        className="Logo w-32 h-32 left-[73px] top-[376px] absolute shadow"
+        class="Logo w-16 h-16 md:w-24 md:h-24 lg:w-32 lg:h-32 shadow"
         src="@/assets/logo.svg"
+        alt="TravelPal logo"
       />
-      <div
-        className="TravelPal w-96 h-48 left-[227px] top-[376px] absolute text-white text-9xl font-semibold font-['Poppins']"
-      >
+      <!-- Title -->
+
+      <h1 class="TravelPal md:text-7xl lg:text-9xl text-5xl font-semibold text-white">
+
         TravelPal
-      </div>
-      <div className="Slogan h-20 left-[73px] top-[525px] absolute">
-        <span className="SloganFirst text-white text-5xl font-semibold font-['Poppins']"
-          >Journey Together,
-        </span>
-        <span className="SloganSecond text-yellow-600 text-5xl font-semibold font-['Poppins']"
-          >Share Forever</span
-        >
-      </div>
-      <div>
-        <button
-          @click="showModal = true"
-          className="LoginButton w-60 h-16 left-[73px] top-[612px] absolute bg-yellow-600 hover:bg-yellow-600 rounded-full shadow text-white text-xl text-center hover:translate-x-1 hover:transition-transform hover:-translate-y-1 hover:shadow-xl font-semibold font-['Poppins']"
-        >
-          Start Traveling
-        </button>
-      </div>
-      <AuthenticationModal :open="showModal" @close="showModal = false" />
+      </h1>
     </div>
+      <!-- Slogan -->
+      <div class="Slogan space-y-2">
+        <span class="SloganFirst text-white text-3xl md:text-4xl lg:text-5xl font-semibold">
+          Journey Together,
+        </span>
+        <span class="SloganSecond text-yellow-600 text-3xl md:text-4xl lg:text-5xl font-semibold">
+
+
+          Share Forever
+        </span>
+      </div>
+      <!-- Button -->
+      <button
+        @click="showModal = true"
+
+
+        class="LoginButton bg-yellow-600 hover:bg-yellow-700 text-white text-sm md:text-xl lg:text-2xl font-semibold rounded-full px-6 py-2 md:px-8 md:py-3 lg:px-10 lg:py-4 hover:shadow-xl transition transform hover:-translate-y-1 hover:translate-x-1" 
+
+      >
+        Start Traveling
+      </button>
+    </div>
+
+    <!-- Authentication Modal -->
+    <AuthenticationModal :open="showModal" @close="showModal = false" />
   </div>
 </template>
 

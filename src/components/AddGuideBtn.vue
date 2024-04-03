@@ -41,6 +41,7 @@ export default {
   methods: {
     openSecondModal() {
       this.addGuide()
+
       this.isFirstOpen = false
       this.isSecondOpen = true
     },
@@ -53,6 +54,7 @@ export default {
     clearEndDate() {
       this.selectedEndDate = null;
     },
+
     handleFileChange(event) {
       const file = event.target.files[0]
       if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
@@ -119,6 +121,7 @@ export default {
       }
     }
   },
+
 }
 </script>
 
@@ -132,6 +135,7 @@ export default {
 
       <div class="fixed inset-0 overflow-y-auto">
         <div class="flex min-h-full items-center justify-center p-4 text-center">
+
           <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95"
             enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
             leave-to="opacity-0 scale-95">
@@ -139,6 +143,7 @@ export default {
               <div class="flex justify-between items-center">
                 <DialogTitle class="addGuide_style text-center flex-grow"> Add Guide </DialogTitle>
                 <img src="../assets/Multiply.svg" alt="Close" class="cursor-pointer w-6 h-6" @click="closeModal" />
+
               </div>
               <br />
 
@@ -160,6 +165,7 @@ export default {
                       accept=".jpg, .jpeg, .png" />
                   </label>
                 </div>
+
 
                 <br />
 
@@ -250,8 +256,10 @@ export default {
                 <label class="text-gray-700" for="name">
                   <textarea
                     class="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-transparent"
+
                     id="description" v-model="description" type="text" placeholder="Write your description here"
                     name="description" rows="2" cols="40"></textarea>
+
                 </label>
               </div>
               <div class="mt-4 justify-center flex items-center">
@@ -263,7 +271,9 @@ export default {
       </div>
     </HeadlessDialog>
   </TransitionRoot>
+
   <AddGuide2 v-if="isSecondOpen" @close="closeModal" :guideId="guideId" @update-guide-id="guideId = $event" />
+
 </template>
 
 <style scoped>
@@ -304,4 +314,5 @@ export default {
 .scrollbar::-webkit-scrollbar-button {
   display: none;
 }
+
 </style>

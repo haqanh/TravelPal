@@ -263,8 +263,11 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import firebaseApp from '../firebase'
-import {  
+
+import { firebaseApp, db } from '@/firebase'
+import { doc, setDoc } from 'firebase/firestore'
+import {
+
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -314,6 +317,7 @@ const SignIn = () => {
         position: 'top'
       })
       router.push('/about')
+      
     })
     .catch((error) => {
       const errorMessage = error.message
@@ -323,7 +327,7 @@ const SignIn = () => {
     })
 }
 
-const SignUp = () => {
+async function SignUp() {
   if (signUpPassword.value !== signUpConfirmPassword.value) {
     $toast.error('Passwords do not match!', {
       position: 'top'
@@ -331,16 +335,17 @@ const SignUp = () => {
   } else {
     const auth = getAuth(firebaseApp)
     createUserWithEmailAndPassword(auth, signUpEmail.value, signUpPassword.value)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user
         console.log(user)
         $toast.success('Welcome to TravelPal!', {
           position: 'top'
         })
+        await addUser();
         router.push('/about')
       })
-      .catch((error) => {
+      .catch(async (error) => {
         const errorMessage = error.message
         $toast.error(errorMessage, {
           position: 'top'
@@ -349,7 +354,7 @@ const SignUp = () => {
   }
 }
 
-const SignInWithGoogle = () => {
+async function SignInWithGoogle() {
   const auth = getAuth(firebaseApp)
   signInWithPopup(auth, provider)
     .then((result) => {
@@ -360,7 +365,9 @@ const SignInWithGoogle = () => {
       const user = result.user
       // IdP data available using getAdditionalUserInfo(result)
       // ...
-      console.log(user)
+
+      addUserGoogle(user.email);
+
       router.push('/about')
     })
     .catch((error) => {
@@ -384,4 +391,27 @@ function closeModal() {
   open.value = false
   emit('close')
 }
+
+async function addUser() {
+  try {
+    await setDoc(doc(db, "users", signUpEmail.value, {merge: true}), {
+      email: signUpEmail.value,
+    })
+  } catch (e) {
+    console.error('Error adding document: ', e)
+  }
+}
+
+async function addUserGoogle(email) {
+  try {
+    await setDoc(doc(db, "users", email, {merge: true}), {
+      email: email,
+    })
+  } catch (e) {
+    console.error('Error adding document: ', e)
+  }   
+}
+
+
 </script>
+

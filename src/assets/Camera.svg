@@ -1,11 +1,9 @@
 <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <rect width="45" height="45" fill="#F5F5F5"/>
-<rect x="-1254" y="-395" width="2388" height="1419" fill="url(#pattern0)"/>
-<rect x="-1254" y="-395" width="2388" height="1419" fill="black" fill-opacity="0.3"/>
+<rect x="-1254" y="-395" width="2388" height="1419" fill="none"/>
+<rect x="-1254" y="-395" width="2388" height="1419" fill="none"/>
 <g filter="url(#filter0_d_0_1)">
-<path d="M-994 -235C-994 -246.046 -985.046 -255 -974 -255H991C1002.05 -255 1011 -246.046 1011 -235V906C1011 917.046 1002.05 926 991 926H-974C-985.046 926 -994 917.046 -994 906V-235Z" fill="#FBFBFB"/>
 </g>
-<rect x="-76.5" y="-59.5" width="199" height="199" rx="9.5" fill="#FBFBFB" stroke="#3F3D3D" stroke-linecap="square" stroke-dasharray="1 2 3 4"/>
 <rect width="45" height="45" fill="url(#pattern1)"/>
 <defs>
 <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">

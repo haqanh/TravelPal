@@ -24,6 +24,7 @@ export default {
       required: true
     }
   },
+
   components: {
     HeadlessDialog,
     DialogPanel,
@@ -40,6 +41,7 @@ export default {
     return {
       isOpen: true,
       advices: [{ id: 1, content: '', visible: true }],
+
       places: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
       placesToEat: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
       placesToStay: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
@@ -281,6 +283,7 @@ export default {
   },
   mounted() {
     console.log('Guide ID received:', this.guideId); // Check guideId prop
+
   }
 }
 </script>
@@ -331,7 +334,9 @@ export default {
                       leave-from-class="transform scale-100 opacity-100"
                       leave-to-class="transform scale-95 opacity-0"
                     >
+
                     <!-- Add General Advice Components -->
+
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                         <div v-for="(advice) in advices" :key="advice.id" @contextmenu.prevent="deleteAdvice(advice)">
@@ -382,12 +387,16 @@ export default {
                       leave-from-class="transform scale-100 opacity-100"
                       leave-to-class="transform scale-95 opacity-0"
                     >
+
                     <!-- Places to Visit Components -->
+
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                           <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
                             <div v-if="place.visible"></div>
+
                             <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
+
                           <br />
                         </div>
 
@@ -427,12 +436,16 @@ export default {
                       leave-from-class="transform scale-100 opacity-100"
                       leave-to-class="transform scale-95 opacity-0"
                     >
+
                     <!-- Places to Eat Components -->
+
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesToEat" :key="place.id" @contextmenu.prevent="deletePlaceToEat(place)">
                             <div v-if="place.visible"></div>
+
                             <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
+
                           <br />
                         </div>
 
@@ -477,7 +490,9 @@ export default {
                       leave-from-class="transform scale-100 opacity-100"
                       leave-to-class="transform scale-95 opacity-0"
                     >
+
                     <!-- Places To Stay Component -->
+
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesToStay" :key="place.id" @contextmenu.prevent="deletePlaceToStay(place)">
@@ -527,7 +542,9 @@ export default {
                       leave-from-class="transform scale-100 opacity-100"
                       leave-to-class="transform scale-95 opacity-0"
                     >
+
                     <!-- Nearby Places Components -->
+
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesNearby" :key="place.id" @contextmenu.prevent="deletePlaceNearby(place)">
