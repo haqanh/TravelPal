@@ -65,22 +65,6 @@ const router = createRouter({
     }
   },
   {
-
-    path: '/add-guide-btn',
-    name: 'addGuideBtn',
-    component: AddGuideBtn
-  },
-  {
-    path: '/explore-card',
-    name: 'exploreCard',
-    component: ExploreCard
-  },
-  {
-    path: '/guide-card',
-    name: 'guideCard',
-    component: GuideCard
-  },
-  {
     path: '/explore',
     name: 'explore',
     component: Explore
