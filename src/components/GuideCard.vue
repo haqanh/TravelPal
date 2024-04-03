@@ -1,85 +1,102 @@
 <template>
-
-    <div class="fixed inset-0 justify-center items-center flex" v-on:click="openGuide" v-if="isVisible">
-        <div class="mx-auto bg-gray shadow-lg w-64 rounded-2xl">
-            <div class="relative h-48 overflow-hidden bg-gray-200 rounded-t-2xl">
-                <img src='../assets/Marbella.jpg' alt="Image" class="object-cover rounded-t-2xl h-full w-full">
-                <div class="flex absolute top-0 right-0 p-3">
-                    
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="white" class="w-4 h-4 mr-1">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                    </svg>
-
-                    <div class="text-white text-xs font-normal mt-[1.5px]">Marbella, Spain</div>
-
-                </div>
-
+    <div class="flex items-center">
+        <div class="guide-card relative w-[32.8vh] h-[33.4vh] bg-white border border-gray-200 rounded-[2.63vh] custom-shadow dark:bg-gray-800 dark:border-gray-700">
+            <img class="rounded-t-[2.63vh] h-[23.7vh] w-[32.8vh] custom-shadow object-cover object-bottom" :src="GuideImage" alt="" />
+            <div class="absolute top-0 right-0 mt-[1.05vh] mr-[1.05vh] flex items-center">
+                <img class="h-[1.8vh] w-[1.8vh] relative" src="../assets/map-pin.svg" alt="" />
+                <span class="ml-[0.53vh] font-medium text-sky-50 text-[1.8vh] text-[#E1F1FF]">{{Location}}</span>
             </div>
-            <div class="p-3">
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="h-8 rounded font-semibold text-[#3F3D3D] text-xl">
-                        Marbella
-                    </div>
-                    <div class="h-8 rounded">
-                        
-                    </div>
-                    <div class="h-5 flex flex-row-reverse">
-                        <svg stroke="#94a3b8" stroke-width="0.5" width="15" height="20" viewBox="0 0 15 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g opacity="0.75">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.25006 4C8.25006 3.58579 7.91428 3.25 7.50006 3.25C7.08585 3.25 6.75006 3.58579 6.75006 4V5.29486C6.31701 5.36301 5.87074 5.51932 5.49522 5.83119C5.02856 6.21874 4.75171 6.77963 4.68952 7.47777C4.58584 8.64158 4.89841 9.48323 5.55871 10.0501C6.13773 10.5471 6.906 10.7481 7.46611 10.8946L7.49287 10.9016C8.14891 11.0733 8.53974 11.1845 8.77746 11.3841C8.86829 11.4604 8.92958 11.547 8.96596 11.676C9.00595 11.8179 9.02635 12.0511 8.9573 12.4272C8.90306 12.7225 8.76554 12.893 8.5783 13.0112C8.36709 13.1445 8.0556 13.2305 7.66237 13.2471C7.27527 13.2634 6.85923 13.21 6.48658 13.1135C6.10437 13.0146 5.82281 12.8848 5.68126 12.7854C5.34234 12.5472 4.87455 12.6289 4.63641 12.9678C4.39827 13.3067 4.47996 13.7745 4.81887 14.0127C5.15911 14.2517 5.62743 14.4406 6.11069 14.5657C6.31345 14.6182 6.52844 14.6619 6.75006 14.6936V16C6.75006 16.4142 7.08585 16.75 7.50006 16.75C7.91428 16.75 8.25006 16.4142 8.25006 16V14.6919C8.63944 14.6266 9.03026 14.4997 9.37888 14.2797C9.90947 13.9448 10.3004 13.4183 10.4326 12.6981C10.5292 12.1722 10.5298 11.6951 10.4097 11.269C10.286 10.8302 10.0469 10.4914 9.74213 10.2354C9.2242 9.80047 8.507 9.61478 7.97846 9.47794L7.97845 9.47794L7.87266 9.45045C7.24364 9.28582 6.81657 9.15297 6.53575 8.91191C6.32695 8.73266 6.11203 8.41435 6.1836 7.61087C6.21566 7.251 6.33763 7.08141 6.45355 6.98514C6.588 6.87348 6.80547 6.78696 7.12785 6.75921C7.78888 6.7023 8.61293 6.91721 9.1394 7.15331C9.51735 7.3228 9.96114 7.15381 10.1306 6.77586C10.3001 6.39791 10.1311 5.95412 9.75319 5.78463C9.36115 5.60882 8.8263 5.43127 8.25006 5.33148V4Z" fill="#253D35" fill-opacity="0.5"/>
-                            </g>
-                        </svg>
-                        <img class="h-[5px] w-[5px] mt-2 mr-1" src="../assets/Dot Split.svg" alt="" />
-
-                    </div>
-                    <div class="h-5 col-span-2 mt-[-10px]">
-                        <div class="text-sm text-[#94a3b8] font-semibold">Aug 27'19 - Sep12'19</div>
-                    </div>
-                    <div class="h-5 mt-[-13px]">
-                        <span
-                            class="px-4 py-1 text-xs font-semibold rounded-full text-yellow-500 border-2 border-yellow-500 undefined ">
-                            Guide
-                        </span>
-                    </div>
-                    <div class="...">
-                    </div>
-                    <div class="col-span-2 ...">
-
-                    </div>
+            <div class="p-[1.05vh]">
+                <div class="flex justify-between items-center">
+                    <p class="mb-[0.13vh] text-[3vh] font-semibold tracking-tight text-[#3F3D3D] dark:text-white">{{GuideName}}</p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <p class="pt-[0.3vh] text-[1.7vh] font-medium text-[#3F3D3D] text-opacity-60">{{ formattedDate }}</p>
+                    <span class="px-[1.05vh] font-semibold text-center text-[1.7vh] rounded-full guide-colour border undefined ">
+                        Guide
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+<script>
+export default {
+    props: {
+        GuideName: {
+            type: String,
+            default: 'Guide Name'
+        },
+        Location: {
+            type: String,
+            default: 'Location'
+        },
+        GuideStartDate: {
+            type: String,
+            default: 'Guide Start Date'
+        },
+        GuideEndDate: {
+            type: String,
+            default: 'Guide End Date'
+        },
+        guide: {
+            type: Object,
+            required: true
+        },
+        GuideImage: {
+            type: String,
+            default: ''
+        
+        },
+    },
+    methods: {
+        formatDateRange(startTimestamp, endTimestamp) {
+            const formatDate = (timestamp) => {
+                if (!timestamp) return 'N/A';
+                const date = new Date(timestamp.seconds * 1000);
+                const month = date.toLocaleString('default', { month: 'short' });
+                const day = date.getDate();
+                const year = date.getFullYear().toString().substr(-2);
+                return `${month} ${day} ‘${year}`;
+            }
 
-const isVisible = ref(true)
-const router = useRouter()
+            const startDate = formatDate(startTimestamp);
+            const endDate = formatDate(endTimestamp);
 
-const openGuide = () => {
-    isVisible.value = false
-    router.push({ name: 'GuideView' })
+            return `${startDate} - ${endDate}`;
+        },
+    },
+    computed: {
+        formattedDate() {
+            return this.formatDateRange(this.GuideStartDate, this.GuideEndDate)
+        },
+    }
+}
+</script>
+
+<style scoped>
+.object-bottom {
+    object-position: bottom;
 }
 
-// import { defineProps } from 'vue';
+.custom-shadow {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
 
-// Declare props
-// defineProps({
-//   fromDate: {
-//     type: String,
-//     required: true
-//   },
-//   toDate: {
-//     type: String,
-//     required: true
-//   }
-// });
+.guide-colour {
+    color: rgba(215, 135, 15, 0.75);
+    border-color: rgba(215, 135, 15, 0.75);
+}
 
-</script>
+.guide-card {
+    box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23); 
+    transition: transform 0.3s ease-in-out; 
+}
+
+.guide-card:hover {
+  transform: scale(1.05); /* Slightly larger on hover for a popping effect */
+}
+</style>

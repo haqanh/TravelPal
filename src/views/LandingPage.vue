@@ -37,16 +37,20 @@ export default {
         alt="TravelPal logo"
       />
       <!-- Title -->
+
       <h1 class="TravelPal md:text-7xl lg:text-9xl text-5xl font-semibold text-white">
+
         TravelPal
       </h1>
     </div>
       <!-- Slogan -->
       <div class="Slogan space-y-2">
+
         <span class="SloganFirst text-white text-3xl md:text-4xl lg:text-5xl font-semibold">
           Journey Together,
         </span>
         <span class="SloganSecond text-yellow-600 text-3xl md:text-4xl lg:text-5xl font-semibold">
+
 
           Share Forever
         </span>
@@ -54,6 +58,7 @@ export default {
       <!-- Button -->
       <button
         @click="showModal = true"
+
 
         class="LoginButton bg-yellow-600 hover:bg-yellow-700 text-white text-sm md:text-xl lg:text-2xl font-semibold rounded-full px-6 py-2 md:px-8 md:py-3 lg:px-10 lg:py-4 hover:shadow-xl transition transform hover:-translate-y-1 hover:translate-x-1" 
 

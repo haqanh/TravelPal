@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import AddGuide2 from '../components/AddGuide2.vue'
 import GuideView from '../views/GuideView.vue'
 import AddTrip from '../components/AddTrip.vue'
+import EditTrip from '../components/EditTripFirstPopUp.vue'
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import LandingPage from '@/views/LandingPage.vue'
 
@@ -9,6 +10,7 @@ import Home from '../views/Home.vue'
 import ViewTrip from '../views/ViewTrip.vue'
 import Sidebar from '../components/SideBar.vue'
 import UserProfiling from '../components/UserProfiling.vue'
+import Dashboard from '../views/DashboardView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,7 +33,7 @@ const router = createRouter({
       
     },
     { 
-      path: '/add-trip-popup-1',
+      path: '/add-trip',
       name: 'AddTrip',
       component: AddTrip
   }, {
@@ -58,6 +60,16 @@ const router = createRouter({
     name: 'userprofiling',
     component: UserProfiling
   },
+  {
+    path: '/edit-trip',
+    name: 'edit-trip',
+    component: EditTrip
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: Dashboard
+  }
   ]
 });
 
