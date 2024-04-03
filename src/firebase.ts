@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
 
@@ -13,8 +14,6 @@ const firebaseConfig = {
   messagingSenderId: process.env.MESSAGING_SENDER_ID,
   appId: process.env.APP_ID,
 };
-
-
 
 const firebaseApp = initializeApp(firebaseConfig);
 
