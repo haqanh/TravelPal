@@ -14,14 +14,16 @@
             <span class="bar">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-5 h-5">
+
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
               </svg>
             </span>
 
+            <!-- Location Input -->
             <label for="location">
-              <input v-model= "location" type="text" id="location" class="input_style" name="location" placeholder="Location" />
+              <input @keyup.enter="updateLocation" @input="updateLocation($event.target.value, place)" v-model= "location" type="text" id="location" class="input_style" name="location" placeholder="Location" />
             </label>
           </div>
           <br />
@@ -35,11 +37,32 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
               </svg>
             </span>
-            <label class="text-neutral-700" for="tag">
-              <input v-model= "tags" type="text" id="email-with-icon" class="input_style" name="guideTitle" placeholder="Add Tags" />
-            </label>
+            <!-- Tags Input -->
+            <!-- <label class="text-neutral-700" for="tags">
+              <input @keyup.enter="updateTags" @input="updateTags($event.target.value, place)" v-model= "tags" type="text" id="tags" class="input_style" name="tags" placeholder="Add Tags" />
+            </label> -->
+        
+            <div class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-1/2 py-2 px-4 mr-2 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent">    
+              
+              <div class="flex-wrap flex">
+                <GlobalTag v-for='(tag, index) in tags' :key='index' :tagCategory='tag' @click="removeTag(index)" class="mr-2 mb-2"/>  
+              </div>
+              <input
+                  type='text'
+                  placeholder="Enter a Tag"
+                  @keyup.enter="updateTags" 
+                  @input="updateTags($event.target.value, place)"
+                  v-model="tagInput"
+                  @keydown.enter='addTag'
+                  @keydown.delete='removeLastTag'
+                  style="border: none; outline: none; background-color: transparent;"
+                  />
+            
+            </div>
+            
           </div>
           <br />
+
 
           <div class="flex relative">
             <span class="bar">
@@ -49,8 +72,11 @@
                   d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
               </svg>
             </span>
-            <label class="text-neutral-700" for="tag">
-              <input v-model="cost" type="cost" id="cost" class="input_style" name="cost" placeholder="Add Cost" />
+
+            <!-- Update Cost -->
+            <label class="text-neutral-700" for="cost">
+              <input @keyup.enter="updateCost" @input="updateCost($event.target.value, place)" v-model="cost" type="cost" id="cost" class="input_style" name="cost" placeholder="Add Cost" />
+
             </label>
           </div>
         </div>
@@ -62,11 +88,16 @@
               :for="'dropzone-file-' + id + count" 
               class="flex flex-col items-center justify-center rounded-lg cursor-pointer bg-gray-500 p-2 bg-opacity-0"
               :class="{
-                'dark:hover:bg-gray-800 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600': !selectedPhoto,
+
+                'hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600': !selectedPhoto,
+
                 'border border-gray-300 border-dashed': !selectedPhoto
               }"
               @contextmenu.prevent="confirmRemove"
             >
+
+            <!-- Photo Input -->
+
             <div class="flex flex-col items-center justify-center w-52 h-40">
                 <!-- Show uploaded image or camera icon based on whether an image has been uploaded -->
                 <img v-if="selectedPhoto" :src="selectedPhoto" alt="Uploaded Image" class="object-cover rounded-lg w-52 h-40">
@@ -91,11 +122,13 @@
                           d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5" />
                   </svg>
               </span>
+              <!-- Summary Input -->
               <div class="w-full">
-                  <label for="comment">
-                      <input v-model= "summary" type="text" id="comment"
+                  <label for="summary">
+                      <input @keyup.enter="updateSummary" @input="updateSummary($event.target.value, place)" v-model= "summary" type="text" id="summary"
                           class="input_style"
-                          name="comment" placeholder="Write a short summary" />
+                          name="summary" placeholder="Write a short summary" />
+
                   </label>
               </div>
           </div>
@@ -115,25 +148,44 @@
 }
 
 .input_style {
-  @apply mr-8 rounded-r-lg border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-white shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-transparent
-  /* @apply mr-8 flex-1 rounded-r-lg w-full py-2 px-4 text-gray-700 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-neutral-700 bg-neutral-700; */
+  @apply mr-8 flex-auto flex items-center rounded-r-lg border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-white shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-transparent
 }
 </style>
 
 <script>
+
+import GlobalTag from './GlobalTag.vue'
+
 export default {
+  components: {
+    GlobalTag
+  },
   data() {
     return {
-      location: '',
-      tags: '',
-      cost: '',
-      summary: '',
-      selectedPhoto: null,
-      isVisible: false,
-      count: 1,
+        location: '',
+        tags: [],
+        cost: '',
+        summary: '',
+        selectedPhoto: null,
+        isVisible: false,
+        count: 1,
+        tagInput: '' // This holds the value of the input field
     };
   },
   methods: {
+    updateLocation() {
+      this.$emit('location-updated', this.location);
+    },
+    updateTags() {
+      this.$emit('tags-updated', this.tags);
+    },
+    updateCost() {
+      this.$emit('cost-updated', this.cost);
+    },
+    updateSummary() {
+      this.$emit('summary-updated', this.summary);
+    },
+
     handleFileChange(event) {
       const file = event.target.files[0];
       this.count++;
@@ -141,6 +193,8 @@ export default {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.selectedPhoto = e.target.result;
+          this.$emit('photo-updated', this.selectedPhoto);
+
         };
         reader.readAsDataURL(file);
         console.log(this.selectedPhoto);
@@ -155,8 +209,41 @@ export default {
       if (confirm('Are you sure you want to remove the image?')) {
         this.selectedPhoto = null;
       }
-    }
-  },
+    },
+    addTag(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault()
+        let val = this.tagInput.trim()
+        if (val.length > 0 && !this.tags.includes(val)) {
+          this.tags.push(val)
+          this.tagInput = ''
+          console.log(this.tags)
+        }
+      }
+
+        // event.preventDefault()
+        // let val = event.target.value.trim()
+        // if (val.length > 0) {
+        //   if (this.tags.length >= 1) {
+        //     for (let i = 0; i < this.tags.length; i++) {
+        //       if (this.tags[i] === val) {
+        //         return false
+        //       }
+        //     }
+        //   }
+        //   this.tags.push(val)
+        //   event.target.value = ''
+        //   console.log(this.tags)
+    },
+    removeTag(index) {
+      this.tags.splice(index, 1)
+    },
+    removeLastTag(event) {
+      if (event.target.value.length === 0) {
+        this.removeTag(this.tags.length - 1)
+      }
+    },
+  },      
   mounted() {
     this.isVisible = true;
   },

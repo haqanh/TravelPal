@@ -29,7 +29,9 @@
             >
               <DialogTitle
                 as="h3"
-                class="text-center font-medium leading-[3.2vh] text-[#3F3D3D] font-semibold text-[3.4vh]"
+
+                class="text-center text-lg leading-6 text-[#3F3D3D] font-semibold text-[26px]"
+
               >
                 Add Trip
               </DialogTitle>
@@ -86,11 +88,13 @@
 
 
                 <!-- Select Dates Inputs -->
-                <div class="mb-[2.1vh]">
-                  <div class="flex items-center mb-[1.05vh]">
-                      <div class="text-[#3F3D3D] text-lg font-semibold mr-[1.05vh] font-[4vh]">Dates</div>
-                      <div class="mr-[1.05vh]">
-                          <img src="../assets/Calendar.svg" alt="Calendar Icon" class="w-[4vh] h-[4vh] pb-[0.5vh]">
+
+                <div class="mb-4">
+                  <div class="flex items-center mb-2">
+                      <div class="text-[#3F3D3D] text-lg font-semibold mr-2">Dates</div>
+                      <div class="mr-2">
+                          <img src="../assets/Calendar.svg" alt="Calendar Icon" class="w-6 h-6">
+
                       </div>
                   </div>
 
@@ -124,8 +128,10 @@
               </div>
                 
               <!-- Cost Input -->
-                <div class="mb-[2.1vh]">
-                <label for="cost" class="text-[#3F3D3D] text-lg font-semibold mr-[1.05vh] font-[2.6vh]">
+
+                <div class="mb-4">
+                <label for="cost" class="text-[#3F3D3D] text-lg font-semibold mr-2">
+
                     Cost
                 </label>
                 <div class="mb-[2.1vh]">
@@ -147,7 +153,9 @@
               <div class="mt-[5vh] text-center">
                 <button
                   type="button"
-                  class="inline-flex justify-center rounded-lg border border-[#C1C1C1] border-2 shadow-lg px-[1vh] py-[0.4vh] text-[2vh] font-regular text-[#434343] hover:bg-[#C1C1C1] hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1C1C1] focus-visible:ring-offset-2"
+
+                  class="inline-flex justify-center rounded-lg border-[#C1C1C1] border-2 shadow-lg px-3 py-1 text-sm font-regular text-[#434343] hover:bg-[#C1C1C1] hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1C1C1] focus-visible:ring-offset-2"
+
                   @click="navigateToNextStep"
                 >
                   Next

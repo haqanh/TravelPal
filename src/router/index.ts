@@ -9,9 +9,9 @@ import LandingPage from '@/views/LandingPage.vue'
 import Home from '../views/Home.vue'
 import ViewTrip from '../views/ViewTrip.vue'
 import Sidebar from '../components/SideBar.vue'
+import Explore from '../views/ExploreView.vue';
 import UserProfilingView from '../views/UserProfilingView.vue'
 import Dashboard from '../views/DashboardView.vue'
-
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,6 +65,27 @@ const router = createRouter({
     }
   },
   {
+
+    path: '/add-guide-btn',
+    name: 'addGuideBtn',
+    component: AddGuideBtn
+  },
+  {
+    path: '/explore-card',
+    name: 'exploreCard',
+    component: ExploreCard
+  },
+  {
+    path: '/guide-card',
+    name: 'guideCard',
+    component: GuideCard
+  },
+  {
+    path: '/explore',
+    name: 'explore',
+    component: Explore
+  },
+  {
     path: '/edit-trip',
     name: 'edit-trip',
     component: EditTrip
@@ -73,6 +94,7 @@ const router = createRouter({
     path: '/dashboard',
     name: 'dashboard',
     component: Dashboard
+
   }
   ]
 });

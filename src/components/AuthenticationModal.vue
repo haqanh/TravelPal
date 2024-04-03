@@ -263,9 +263,11 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
+
 import { firebaseApp, db } from '@/firebase'
 import { doc, setDoc } from 'firebase/firestore'
 import {
+
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,

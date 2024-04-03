@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
@@ -20,5 +21,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 // Initialize Firestore and export
 const db = getFirestore(firebaseApp)
 
-export { firebaseApp, db }
+const storage = getStorage(firebaseApp)
+
+export { firebaseApp, db, storage }
 
