@@ -1,6 +1,4 @@
-<script setup>
-import { ref } from 'vue'
-
+<script>
 import {
   Dialog as HeadlessDialog,
   DialogPanel,
@@ -14,121 +12,124 @@ import {
 import AddPlaces from './AddPlaces.vue'
 import AddGeneralAdvice from './AddGeneralAdvice.vue'
 
-const isOpen = ref(true)
-
-function submit() {
-  isOpen.value = false
-}
-
-const advices = ref([{ id: 1, content: '', visible: true }])
-const places = ref([{id: 1, visible: true}])
-const placesToEat = ref([{id:1, visible: true}])
-const placesToStay = ref([{id:1, visible: true}])
-const placesNearby = ref([{id:1, visible: true}])
-
-// Initialize an id counter
-let adId = 2;
-const addAdvice = (content) => {
-  const newAdvice = {
-    id: `advice-${adId++}`, // Increment the id for each new advice
-    content: content,
-    visible: true
-  };
-  advices.value.push(newAdvice);
-}
-
-function deleteAdvice(advice) {
-  if(confirm('Are you sure you want to remove the Advice?')) {
-    advice.visible = !advice.visible;
-    const index = this.advices.indexOf(advice);
-    if (index !== -1) {
-      this.advices.splice(index, 1);
+export default {
+  components: {
+    HeadlessDialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionRoot,
+    TransitionChild,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    AddPlaces,
+    AddGeneralAdvice
+  },
+  data() {
+    return {
+      isOpen: true,
+      advices: [{ id: 1, content: '', visible: true }],
+      places: [{ id: 1, visible: true }],
+      placesToEat: [{ id: 1, visible: true }],
+      placesToStay: [{ id: 1, visible: true }],
+      placesNearby: [{ id: 1, visible: true }]
+    }
+  },
+  methods: {
+    submit() {
+      this.isOpen = false
+      this.$emit('close')
+    },
+    exit() {
+      this.isOpen = false
+      this.$emit('close')
+    },
+    addAdvice(content) {
+      const newAdvice = {
+        id: `advice-${this.advices.length + 1}`,
+        content: content,
+        visible: true
+      }
+      this.advices.push(newAdvice)
+    },
+    deleteAdvice(advice) {
+      if (confirm('Are you sure you want to remove the Advice?')) {
+        advice.visible = !advice.visible
+        const index = this.advices.indexOf(advice)
+        if (index !== -1) {
+          this.advices.splice(index, 1)
+        }
+      }
+    },
+    updateContent(advice, content) {
+      advice.content = content
+    },
+    addPlace() {
+      const newPlace = {
+        id: `place-${this.places.length + 1}`,
+        visible: true
+      }
+      this.places.push(newPlace)
+    },
+    deletePlace(place) {
+      if (confirm('Are you sure you want to remove the Place?')) {
+        place.visible = !place.visible
+        const index = this.places.indexOf(place)
+        if (index !== -1) {
+          this.places.splice(index, 1)
+        }
+      }
+    },
+    addPlaceToEat() {
+      const newPlace = {
+        id: `place-${this.placesToEat.length + 1}`,
+        visible: true
+      }
+      this.placesToEat.push(newPlace)
+    },
+    deletePlaceToEat(place) {
+      if (confirm('Are you sure you want to remove the Place?')) {
+        place.visible = !place.visible
+        const index = this.placesToEat.indexOf(place)
+        if (index !== -1) {
+          this.placesToEat.splice(index, 1)
+        }
+      }
+    },
+    addPlaceToStay() {
+      const newPlace = {
+        id: `place-${this.placesToStay.length + 1}`,
+        visible: true
+      }
+      this.placesToStay.push(newPlace)
+    },
+    deletePlaceToStay(place) {
+      if (confirm('Are you sure you want to remove the Place?')) {
+        place.visible = !place.visible
+        const index = this.placesToStay.indexOf(place)
+        if (index !== -1) {
+          this.placesToStay.splice(index, 1)
+        }
+      }
+    },
+    addPlaceNearby() {
+      const newPlace = {
+        id: `place-${this.placesNearby.length + 1}`,
+        visible: true
+      }
+      this.placesNearby.push(newPlace)
+    },
+    deletePlaceNearby(place) {
+      if (confirm('Are you sure you want to remove the Place?')) {
+        place.visible = !place.visible
+        const index = this.placesNearby.indexOf(place)
+        if (index !== -1) {
+          this.placesNearby.splice(index, 1)
+        }
+      }
     }
   }
 }
-
-function updateContent(advice, content) {
-      advice.content = content;
-}
-
-// Function to add a new AddPlaces component
-let pId = 2;
-const addPlace = () => {
-  const newPlace = {
-    id: `place-${pId++}`, 
-    visible: true
-  };
-  places.value.push({newPlace})
-}
-
-function deletePlace(place) {
-  if(confirm('Are you sure you want to remove the Place?')) {
-    place.visible = !place.visible;
-    const index = this.places.indexOf(place);
-    if (index !== -1) {
-      this.places.splice(index, 1);
-    }
-  }
-}
-
-let peId = 2;
-const addPlaceToEat = () => {
-  const newPlace = {
-    id: `place-${peId++}`, // Increment the id for each new advice
-    visible: true
-  };
-  placesToEat.value.push({newPlace})
-}
-
-function deletePlaceToEat(place) {
-  if(confirm('Are you sure you want to remove the Place?')) {
-    place.visible = !place.visible;
-    const index = this.placesToEat.indexOf(place);
-    if (index !== -1) {
-      this.placesToEat.splice(index, 1);
-    }
-  }
-}
-
-
-let psId = 2;
-const addPlaceToStay = () => {
-  const newPlace = {
-    id: `place-${psId++}`, // Increment the id for each new advice
-    visible: true
-  };
-  placesToStay.value.push({newPlace})
-}
-
-function deletePlaceToStay(place) {
-  if(confirm('Are you sure you want to remove the Place?')) {
-    place.visible = !place.visible;
-    const index = this.placesToStay.indexOf(place);
-    if (index !== -1) {
-      this.placesToStay.splice(index, 1);
-    }
-  }
-}
-
-let pnId = 2;
-const addPlaceNearby = () => {
-  const newPlace = {
-    id: `place-${pnId++}`, // Increment the id for each new advice
-    visible: true
-  };
-  placesNearby.value.push({newPlace})
-}
-
-function deletePlaceNearby(place) {
-  if(confirm('Are you sure you want to remove the Place?')) {
-    place.visible = !place.visible;
-    const index = this.placesNearby.indexOf(place);
-    if (index !== -1) {
-      this.placesNearby.splice(index, 1);
-    }
-  }
-}
-
 </script>
 
 <template>
@@ -145,10 +146,12 @@ function deletePlaceNearby(place) {
             <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-100 scale-95"
               enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
               leave-to="opacity-100 scale-95">
-              <DialogPanel class="panel_style">
-                <DialogTitle as="h3" class="addGuide_style"> Add Guide </DialogTitle>
+              <DialogPanel class="panel_style relative">
+                <div class="flex justify-between items-center">
+                  <DialogTitle class="addGuide_style text-center flex-grow"> Add Guide </DialogTitle>
+                  <img src="../assets/Multiply.svg" alt="Close" class="cursor-pointer w-6 h-6" @click="exit" />
+                </div>
                 <br />
-
                 <div class="mt-2">
                   <Disclosure v-slot="{ open }">
                     <DisclosureButton class="disclosureButton">
@@ -167,10 +170,17 @@ function deletePlaceNearby(place) {
                         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                       </svg>
                     </DisclosureButton>
+                    <transition
+                      enter-active-class="transition duration-300 ease-out"
+                      enter-from-class="transform scale-95 opacity-0"
+                      enter-to-class="transform scale-100 opacity-100"
+                      leave-active-class="transition duration-200 ease-in"
+                      leave-from-class="transform scale-100 opacity-100"
+                      leave-to-class="transform scale-95 opacity-0"
+                    >
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                         <div v-for="(advice) in advices" :key="advice.id" @contextmenu.prevent="deleteAdvice(advice)">
-              
                             <AddGeneralAdvice v-show="advice.visible" :content="advice.content" @content-updated="updateContent(advice, $event)"/>
                             <br>
                         </div>
@@ -188,6 +198,7 @@ function deletePlaceNearby(place) {
                       </div>
 
                     </DisclosurePanel>
+                    </transition>
                   </Disclosure>
                   <br />
 
@@ -210,14 +221,19 @@ function deletePlaceNearby(place) {
                         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                       </svg>
                     </DisclosureButton>
+                    <transition
+                      enter-active-class="transition duration-300 ease-out"
+                      enter-from-class="transform scale-95 opacity-0"
+                      enter-to-class="transform scale-100 opacity-100"
+                      leave-active-class="transition duration-200 ease-in"
+                      leave-from-class="transform scale-100 opacity-100"
+                      leave-to-class="transform scale-95 opacity-0"
+                    >
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
-                        <!-- <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
-                            <AddPlaces v-show="place.visible"/> -->
-
                           <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
                             <div v-if="place.visible"></div>
-                            <AddPlaces />
+                            <AddPlaces :id="place.id"/>
                           <br />
                         </div>
 
@@ -233,6 +249,7 @@ function deletePlaceNearby(place) {
                         </div>
                       </div>
                     </DisclosurePanel>
+                    </transition>
                   </Disclosure>
                   <br />
 
@@ -249,11 +266,19 @@ function deletePlaceNearby(place) {
                         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                       </svg>
                     </DisclosureButton>
+                    <transition
+                      enter-active-class="transition duration-300 ease-out"
+                      enter-from-class="transform scale-95 opacity-0"
+                      enter-to-class="transform scale-100 opacity-100"
+                      leave-active-class="transition duration-200 ease-in"
+                      leave-from-class="transform scale-100 opacity-100"
+                      leave-to-class="transform scale-95 opacity-0"
+                    >
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesToEat" :key="place.id" @contextmenu.prevent="deletePlaceToEat(place)">
                             <div v-if="place.visible"></div>
-                            <AddPlaces/>
+                            <AddPlaces :id="place.id"/>
                           <br />
                         </div>
 
@@ -269,6 +294,7 @@ function deletePlaceNearby(place) {
                         </div>
                       </div>
                     </DisclosurePanel>
+                    </transition>
                   </Disclosure>
                   <br />
 
@@ -289,6 +315,14 @@ function deletePlaceNearby(place) {
                         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                       </svg>
                     </DisclosureButton>
+                    <transition
+                      enter-active-class="transition duration-300 ease-out"
+                      enter-from-class="transform scale-95 opacity-0"
+                      enter-to-class="transform scale-100 opacity-100"
+                      leave-active-class="transition duration-200 ease-in"
+                      leave-from-class="transform scale-100 opacity-100"
+                      leave-to-class="transform scale-95 opacity-0"
+                    >
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesToStay" :key="place.id" @contextmenu.prevent="deletePlaceToStay(place)">
@@ -309,6 +343,7 @@ function deletePlaceNearby(place) {
                         </div>
                       </div>
                     </DisclosurePanel>
+                    </transition>
                   </Disclosure>
                   <br />
 
@@ -329,6 +364,14 @@ function deletePlaceNearby(place) {
                         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                       </svg>
                     </DisclosureButton>
+                    <transition
+                      enter-active-class="transition duration-300 ease-out"
+                      enter-from-class="transform scale-95 opacity-0"
+                      enter-to-class="transform scale-100 opacity-100"
+                      leave-active-class="transition duration-200 ease-in"
+                      leave-from-class="transform scale-100 opacity-100"
+                      leave-to-class="transform scale-95 opacity-0"
+                    >
                     <DisclosurePanel class="flex w-full px-4 pb-2 pt-4 text-sm text-gray-500">
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesNearby" :key="place.id" @contextmenu.prevent="deletePlaceNearby(place)">
@@ -349,6 +392,7 @@ function deletePlaceNearby(place) {
                         </div>
                       </div>
                     </DisclosurePanel>
+                    </transition>
                   </Disclosure>
                   <br />
                 </div>
@@ -379,7 +423,7 @@ function deletePlaceNearby(place) {
 }
 
 .addGuide_style {
-  @apply text-lg font-medium leading-6 text-gray-900 justify-center flex items-center;
+  @apply text-2xl font-semibold leading-6 text-gray-900 justify-center ml-10 items-center;
 }
 
 .photoInput_style {

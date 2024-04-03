@@ -24,20 +24,24 @@
     </div>
   </template>
   
-  <script setup>
-  import { ref } from 'vue'
-  
-  const isOpen = ref(true)
-  
-  function handleDelete() {
-    // Connect to Firebase for Delete functionality here
-    console.log('Delete Trip')
-  }
-  
-  function handleCancel() {
-    // Close the modal
-    isOpen.value = false
-    console.log('Cancel Deletion')
-  }
+  <script>
+    export default {
+      data() {
+        return {
+          isOpen: true,
+        };
+      },
+      methods: {
+        handleDelete() {
+          // Connect to Firebase for Delete functionality here
+          console.log('Delete Trip');
+        },
+        handleCancel() {
+          // Close the modal
+          this.isOpen = false;
+          console.log('Cancel Deletion');
+        },
+      },
+    };
   </script>
   
