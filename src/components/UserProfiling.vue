@@ -1,7 +1,9 @@
 <template>
-  <div class="flex justify-center items-center align-middle min-h-screen min-w-full font-poppins">
-    <div class="flex flex-col justify-between h-[600px] max-w-[600px] shadow-2xl rounded-3xl">
+  <div class="flex justify-center items-center align-middle min-h-screen min-w-full font-poppins absolute top-0 backdrop-filter backdrop-brightness-75 backdrop-blur-md">
+    <div class="flex flex-col justify-between h-[600px] w-[600px] shadow-2xl rounded-3xl bg-white relative">
+      <hr class="relative h-[1px] border-0 bg-gray-600 top-[6rem]" />
       <keep-alive>
+        <Transition :name="slide" mode="out-in">
         <component 
           :is="components[page]" 
           :name="name" @update-name="updateName" 
@@ -15,31 +17,11 @@
           :selectedCountries="selectedCountries" @toggle-country="toggleCountry"
           :selectedInterests="selectedInterests" @toggle-interest="toggleInterest"
         />
+        </Transition>
       </keep-alive>
       <TheFooter @page-change="updatePage"/>
     </div>
   </div>
-  <div>
-    {{ name }}
-    <br/>
-    {{ ageRange }}
-    <br/>
-    {{ gender }}
-    <br/>
-    {{ travelFreq }}
-    <br/>
-    {{ travelCompanions }}
-    <br/>
-    {{ usedTravelpalBefore }}
-    <br/>
-    {{ usedSimilarAppsBefore }}
-    <br/>
-    {{ privateOrPublic }}
-    <br/>
-    {{ selectedCountries }}
-    <br/>
-    {{ selectedInterests }}
-</div>
 </template>
 
 <script lang="ts">
@@ -51,7 +33,9 @@ import StateFamiliarityAndPrivacy from './StateFamiliarityAndPrivacy.vue';
 import TheFooter from './TheFooter.vue';
 import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
-const $toast = useToast()
+import { firebaseApp, db } from '@/firebase'
+import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { getAuth } from 'firebase/auth'
 
 export default {
   data() {
@@ -66,8 +50,15 @@ export default {
       usedTravelpalBefore: "no",
       usedSimilarAppsBefore: "no",
       privateOrPublic: "private",
-      selectedCountries: [""],
-      selectedInterests: [""],
+      selectedCountries: [],
+      selectedInterests: [],
+      slideRight: true,
+      auth: null,
+    }
+  },
+  computed: {
+    slide() {
+      return this.slideRight ? "slide-right" : "slide-left"
     }
   },
   components: {
@@ -79,8 +70,32 @@ export default {
     TheFooter
   },
   methods: {
-    updatePage(page: number) {
-      this.page = page
+    async updatePage(page: number) {
+      if (page === 6) {
+        try {
+          const auth = getAuth()
+          const user = auth.currentUser
+          await updateDoc(doc(db, 'users', user!.email!), {
+            Name: this.name,
+            Age_Range: this.ageRange,
+            Gender: this.gender,
+            Travel_Freq: this.travelFreq,
+            Travel_Comp: this.travelCompanions,
+            Used_Before: this.usedTravelpalBefore == "yes" ? true : false,
+            Used_Similar: this.usedSimilarAppsBefore == "yes" ? true : false,
+            Is_Public: this.privateOrPublic == "public" ? true : false,
+            Bucket_List: this.selectedCountries,
+            Interests: this.selectedInterests
+          })
+          console.log('Doc updated')
+        } catch (e) {
+          console.error('Error updating document: ', e)
+        }
+        this.$router.push('dashboard')
+      } else {
+        this.slideRight = page > this.page ? true : false
+        this.page = page
+      }
     },
     updateName(name: string) {
       this.name = name
@@ -111,11 +126,7 @@ export default {
         const index = this.selectedCountries.indexOf(country)
         this.selectedCountries.splice(index, 1)
       } else {
-        if (this.selectedCountries.length > 10) {
-          $toast.error('Maximum 10 countries!', {
-            position: 'top'
-          })
-        } else{
+        if (this.selectedCountries.length <= 10) {
           this.selectedCountries.push(country)
         }
       }
@@ -131,3 +142,24 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.slide-right-leave-active {
+  animation: slideRight 0.3s ease-out;
+}
+
+.slide-left-leave-active {
+  animation: slideLeft 0.3s ease-out;
+}
+
+@keyframes slideRight {
+  0% { transform: translateX(0px); width: 600px }
+  100% { transform: translateX(-40px); opacity: 1; width: 600px }
+}
+
+@keyframes slideLeft {
+  0% { transform: translateX(0px); width: 600px }
+  100% { transform: translateX(40px); opacity: 1; width: 600px }
+}
+
+</style>
