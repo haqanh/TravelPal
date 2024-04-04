@@ -43,7 +43,7 @@ const router = createRouter({
       component: AddGuide2,
     },
     {
-      path: '/guide-view',
+      path: '/guide/:docRef',
       name: 'GuideView',
       component: GuideView,
     },
