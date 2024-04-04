@@ -82,7 +82,7 @@
                         <span class="rounded-l-md inline-flex items-center px-[1.6vh] border-t bg-white border-l border-b border-gray-300 text-gray-500 shadow-sm text-[1.8vh]">
                             <img src="../assets/Airplane Take Off.svg" width="15" height="15" fill="currentColor" viewBox="0 0 1792 1792">
                         </span>
-                        <input v-model="tripLocation" type="text" id="trip-location-with-icon" class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-[1.05vh] px-[2.1vh] bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="location" placeholder="Where?" />
+                        <input ref="location_input" v-model="tripLocation" type="text" id="trip-location-with-icon" class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-[1.05vh] px-[2.1vh] bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="location" placeholder="Where?" />
                     </div>
                 </div>
 
@@ -181,7 +181,7 @@ import {
 import AddTripSecondPopUp from './AddTripSecondPopUp.vue'
 import Datepicker from 'vue3-datepicker';
 import { firebaseApp, db } from '@/firebase'
-import { doc, setDoc, collection, getDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, collection, getDoc, updateDoc, increment } from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
@@ -195,7 +195,23 @@ export default {
       selectedEndDate: null,
       showStartDatepicker: false,
       showEndDatepicker: false,
+      tripLocation: '',
+      selectedTempPlace: '',
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      const autocomplete = new google.maps.places.Autocomplete(this.$refs.location_input, {
+      fields: ["geometry.location", "place_id", "name", "formatted_address"],
+      types: ["geocode"],
+      });
+
+      google.maps.event.addListener(autocomplete, "place_changed", () => {
+        const place = autocomplete.getPlace();
+        this.selectedTempPlace = place;
+        console.log(this.selectedTempPlace.formatted_address)
+      });
+    });
   },
   methods: {
     clearStartDate() {
@@ -232,12 +248,53 @@ export default {
         }
       }
     },
+    calculateDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371; // Radius of the earth in km
+      const dLat = this.deg2rad(lat2-lat1);
+      const dLon = this.deg2rad(lon2-lon1); 
+      const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2)
+        ; 
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      const distance = R * c; // Distance in km
+      return parseFloat(distance.toFixed(2));
+    },
+    deg2rad(deg) {
+      return deg * (Math.PI/180)
+    },
+    num_of_steps(days) {
+      let steps = 0;
+      for (let i = 0; i < days; i++) {
+        steps += Math.floor(Math.random() * (15000 - 5000 + 1)) + 5000;
+      }
+      return steps;
+    },
     async saveTrip() {
       const auth = getAuth();
       const user = auth.currentUser;
       const userRef = doc(db, 'users', user.email);
       const currentTimestamp = new Date();
-      await setDoc(userRef, {});
+      this.tripLocation = this.selectedTempPlace.formatted_address;
+      const distance = this.calculateDistance(this.selectedTempPlace.geometry.location.lat(), this.selectedTempPlace.geometry.location.lng(), 
+      1.352083, 103.819836); //Latitude and Longitude of Singapore
+      const numDays = Math.round((this.selectedEndDate - this.selectedStartDate) / (1000 * 60 * 60 * 24));
+
+      const userDoc = await getDoc(userRef);
+      if (!userDoc.exists()) {
+        await setDoc(userRef, {
+          Distance_Travelled: 0,
+          Num_Visited: 0,
+          Steps: 0,
+        });
+      }
+
+      await updateDoc(userRef, {
+          Distance_Travelled: increment(distance),
+          Num_Visited: increment(1),
+          Steps: increment(this.num_of_steps(numDays)),
+      });
 
       const tripRef = doc(collection(userRef, 'trips'), this.tripName);
       await setDoc(tripRef, {
