@@ -23,6 +23,7 @@ onMounted(() => {
       isLoggedIn.value = false;
     }
   });
+  
 });
 
 const handleSignOut = () => {
@@ -30,8 +31,6 @@ const handleSignOut = () => {
     router.push('/');
   });
 };
-
-
 </script>
 
 <template>
