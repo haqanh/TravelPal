@@ -184,6 +184,10 @@ import { firebaseApp, db } from '@/firebase'
 import { doc, setDoc, collection, getDoc, updateDoc, increment } from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
+
+const $toast = useToast()
 
 export default {
   data() {
@@ -221,9 +225,16 @@ export default {
       this.selectedEndDate = null;
     },
     navigateToNextStep() {
-      this.isfirstDialog = false;
-      this.isSecondDialog = true;
-      this.saveTrip();
+      if (this.fieldsFilled()) {
+        this.isfirstDialog = false;
+        this.isSecondDialog = true;
+        this.saveTrip();
+      } else {
+        const errorMessage = 'Please fill in all fields!'
+        $toast.error(errorMessage, {
+          position: 'top'
+        })
+      }
     },
     closeDialog() {
       this.$emit('closetrip')
@@ -247,6 +258,9 @@ export default {
           alert('Please select a JPEG or PNG file.');
         }
       }
+    },
+    fieldsFilled() {
+      return this.tripName && this.tripLocation && this.selectedStartDate && this.selectedEndDate && this.tripCost && this.selectedPhoto.length > 0;
     },
     calculateDistance(lat1, lon1, lat2, lon2) {
       const R = 6371; // Radius of the earth in km
@@ -352,7 +366,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .scrollbar::-webkit-scrollbar {
     width: 10px; 
     height: 10px; 

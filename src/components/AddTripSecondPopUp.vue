@@ -100,6 +100,10 @@
   import { doc, updateDoc, collection } from "firebase/firestore";
   import { getAuth } from 'firebase/auth'
   import global_tags from './GlobalTag.vue'
+  import { useToast } from 'vue-toast-notification'
+  import 'vue-toast-notification/dist/theme-sugar.css'
+
+  const $toast = useToast()
   
   export default {
     data() {
@@ -128,11 +132,21 @@
         });
         console.log('Trip part 2 saved successfully');
     },
+    fieldsFilled() {
+      return this.summary && this.tags.length > 0;
+    },
     closeModal() {
+      if (this.fieldsFilled()) {
         this.isOpen = false;
         this.$emit('closetrip')
         this.saveTrip2();
-      },
+      } else {
+        const errorMessage = 'Please fill in all fields!'
+        $toast.error(errorMessage, {
+          position: 'top'
+        })
+      }
+    },
       closeModalOnly() {
         this.isOpen = false;
         this.$emit('closetriponly')

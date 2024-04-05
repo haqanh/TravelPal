@@ -3,7 +3,6 @@
       <NavBar />
     </div>
     <div class="flex">
-      <SideBar />
       <div class="w-80vw p-10 my-10 mx-10">
         <div class="DashboardContents flex flex-col lg:flex-row justify-between lg:items-center -mx-10">
             <h1 class="text-[60px] font-semibold text-[#3F3D3D] mx-10">Home</h1>
@@ -11,7 +10,7 @@
                 <svg class="absolute left-0 z-0 hidden w-4 h-4 ml-4 text-gray-500 pointer-events-none fill-current group-hover:text-gray-400 sm:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                     <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
                 </svg>
-                <input type="text" class="block w-full py-3 pl-10 pr-4 leading-normal rounded-xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-800 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-[#3F3D3D] aa-input" placeholder="Search"/>
+                <input type="text" v-model="searchInput" class="block w-full py-3 pl-10 pr-4 leading-normal rounded-xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-800 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-[#3F3D3D] aa-input" placeholder="Search"/>
             </div>
         </div>
         <div class="flex justify-between items-center my-10 mb-10 min-w-full -mx-10">
@@ -23,7 +22,7 @@
         </div>
         <AddTrip v-if="showAddTrip" @closetrip="resetAddTrip" @closetriponly="backToDashboard"/>
         <div class="TripCardWrapper grid grid-cols-4 min-w-full gap-4">
-            <TripCard class="cursor-pointer" @click="viewTrip(trip)" v-for="trip in trips" :key="trip.id" :TripName="trip.Name" :Location="trip.Location" :TripStartDate="trip.Start_Date" :TripEndDate="trip.End_Date" :TripImage="trip.Photos[0]" :TripCost="trip.Cost"/>
+            <TripCard class="cursor-pointer" @click="viewTrip(trip)" v-for="trip in filteredTrips" :key="trip.id" :TripName="trip.Name" :Location="trip.Location" :TripStartDate="trip.Start_Date" :TripEndDate="trip.End_Date" :TripImage="trip.Photos[0]" :TripCost="trip.Cost"/>
         </div>
         <div class="flex justify-between items-center my-10 mb-10 min-w-full -mx-10">
             <h1 class="text-[2vw] font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">My Guides</h1>
@@ -34,7 +33,7 @@
         </div>
         <AddGuide v-if="showAddGuide" @close="resetAddGuide"/>
         <div class="GuideCardWrapper grid grid-cols-4 min-w-full gap-4">
-            <GuideCard v-for="guide in guides" :key="guide.id" :GuideName="guide.title" :Location="guide.destination" :GuideImage="guide.coverPhoto" :GuideStartDate="guide.Start_Date" :GuideEndDate="guide.End_Date"/>
+            <GuideCard v-for="guide in filteredGuides" :key="guide.id" :GuideName="guide.title" :Location="guide.destination" :GuideImage="guide.coverPhoto" :GuideStartDate="guide.Start_Date" :GuideEndDate="guide.End_Date"/>
         </div>
     </div>
     </div> 
@@ -66,7 +65,28 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
         showAddTrip: false,
         trips: [],
         guides: [],
+        searchInput: '',
       }
+    },
+    computed: {
+        filteredTrips() {
+            if (this.searchInput === '') {
+                return this.trips
+            } else {
+            return this.trips.filter(trip => {
+                return trip.Name.toLowerCase().startsWith(this.searchInput.toLowerCase())
+            })
+            }
+        },
+        filteredGuides() {
+            if (this.searchInput === '') {
+                return this.guides
+            } else {
+            return this.guides.filter(guide => {
+                return guide.title.toLowerCase().startsWith(this.searchInput.toLowerCase())
+            })
+        }
+        }
     },
     methods: {
         toggleAddGuide() {
