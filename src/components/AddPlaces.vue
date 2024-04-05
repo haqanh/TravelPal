@@ -23,7 +23,7 @@
 
             <!-- Location Input -->
             <label for="location">
-              <input @keyup.enter="updateLocation" @input="updateLocation($event.target.value, place)" v-model= "location" type="text" id="location" class="input_style" name="location" placeholder="Location" />
+              <input ref="location_input" @keyup.enter="updateLocation" @input="updateLocation($event.target.value, place)" v-model= "location" type="text" id="location" class="input_style" name="location" placeholder="Location" />
             </label>
           </div>
           <br />
@@ -106,7 +106,7 @@
                   <p class="mb-2 text-sm text-gray-500 dark:text-gray-400 font-semibold">Add Photo</p>
                 </template>
             </div>
-            <input :id="'dropzone-file-' + id + count" type="file" class="hidden"  @change="handleFileChange" accept=".jpg, .jpeg, .png"/>
+            <input :id="'dropzone-file-' + id + count" type="file" class="hidden" @change="handleFileChange" accept=".jpg, .jpeg, .png"/>
             </label>
           </div> 
         </div>
@@ -175,15 +175,19 @@ export default {
   methods: {
     updateLocation() {
       this.$emit('location-updated', this.location);
+      console.log(this.location)
     },
     updateTags() {
       this.$emit('tags-updated', this.tags);
+      console.log(this.tags)
     },
     updateCost() {
       this.$emit('cost-updated', this.cost);
+      console.log(this.cost)
     },
     updateSummary() {
       this.$emit('summary-updated', this.summary);
+      console.log(this.summary)
     },
 
     handleFileChange(event) {
@@ -193,6 +197,7 @@ export default {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.selectedPhoto = e.target.result;
+          console.log(this.selectedPhoto)
           this.$emit('photo-updated', this.selectedPhoto);
 
         };
@@ -220,20 +225,6 @@ export default {
           console.log(this.tags)
         }
       }
-
-        // event.preventDefault()
-        // let val = event.target.value.trim()
-        // if (val.length > 0) {
-        //   if (this.tags.length >= 1) {
-        //     for (let i = 0; i < this.tags.length; i++) {
-        //       if (this.tags[i] === val) {
-        //         return false
-        //       }
-        //     }
-        //   }
-        //   this.tags.push(val)
-        //   event.target.value = ''
-        //   console.log(this.tags)
     },
     removeTag(index) {
       this.tags.splice(index, 1)
@@ -246,6 +237,19 @@ export default {
   },      
   mounted() {
     this.isVisible = true;
+    
+    this.$nextTick(() => {
+      const autocomplete = new google.maps.places.Autocomplete(this.$refs.location_input, {
+        fields: ['geometry.location', 'place_id', 'name', 'formatted_address'],
+        types: ['geocode']
+      })
+
+      google.maps.event.addListener(autocomplete, 'place_changed', () => {
+        const place = autocomplete.getPlace()
+        this.location = place.formatted_address
+        console.log(this.location)
+      })
+    })
   },
   props:['id'],
 };

@@ -12,9 +12,9 @@ import {
 import AddPlaces from './AddPlaces.vue'
 import AddGeneralAdvice from './AddGeneralAdvice.vue'
 import { db, storage} from '@/firebase'
-import { collection, addDoc, deleteDoc, doc} from "firebase/firestore";
+import { collection, addDoc, deleteDoc, doc, setDoc } from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
-import { ref, uploadString, getDownloadURL} from 'firebase/storage'
+import { ref, uploadString, getDownloadURL, uploadBytesResumable} from 'firebase/storage'
 
 
 export default {
@@ -24,7 +24,6 @@ export default {
       required: true
     }
   },
-
   components: {
     HeadlessDialog,
     DialogPanel,
@@ -49,33 +48,54 @@ export default {
     }
   },
   methods: {
+    dataURLtoFile(dataURL, filename) {
+      const arr = dataURL.split(',');
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
     async submit() {
-      this.isOpen = false
-      this.$emit('close')
+      // this.isOpen = false
+      // this.$emit('close')
 
       try {
         const auth = getAuth()
         const user = auth.currentUser
 
         for (let advice of this.advices) {
-          const newAdviceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'advices'), {
+          console.log(this.advices)
+          const newAdviceRef = doc(db, 'users', user.email, "guides", this.guideId, 'advices', 'advice1');
+          await setDoc(newAdviceRef, {
             Content: advice.content,
           })
+          // const newAdviceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'advices'), {
+          //   Content: advice.content,
+          // })
           console.log("Advice document written with ID: ", newAdviceRef.id);
         }
 
         for (let place of this.places) {
+          console.log(this.places)
+          console.log(place)
+          console.log(place.location)
 
           //create storage reference
           const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/places/${place.location}`)
 
+          const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
           // Upload the selectedPhoto to Firebase Storage
-          const uploadTask = await uploadString(storageRef, place.selectedPhoto, 'data_url');
+          const uploadTask = await uploadBytesResumable(storageRef, file);
 
           // Get the URL of the uploaded image
           const photoURL = await getDownloadURL(uploadTask.ref);
-
-          const newPlaceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'places'), {
+    
+          const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'places', place.location)
+          await setDoc(newPlaceRef, {
             Location: place.location,
             Tags: place.tags,
             Cost: place.cost,
@@ -89,13 +109,14 @@ export default {
           //create storage reference
           const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToEat/${place.location}`)
 
+          const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
           // Upload the selectedPhoto to Firebase Storage
-          const uploadTask = await uploadString(storageRef, place.selectedPhoto, 'data_url');
-
+          const uploadTask = await uploadBytesResumable(storageRef, file);
           // Get the URL of the uploaded image
           const photoURL = await getDownloadURL(uploadTask.ref);
 
-          const newPlaceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'places'), {
+          const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToEat', place.location)
+          await setDoc(newPlaceRef, {
             Location: place.location,
             Tags: place.tags,
             Cost: place.cost,
@@ -109,13 +130,14 @@ export default {
           //create storage reference
           const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToStay/${place.location}`)
 
+          const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
           // Upload the selectedPhoto to Firebase Storage
-          const uploadTask = await uploadString(storageRef, place.selectedPhoto, 'data_url');
-
+          const uploadTask = await uploadBytesResumable(storageRef, file);
           // Get the URL of the uploaded image
           const photoURL = await getDownloadURL(uploadTask.ref);
 
-          const newPlaceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'places'), {
+          const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToStay', place.location)
+          await setDoc(newPlaceRef, {
             Location: place.location,
             Tags: place.tags,
             Cost: place.cost,
@@ -129,13 +151,14 @@ export default {
           //create storage reference
           const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesNearby/${place.location}`)
 
+          const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
           // Upload the selectedPhoto to Firebase Storage
-          const uploadTask = await uploadString(storageRef, place.selectedPhoto, 'data_url');
-
+          const uploadTask = await uploadBytesResumable(storageRef, file);
           // Get the URL of the uploaded image
           const photoURL = await getDownloadURL(uploadTask.ref);
 
-          const newPlaceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'places'), {
+          const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesNearby', place.location)
+          await setDoc(newPlaceRef, {
             Location: place.location,
             Tags: place.tags,
             Cost: place.cost,
@@ -195,6 +218,7 @@ export default {
     },
     updatePhoto(place, photo) {
       place.selectedPhoto = photo
+
     },
     addPlace() {
       const newPlace = {
