@@ -40,7 +40,6 @@ export default {
     return {
       isOpen: true,
       advices: [{ id: 1, content: '', visible: true }],
-
       places: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
       placesToEat: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
       placesToStay: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
@@ -67,105 +66,116 @@ export default {
         const auth = getAuth()
         const user = auth.currentUser
 
-        for (let advice of this.advices) {
-          console.log(this.advices)
-          const newAdviceRef = doc(db, 'users', user.email, "guides", this.guideId, 'advices', 'advice1');
-          await setDoc(newAdviceRef, {
-            Content: advice.content,
-          })
-          // const newAdviceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'advices'), {
-          //   Content: advice.content,
-          // })
-          console.log("Advice document written with ID: ", newAdviceRef.id);
+        let numAdvice = 1
+  
+        if (this.advices[0].location != "") {
+          for (let advice of this.advices) {
+            console.log(this.advices)
+            const newAdviceRef = doc(db, 'users', user.email, "guides", this.guideId, 'advices', `advice${numAdvice}`);
+            await setDoc(newAdviceRef, {
+              Content: advice.content,
+            })
+            numAdvice++
+            // const newAdviceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'advices'), {
+            //   Content: advice.content,
+            // })
+            console.log("Advice document written with ID: ", newAdviceRef.id);
+          }
+        }
+        if (this.places[0].location != "") {
+          for (let place of this.places) {
+            console.log(this.places)
+            console.log(place)
+            console.log(place.location)
+
+            //create storage reference
+            const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/places/${place.location}`)
+
+            const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
+            // Upload the selectedPhoto to Firebase Storage
+            const uploadTask = await uploadBytesResumable(storageRef, file);
+
+            // Get the URL of the uploaded image
+            const photoURL = await getDownloadURL(uploadTask.ref);
+      
+            const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'places', place.location)
+            await setDoc(newPlaceRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
+            console.log("Place document written with ID: ", newPlaceRef.id);
+          }
         }
 
-        for (let place of this.places) {
-          console.log(this.places)
-          console.log(place)
-          console.log(place.location)
+        if (this.placesToEat[0].location != "") {
+          for (let place of this.placesToEat) {
+            //create storage reference
+            const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToEat/${place.location}`)
+            const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
+            // Upload the selectedPhoto to Firebase Storage
+            const uploadTask = await uploadBytesResumable(storageRef, file);
+            // Get the URL of the uploaded image
+            const photoURL = await getDownloadURL(uploadTask.ref);
 
-          //create storage reference
-          const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/places/${place.location}`)
-
-          const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
-          // Upload the selectedPhoto to Firebase Storage
-          const uploadTask = await uploadBytesResumable(storageRef, file);
-
-          // Get the URL of the uploaded image
-          const photoURL = await getDownloadURL(uploadTask.ref);
-    
-          const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'places', place.location)
-          await setDoc(newPlaceRef, {
-            Location: place.location,
-            Tags: place.tags,
-            Cost: place.cost,
-            Summary: place.summary,
-            Photo: photoURL,
-          })
-          console.log("Place document written with ID: ", newPlaceRef.id);
+            const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToEat', place.location)
+            await setDoc(newPlaceRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
+            console.log("Place document written with ID: ", newPlaceRef.id);
+          }
         }
 
-        for (let place of this.placesToEat) {
-          //create storage reference
-          const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToEat/${place.location}`)
+        if (this.placesToStay[0].location != "") {
+          for (let place of this.placesToStay) {
+            //create storage reference
+            const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToStay/${place.location}`)
 
-          const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
-          // Upload the selectedPhoto to Firebase Storage
-          const uploadTask = await uploadBytesResumable(storageRef, file);
-          // Get the URL of the uploaded image
-          const photoURL = await getDownloadURL(uploadTask.ref);
+            const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
+            // Upload the selectedPhoto to Firebase Storage
+            const uploadTask = await uploadBytesResumable(storageRef, file);
+            // Get the URL of the uploaded image
+            const photoURL = await getDownloadURL(uploadTask.ref);
 
-          const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToEat', place.location)
-          await setDoc(newPlaceRef, {
-            Location: place.location,
-            Tags: place.tags,
-            Cost: place.cost,
-            Summary: place.summary,
-            Photo: photoURL,
-          })
-          console.log("Place document written with ID: ", newPlaceRef.id);
+            const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToStay', place.location)
+            await setDoc(newPlaceRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
+            console.log("Place document written with ID: ", newPlaceRef.id);
+          }
         }
 
-        for (let place of this.placesToStay) {
-          //create storage reference
-          const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToStay/${place.location}`)
+        if (this.placesNearby[0].location != "") {
+          for (let place of this.placesNearby) {
+            //create storage reference
+            const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesNearby/${place.location}`)
 
-          const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
-          // Upload the selectedPhoto to Firebase Storage
-          const uploadTask = await uploadBytesResumable(storageRef, file);
-          // Get the URL of the uploaded image
-          const photoURL = await getDownloadURL(uploadTask.ref);
+            const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
+            // Upload the selectedPhoto to Firebase Storage
+            const uploadTask = await uploadBytesResumable(storageRef, file);
+            // Get the URL of the uploaded image
+            const photoURL = await getDownloadURL(uploadTask.ref);
 
-          const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToStay', place.location)
-          await setDoc(newPlaceRef, {
-            Location: place.location,
-            Tags: place.tags,
-            Cost: place.cost,
-            Summary: place.summary,
-            Photo: photoURL,
-          })
-          console.log("Place document written with ID: ", newPlaceRef.id);
-        }
-
-        for (let place of this.placesNearby) {
-          //create storage reference
-          const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesNearby/${place.location}`)
-
-          const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
-          // Upload the selectedPhoto to Firebase Storage
-          const uploadTask = await uploadBytesResumable(storageRef, file);
-          // Get the URL of the uploaded image
-          const photoURL = await getDownloadURL(uploadTask.ref);
-
-          const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesNearby', place.location)
-          await setDoc(newPlaceRef, {
-            Location: place.location,
-            Tags: place.tags,
-            Cost: place.cost,
-            Summary: place.summary,
-            Photo: photoURL,
-          })
-          console.log("Place document written with ID: ", newPlaceRef.id);
+            const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesNearby', place.location)
+            await setDoc(newPlaceRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
+            console.log("Place document written with ID: ", newPlaceRef.id);
+          }
         }
 
       } catch (e) {
