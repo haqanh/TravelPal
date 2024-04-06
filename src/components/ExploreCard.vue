@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center justify-center">
     <div class="flex flex-col items-start space-y-3">
       <div
-        class="bg-gray shadow-lg w-56 rounded-3xl guideCard"
+        class="bg-gray shadow-lg w-56 rounded-3xl guideCard cursor-pointer"
         v-on:click="openGuide"
         v-if="isVisible"
       >
@@ -40,7 +40,7 @@
         ></GlobalTag>
 
         <!-- Like Button -->
-        <div @click="likeGuide">
+        <div @click="likeGuide" class="cursor-pointer">
           <svg
             v-if="isLiked"
             xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="red"
-            class="h-5 w-5 heart-icon"
+            class="h-5 w-5 heart-icon cursor-pointer"
             :class="{ 'animate-like': isLiked }"
           >
             <path
