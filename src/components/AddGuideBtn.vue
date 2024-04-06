@@ -9,7 +9,7 @@ import {
 } from '@headlessui/vue'
 import { ref, uploadString, getDownloadURL } from 'firebase/storage'
 import { db, storage } from '@/firebase'
-import { collection, addDoc, updateDoc, doc, setDoc } from 'firebase/firestore'
+import { collection, addDoc, updateDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import Datepicker from 'vue3-datepicker'
 
@@ -36,7 +36,8 @@ export default {
       selectedStartDate: null,
       selectedEndDate: null,
       showStartDatepicker: false,
-      showEndDatepicker: false
+      showEndDatepicker: false,
+      country: '',
     }
   },
   methods: {
@@ -86,7 +87,9 @@ export default {
             Destination: this.destination,
             Description: this.description,
             Start_Date: this.selectedStartDate,
-            End_Date: this.selectedEndDate
+            End_Date: this.selectedEndDate,
+            Last_Edited: serverTimestamp(),
+            Country: this.country
           });
           console.log('Doc created')
 
@@ -125,14 +128,21 @@ export default {
   mounted() {
     this.$nextTick(() => {
       const autocomplete = new google.maps.places.Autocomplete(this.$refs.destination_input, {
-        fields: ['geometry.location', 'place_id', 'name', 'formatted_address'],
+        fields: ['geometry.location', 'place_id', 'name', 'formatted_address', 'address_components'],
         types: ['geocode']
       })
 
       google.maps.event.addListener(autocomplete, 'place_changed', () => {
         const place = autocomplete.getPlace()
         this.destination = place.formatted_address
+
+        // Extract the country from the address components
+        const countryComponent = place.address_components.find(component => component.types.includes('country'));
+        if (countryComponent) {
+          this.country = countryComponent.long_name;
+        }
         console.log(this.destination)
+        console.log(this.country)
       })
     })
   }

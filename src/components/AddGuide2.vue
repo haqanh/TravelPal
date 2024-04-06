@@ -39,6 +39,7 @@ export default {
   data() {
     return {
       isOpen: true,
+      isLoading: false,
       advices: [{ id: 1, content: '', visible: true }],
       places: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
       placesToEat: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
@@ -59,9 +60,7 @@ export default {
       return new File([u8arr], filename, { type: mime });
     },
     async submit() {
-      // this.isOpen = false
-      // this.$emit('close')
-
+      this.isLoading = true;
       try {
         const auth = getAuth()
         const user = auth.currentUser
@@ -180,6 +179,10 @@ export default {
 
       } catch (e) {
         console.error("Error adding document: ", e);
+      } finally {
+        this.isLoading = false;
+        this.isOpen = false
+        this.$emit('close')
       }
     },
     async exit() {
@@ -610,6 +613,12 @@ export default {
                 </div>
               </DialogPanel>
             </TransitionChild>
+
+            <!-- Loading spinner -->
+            <div v-if="isLoading" class="loading-spinner fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
+              <div class="spinner"></div>
+            </div>
+
           </div>
         </div>
       </HeadlessDialog>
@@ -644,5 +653,23 @@ export default {
 
 .disclosureButton {
   @apply flex w-full justify-between rounded-lg bg-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-900 hover:bg-blue-400 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75;
+}
+
+.loading-spinner {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.spinner {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #42a5f5; /* Blue */
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
