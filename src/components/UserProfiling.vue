@@ -7,6 +7,7 @@
         <component 
           :is="components[page]" 
           :name="name" @update-name="updateName" 
+          @update-image="updateImage"
           @update-age-range="updateAgeRange"
           @update-gender="updateGender"
           @update-travel-freq="updateTravelFreq"
@@ -36,6 +37,7 @@ import 'vue-toast-notification/dist/theme-sugar.css'
 import { firebaseApp, db } from '@/firebase'
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 export default {
   data() {
@@ -43,6 +45,7 @@ export default {
       page: 1,
       components: ["", "ProvideDemographic", "ProvideHabits", "ProvideDestinations", "ProvideInterests", "StateFamiliarityAndPrivacy"],
       name: "",
+      image: "",
       ageRange: "",
       gender: "",
       travelFreq: "",
@@ -87,7 +90,10 @@ export default {
             Bucket_List: this.selectedCountries,
             Interests: this.selectedInterests
           })
-          console.log('Doc updated')
+          if (this.image.length > 0) {
+            this.uploadImage(this.image, user!.email)
+          }
+          console.log('User profile updated in Firebase')
         } catch (e) {
           console.error('Error updating document: ', e)
         }
@@ -99,6 +105,9 @@ export default {
     },
     updateName(name: string) {
       this.name = name
+    },
+    updateImage(image: string) {
+      this.image = image
     },
     updateAgeRange(ageRange: string) {
       this.ageRange = ageRange
@@ -138,7 +147,25 @@ export default {
       } else {
         this.selectedInterests.push(interest)
       }
-    }
+    },
+    dataURLtoFile(dataURL, filename) {
+      const arr = dataURL.split(',');
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
+    async uploadImage(file_url, user_email) {
+      const storage = getStorage(firebaseApp);
+      const file = this.dataURLtoFile(file_url, `profile_pic.jpg`);
+      const fileRef = ref(storage, `users/${user_email}/profile_pic/${file.name}`);
+      const uploadTask = uploadBytesResumable(fileRef, file);
+      await uploadTask;
+    },
   }
 }
 </script>
