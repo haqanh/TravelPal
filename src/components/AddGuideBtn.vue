@@ -111,7 +111,21 @@ export default {
             Cover_Photo: photoURL
           })
 
-          console.log('Doc updated')
+          console.log('Doc updated in user')
+
+          const globalGuidesRef = doc(collection(db, 'guides'), this.guideTitle);
+          await setDoc(globalGuidesRef, {
+              Guide_Title: this.guideTitle,
+              Destination: this.destination,
+              Description: this.description,
+              Start_Date: this.selectedStartDate,
+              End_Date: this.selectedEndDate,
+              Last_Edited: serverTimestamp(),
+              Country: this.country,
+              Cover_Photo: photoURL,
+          });
+          console.log('Doc created in global guides collection');
+
 
           // Emit custom event with guideID
           this.$emit('update-guide-id', this.guideId)

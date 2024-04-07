@@ -40,7 +40,7 @@
         ></GlobalTag>
 
         <!-- Like Button -->
-        <div @click="likeGuide" class="cursor-pointer">
+        <div @click="handleLike" class="cursor-pointer">
           <svg
             v-if="isLiked"
             xmlns="http://www.w3.org/2000/svg"
@@ -80,7 +80,11 @@
 
 <script>
 
-import GlobalTag from './GlobalTag.vue'
+import GlobalTag from './GlobalTag.vue';
+import { db } from '@/firebase';
+import { doc, collection, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+
+import { getAuth } from 'firebase/auth';
 
 export default {
   components: {
@@ -101,11 +105,42 @@ export default {
   },
   methods: {
     openGuide() {
-      this.isVisible = false
-      this.$router.push({ name: 'GuideView' })
+      this.isVisible = false;
+      this.$router.push(`/guide/${this.card.guideTitle}`);
+      // this.$router.push({ name: 'GuideView' })
     },
-    likeGuide() {
-      this.isLiked = !this.isLiked
+    async handleLike() {
+      this.isLiked = !this.isLiked;
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      // Get reference to the current guide
+      const currGuideRef = doc(collection(db, 'guides'), this.card.guideTitle);
+      const userRef = doc(collection(db, 'users'), user.email);
+
+      if (this.isLiked) {
+        // Add the current guide to the user's favourites
+        await updateDoc(userRef, {
+          Favourites: arrayUnion(currGuideRef)
+        })
+        .then(() => {
+          console.log('Successfully added to Favourites!');
+        })
+        .catch((error) => {
+          console.error('Error adding to favourites: ', error);
+        });
+      } else {
+        // Remove the current guide from the user's favourites
+        await updateDoc(userRef, {
+          Favourites: arrayRemove(currGuideRef)
+        })
+        .then(() => {
+          console.log('Successfully removed from Favourites!');
+        })
+        .catch((error) => {
+          console.error('Error removing from favourites: ', error);
+        });
+      }
     }
   },
   mounted() {

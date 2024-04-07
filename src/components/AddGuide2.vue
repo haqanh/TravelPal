@@ -74,6 +74,10 @@ export default {
             await setDoc(newAdviceRef, {
               Content: advice.content,
             })
+            const globalGuideRef = doc(db, 'guides', this.guideId, 'advices', `advice${numAdvice}`);
+            await setDoc(globalGuideRef, {
+              Content: advice.content,
+            })
             numAdvice++
             // const newAdviceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'advices'), {
             //   Content: advice.content,
@@ -105,6 +109,15 @@ export default {
               Summary: place.summary,
               Photo: photoURL,
             })
+
+            const globalGuideRef = doc(db, 'guides', this.guideId, 'places', place.location)
+            await setDoc(globalGuideRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
             console.log("Place document written with ID: ", newPlaceRef.id);
           }
         }
@@ -121,6 +134,15 @@ export default {
 
             const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToEat', place.location)
             await setDoc(newPlaceRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
+
+            const globalGuideRef = doc(db, 'guides', this.guideId, 'placesToEat', place.location)
+            await setDoc(globalGuideRef, {
               Location: place.location,
               Tags: place.tags,
               Cost: place.cost,
@@ -150,6 +172,15 @@ export default {
               Summary: place.summary,
               Photo: photoURL,
             })
+
+            const globalGuideRef = doc(db, 'guides', this.guideId, 'placesToStay', place.location)
+            await setDoc(globalGuideRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
             console.log("Place document written with ID: ", newPlaceRef.id);
           }
         }
@@ -167,6 +198,15 @@ export default {
 
             const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesNearby', place.location)
             await setDoc(newPlaceRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
+
+            const globalGuideRef = doc(db, 'guides', this.guideId, 'placesNearby', place.location)
+            await setDoc(globalGuideRef, {
               Location: place.location,
               Tags: place.tags,
               Cost: place.cost,
@@ -456,7 +496,7 @@ export default {
                   <Disclosure v-slot="{ open }">
                     <DisclosureButton class="disclosureButton">
                       <span class="flex w-full right-5 space-x-3">
-                        <img src="../assets/cutleryIcon.png" class="w-5 h-5 stroke-width-1.5" />
+                        <img src="../assets/cutlery.png" class="w-5 h-5" />
                         <h4>Places to Eat</h4>
                       </span>
 
