@@ -61,7 +61,8 @@ export default {
               guidePicPath: guideData.Cover_Photo,
               flagPath: guideData.Flag_Photo,
               profilePicPath: guideData.Profile_Photo,
-              tagCat: guideData.Tags
+              tags: guideData.Tags,
+              country: guideData.Country,
             })
           } else {
             console.log('Guide document not found for reference:', favRef.path)
