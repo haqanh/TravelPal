@@ -46,7 +46,7 @@ export default {
         const userId = '123@gmail.com' // Replace with actual user ID
         const userRef = doc(db, 'users', userId)
         const userSnapshot = await getDoc(userRef)
-        const favourites = userSnapshot.data().favourites
+        const favourites = userSnapshot.data().Favourites
 
         for (const favRef of favourites) {
           const favSnapshot = await getDoc(favRef)
@@ -57,11 +57,11 @@ export default {
             console.log('Guide ID:', guideId)
             this.favoritedGuides.push({
               id: guideId,
-              guideTitle: guideData.guideTitle,
-              guidePicPath: guideData.guidePicPath,
-              flagPath: guideData.flagPath,
-              profilePicPath: guideData.profilePicPath,
-              tagCat: guideData.tagCat
+              guideTitle: guideData.Guide_Title,
+              guidePicPath: guideData.Cover_Photo,
+              flagPath: guideData.Flag_Photo,
+              profilePicPath: guideData.Profile_Photo,
+              tagCat: guideData.Tags
             })
           } else {
             console.log('Guide document not found for reference:', favRef.path)
