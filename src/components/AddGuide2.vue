@@ -12,9 +12,9 @@ import {
 import AddPlaces from './AddPlaces.vue'
 import AddGeneralAdvice from './AddGeneralAdvice.vue'
 import { db, storage} from '@/firebase'
-import { collection, addDoc, deleteDoc, doc} from "firebase/firestore";
+import { collection, addDoc, deleteDoc, doc, setDoc } from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
-import { ref, uploadString, getDownloadURL} from 'firebase/storage'
+import { ref, uploadString, getDownloadURL, uploadBytesResumable} from 'firebase/storage'
 
 
 export default {
@@ -24,7 +24,6 @@ export default {
       required: true
     }
   },
-
   components: {
     HeadlessDialog,
     DialogPanel,
@@ -40,8 +39,8 @@ export default {
   data() {
     return {
       isOpen: true,
+      isLoading: false,
       advices: [{ id: 1, content: '', visible: true }],
-
       places: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
       placesToEat: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
       placesToStay: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
@@ -49,104 +48,181 @@ export default {
     }
   },
   methods: {
+    dataURLtoFile(dataURL, filename) {
+      const arr = dataURL.split(',');
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
     async submit() {
-      this.isOpen = false
-      this.$emit('close')
-
+      this.isLoading = true;
       try {
         const auth = getAuth()
         const user = auth.currentUser
 
-        for (let advice of this.advices) {
-          const newAdviceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'advices'), {
-            Content: advice.content,
-          })
-          console.log("Advice document written with ID: ", newAdviceRef.id);
+        let numAdvice = 1
+  
+        if (this.advices[0].location != "") {
+          for (let advice of this.advices) {
+            console.log(this.advices)
+            const newAdviceRef = doc(db, 'users', user.email, "guides", this.guideId, 'advices', `advice${numAdvice}`);
+            await setDoc(newAdviceRef, {
+              Content: advice.content,
+            })
+            const globalGuideRef = doc(db, 'guides', this.guideId, 'advices', `advice${numAdvice}`);
+            await setDoc(globalGuideRef, {
+              Content: advice.content,
+            })
+            numAdvice++
+            // const newAdviceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'advices'), {
+            //   Content: advice.content,
+            // })
+            console.log("Advice document written with ID: ", newAdviceRef.id);
+          }
+        }
+        if (this.places[0].location != "") {
+          for (let place of this.places) {
+            console.log(this.places)
+            console.log(place)
+            console.log(place.location)
+
+            //create storage reference
+            const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/places/${place.location}`)
+
+            const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
+            // Upload the selectedPhoto to Firebase Storage
+            const uploadTask = await uploadBytesResumable(storageRef, file);
+
+            // Get the URL of the uploaded image
+            const photoURL = await getDownloadURL(uploadTask.ref);
+      
+            const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'places', place.location)
+            await setDoc(newPlaceRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
+
+            const globalGuideRef = doc(db, 'guides', this.guideId, 'places', place.location)
+            await setDoc(globalGuideRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
+            console.log("Place document written with ID: ", newPlaceRef.id);
+          }
         }
 
-        for (let place of this.places) {
+        if (this.placesToEat[0].location != "") {
+          for (let place of this.placesToEat) {
+            //create storage reference
+            const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToEat/${place.location}`)
+            const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
+            // Upload the selectedPhoto to Firebase Storage
+            const uploadTask = await uploadBytesResumable(storageRef, file);
+            // Get the URL of the uploaded image
+            const photoURL = await getDownloadURL(uploadTask.ref);
 
-          //create storage reference
-          const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/places/${place.location}`)
+            const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToEat', place.location)
+            await setDoc(newPlaceRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
 
-          // Upload the selectedPhoto to Firebase Storage
-          const uploadTask = await uploadString(storageRef, place.selectedPhoto, 'data_url');
-
-          // Get the URL of the uploaded image
-          const photoURL = await getDownloadURL(uploadTask.ref);
-
-          const newPlaceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'places'), {
-            Location: place.location,
-            Tags: place.tags,
-            Cost: place.cost,
-            Summary: place.summary,
-            Photo: photoURL,
-          })
-          console.log("Place document written with ID: ", newPlaceRef.id);
+            const globalGuideRef = doc(db, 'guides', this.guideId, 'placesToEat', place.location)
+            await setDoc(globalGuideRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
+            console.log("Place document written with ID: ", newPlaceRef.id);
+          }
         }
 
-        for (let place of this.placesToEat) {
-          //create storage reference
-          const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToEat/${place.location}`)
+        if (this.placesToStay[0].location != "") {
+          for (let place of this.placesToStay) {
+            //create storage reference
+            const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToStay/${place.location}`)
 
-          // Upload the selectedPhoto to Firebase Storage
-          const uploadTask = await uploadString(storageRef, place.selectedPhoto, 'data_url');
+            const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
+            // Upload the selectedPhoto to Firebase Storage
+            const uploadTask = await uploadBytesResumable(storageRef, file);
+            // Get the URL of the uploaded image
+            const photoURL = await getDownloadURL(uploadTask.ref);
 
-          // Get the URL of the uploaded image
-          const photoURL = await getDownloadURL(uploadTask.ref);
+            const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToStay', place.location)
+            await setDoc(newPlaceRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
 
-          const newPlaceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'places'), {
-            Location: place.location,
-            Tags: place.tags,
-            Cost: place.cost,
-            Summary: place.summary,
-            Photo: photoURL,
-          })
-          console.log("Place document written with ID: ", newPlaceRef.id);
+            const globalGuideRef = doc(db, 'guides', this.guideId, 'placesToStay', place.location)
+            await setDoc(globalGuideRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
+            console.log("Place document written with ID: ", newPlaceRef.id);
+          }
         }
 
-        for (let place of this.placesToStay) {
-          //create storage reference
-          const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToStay/${place.location}`)
+        if (this.placesNearby[0].location != "") {
+          for (let place of this.placesNearby) {
+            //create storage reference
+            const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesNearby/${place.location}`)
 
-          // Upload the selectedPhoto to Firebase Storage
-          const uploadTask = await uploadString(storageRef, place.selectedPhoto, 'data_url');
+            const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
+            // Upload the selectedPhoto to Firebase Storage
+            const uploadTask = await uploadBytesResumable(storageRef, file);
+            // Get the URL of the uploaded image
+            const photoURL = await getDownloadURL(uploadTask.ref);
 
-          // Get the URL of the uploaded image
-          const photoURL = await getDownloadURL(uploadTask.ref);
+            const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesNearby', place.location)
+            await setDoc(newPlaceRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
 
-          const newPlaceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'places'), {
-            Location: place.location,
-            Tags: place.tags,
-            Cost: place.cost,
-            Summary: place.summary,
-            Photo: photoURL,
-          })
-          console.log("Place document written with ID: ", newPlaceRef.id);
-        }
-
-        for (let place of this.placesNearby) {
-          //create storage reference
-          const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesNearby/${place.location}`)
-
-          // Upload the selectedPhoto to Firebase Storage
-          const uploadTask = await uploadString(storageRef, place.selectedPhoto, 'data_url');
-
-          // Get the URL of the uploaded image
-          const photoURL = await getDownloadURL(uploadTask.ref);
-
-          const newPlaceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'places'), {
-            Location: place.location,
-            Tags: place.tags,
-            Cost: place.cost,
-            Summary: place.summary,
-            Photo: photoURL,
-          })
-          console.log("Place document written with ID: ", newPlaceRef.id);
+            const globalGuideRef = doc(db, 'guides', this.guideId, 'placesNearby', place.location)
+            await setDoc(globalGuideRef, {
+              Location: place.location,
+              Tags: place.tags,
+              Cost: place.cost,
+              Summary: place.summary,
+              Photo: photoURL,
+            })
+            console.log("Place document written with ID: ", newPlaceRef.id);
+          }
         }
 
       } catch (e) {
         console.error("Error adding document: ", e);
+      } finally {
+        this.isLoading = false;
+        this.isOpen = false
+        this.$emit('close')
       }
     },
     async exit() {
@@ -195,6 +271,7 @@ export default {
     },
     updatePhoto(place, photo) {
       place.selectedPhoto = photo
+
     },
     addPlace() {
       const newPlace = {
@@ -395,7 +472,8 @@ export default {
                           <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
                             <div v-if="place.visible"></div>
 
-                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
+                            <!-- <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/> -->
+                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
 
                           <br />
                         </div>
@@ -419,7 +497,7 @@ export default {
                   <Disclosure v-slot="{ open }">
                     <DisclosureButton class="disclosureButton">
                       <span class="flex w-full right-5 space-x-3">
-                        <img src="../assets/cutleryIcon.png" class="w-5 h-5 stroke-width-1.5" />
+                        <img src="../assets/cutlery.png" class="w-5 h-5" />
                         <h4>Places to Eat</h4>
                       </span>
 
@@ -444,7 +522,7 @@ export default {
                         <div v-for="(place) in placesToEat" :key="place.id" @contextmenu.prevent="deletePlaceToEat(place)">
                             <div v-if="place.visible"></div>
 
-                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
+                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
 
                           <br />
                         </div>
@@ -497,7 +575,7 @@ export default {
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesToStay" :key="place.id" @contextmenu.prevent="deletePlaceToStay(place)">
                             <div v-if="place.visible"></div>
-                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
+                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
                           <br />
                         </div>
 
@@ -549,7 +627,7 @@ export default {
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesNearby" :key="place.id" @contextmenu.prevent="deletePlaceNearby(place)">
                             <div v-if="place.visible"></div>
-                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
+                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
                           <br />
                         </div>
 
@@ -576,6 +654,12 @@ export default {
                 </div>
               </DialogPanel>
             </TransitionChild>
+
+            <!-- Loading spinner -->
+            <div v-if="isLoading" class="loading-spinner fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
+              <div class="spinner"></div>
+            </div>
+
           </div>
         </div>
       </HeadlessDialog>
@@ -601,7 +685,7 @@ export default {
 }
 
 .photoInput_style {
-  @apply rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent;
+  @apply rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:border-transparent;
 }
 
 .nextBtn_style {
@@ -609,6 +693,24 @@ export default {
 }
 
 .disclosureButton {
-  @apply flex w-full justify-between rounded-lg bg-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-900 hover:bg-blue-400 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75;
+  @apply flex w-full justify-between rounded-lg bg-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-900 hover:bg-gray-500 focus:outline-none focus-visible:ring ;
+}
+
+.loading-spinner {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.spinner {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #6b7280; /* Blue */
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
