@@ -50,7 +50,7 @@
                     class="relative block mx-[9vw] mt-[2.6vh] h-[30vh] w-[60vh] flex items-center justify-center cursor-pointer rounded-lg"
                   >
                   <div v-if="selectedPhoto.length === 0" class=" h-[20vh] w-[25vh] items-center justify-center"
-                  :class="{ 'border border-dashed border-gray-500 rounded-lg dark:hover:bg-bray-800 dark:bg-gray-500 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600': selectedPhoto }">
+                  :class="{ 'border border-dashed border-gray-500 rounded-lg hover:bg-gray-100': selectedPhoto }">
                     <img src="../assets/Camera.svg" alt="Add Photo" class="h-[8vh] w-[8vh] mb-[0.9vh] mx-auto mt-[5vh]">
                     <p class="text-[1.8vh] text-[#3F3D3D] font-semibold">Add Photos</p>
                   </div>
@@ -105,7 +105,7 @@
 
                   <div date-rangepicker class="flex items-center justify-between">
                     <div class="relative">
-                      <Datepicker v-model="selectedStartDate" :show="showStartDatepicker" @update:show="val => showStartDatepicker = val" class="w-[20vw] h-[7vh] border border-gray-300 text-gray-900 text-sm rounded-lg pl-12 pr-2.5 pt-2.5 pb-2.5 focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Start Date">
+                      <Datepicker v-model="selectedStartDate" :show="showStartDatepicker" @update:show="val => showStartDatepicker = val" class="w-[20vw] h-[7vh] border border-gray-300 text-gray-900 text-sm rounded-lg pl-12 pr-2.5 pt-2.5 pb-2.5 focus:ring-blue-500 focus:border-blue-500 block w-full" placeholder="Start Date">
                         </Datepicker>
                         <div class="absolute inset-y-0 left-0 flex items-center pl-[1.4vh] pointer-events-none text-gray-500">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -118,7 +118,7 @@
                       </div>
                       <span class="mx-[2.1vh] text-gray-500">-</span>
                       <div class="relative">
-                        <Datepicker v-model="selectedEndDate" :show="showEndDatepicker" @update:show="val => showEndDatepicker = val" class="w-[20vw] h-[7vh] border border-gray-300 text-gray-900 text-sm rounded-lg pl-12 pr-2.5 pt-2.5 pb-2.5 focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="End Date">
+                        <Datepicker v-model="selectedEndDate" :show="showEndDatepicker" @update:show="val => showEndDatepicker = val" class="w-[20vw] h-[7vh] border border-gray-300 text-gray-900 text-sm rounded-lg pl-12 pr-2.5 pt-2.5 pb-2.5 focus:ring-blue-500 focus:border-blue-500 block w-full" placeholder="End Date">
                         </Datepicker>
                         <div class="absolute inset-y-0 left-0 flex items-center pl-[1.6vh] pointer-events-none text-gray-500">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

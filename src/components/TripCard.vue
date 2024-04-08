@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center">
-        <div class="trip-card relative w-[32.8vh] h-[33.4vh] bg-white border border-gray-200 rounded-[2.63vh] custom-shadow dark:bg-gray-800 dark:border-gray-700">
+        <div class="trip-card relative w-[32.8vh] h-[33.4vh] bg-white border border-gray-200 rounded-[2.63vh] custom-shadow">
             <img class="rounded-t-[2.63vh] h-[23.7vh] w-[32.8vh] custom-shadow object-cover object-bottom" :src="TripImage" alt="No Image" />
             <div class="absolute top-0 right-0 mt-[1.05vh] mr-[1.05vh] flex items-center">
                 <img class="h-[1.8vh] w-[1.8vh] relative" src="../assets/map-pin.svg" alt="" />
@@ -8,7 +8,7 @@
             </div>
             <div class="p-[1.05vh]">
                 <div class="flex justify-between items-center">
-                    <span class="mb-[0.13vh] text-[3vh] font-semibold tracking-tight text-[#3F3D3D] dark:text-white">{{ TripName }}</span>
+                    <span class="mb-[0.13vh] text-[3vh] font-semibold tracking-tight text-[#3F3D3D]">{{ TripName }}</span>
                     <div class="flex items-center flex-shrink-0 space-x-0">
                         <img class="mb-[0.4vh] mr-[1.05vh] h-[1.1vh] w-[1.1vh]" src="../assets/Dot Split.svg" alt="" />
                         <div v-for="i in dollarCount" :key="i">
