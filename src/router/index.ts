@@ -13,7 +13,6 @@ import Explore from '../views/ExploreView.vue';
 import UserProfilingView from '../views/UserProfilingView.vue'
 import Dashboard from '../views/DashboardView.vue'
 import UserProfile from '../views/UserProfile.vue'
-
 import AddGuideBtn from '../components/AddGuideBtn.vue'
 import FavouritesView from '../views/FavouritesView.vue'
 
@@ -119,6 +118,11 @@ const router = createRouter({
       path: '/add-guide-btn',
       name: 'add-guide-btn',
       component: AddGuideBtn,
+    },
+    {
+      path: '/sidebar',
+      name: 'sidebar',
+      component: Sidebar
     },
   ]
 })
