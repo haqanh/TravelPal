@@ -1,92 +1,94 @@
 <template>
-  <div class="absolute inset-x-0 top-0 h-2/5">
-    <img
-      :src="tripData.Photos.length ? tripData.Photos[0] : '@/assets/sf1.jpeg'"
-      class="object-cover w-full h-full rounded-b-3xl"
-      alt="San Francisco"
-    />
-    <div class="absolute inset-0 bg-gray-700 bg-opacity-50 rounded-b-3xl"></div>
-    <div class="absolute bottom-0 left-0 w-full p-4 text-center">
-      <h1 class="text-6xl font-bold text-white">{{ tripData.Name }}</h1>
-      <p class="text-xl text-white mt-4">In {{ tripData.Location }}</p>
-      <p class="mt-10 text-md text-white">Last Edit: {{ formatDate(tripData.Last_Edit) }}</p>
+  <div>
+    <div class="absolute inset-x-0 top-0 h-2/5">
+      <img
+        :src="tripData.Photos.length ? tripData.Photos[0] : '@/assets/sf1.jpeg'"
+        class="object-cover w-full h-full rounded-b-3xl"
+        alt="San Francisco"
+      />
+      <div class="absolute inset-0 bg-gray-700 bg-opacity-50 rounded-b-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-full p-4 text-center">
+        <h1 class="text-6xl font-bold text-white">{{ tripData.Name }}</h1>
+        <p class="text-xl text-white mt-4">In {{ tripData.Location }}</p>
+        <p class="mt-10 text-md text-white">Last Edit: {{ formatDate(tripData.Last_Edit) }}</p>
+      </div>
     </div>
-  </div>
-  <NavBar />
+    <NavBar />
 
-  <div class="mt-[40vh] bg-white text-left mx-auto max-w-7xl">
-    <!-- Added text-left class -->
-    <div class="p-6">
-      <div class="tags-dates-cost mb-8">
-        <div class="tags text-xl mb-4">
-          <span class="tag mr-2">Tag1</span>
-          <span class="tag">Tag2</span>
+    <div class="mt-[40vh] bg-white text-left mx-auto max-w-7xl">
+      <!-- Added text-left class -->
+      <div class="p-6">
+        <div class="tags-dates-cost mb-8">
+          <div class="tags text-xl mb-4">
+            <GlobalTag v-for="tag in tags" :tagCategory="tag"/>
+          </div>
+          <div class="dates mb-4">
+            <span class="date text-xl"
+              >Date: {{ formatDateRange(tripData.Start_Date, tripData.End_Date) }}</span
+            >
+          </div>
+          <div class="cost mb-4">
+            <span class="cost-text text-xl">Total Cost: ${{ tripData.Cost }}</span>
+          </div>
         </div>
-        <div class="dates mb-4">
-          <span class="date text-xl"
-            >Date: {{ formatDateRange(tripData.Start_Date, tripData.End_Date) }}</span
-          >
+
+        <div class="flex items-center mb-4">
+          <img src="@/assets/summary.svg" alt="Summary icon" class="inline-block mr-2 w-6 h-6" />
+          <h2 class="text-2xl font-bold">Summary</h2>
         </div>
-        <div class="cost mb-4">
-          <span class="cost-text text-xl">Total Cost: ${{ tripData.Cost }}</span>
-        </div>
+        <p class="text-gray-600 text-xl mb-8">
+          {{ tripData.Summary }}
+        </p>
       </div>
 
-      <div class="flex items-center mb-4">
-        <img src="@/assets/summary.svg" alt="Summary icon" class="inline-block mr-2 w-6 h-6" />
-        <h2 class="text-2xl font-bold">Summary</h2>
-      </div>
-      <p class="text-gray-600 text-xl mb-8">
-        {{ tripData.Summary }}
-      </p>
-    </div>
-
-    <section class="p-6">
-      <div class="flex items-center mb-4">
-        <img
-          src="@/assets/camera-photo.svg"
-          alt="Photos icon"
-          class="photos-icon inline-block mr-2 w-8 h-8"
-        />
-        <!-- Adjusted width and height -->
-        <h2 class="text-2xl font-bold">Photos</h2>
-      </div>
-      <div class="grid grid-cols-3 gap-10">
-        <img
-          v-for="(photoUrl, index) in displayedPhotos"
-          :key="index"
-          :src="photoUrl"
-          alt="Uploaded photo"
-          class="photo-card"
-          @click="openModal(photoUrl)"
-        />
-      </div>
-      <!-- Modal section -->
-      <div v-if="isModalOpen" class="modal" @click.self="closeModal">
-        <div class="modal-content" :class="{ 'no-image': imageError }">
-          <span class="close" @click="closeModal">&times;</span>
+      <section class="p-6">
+        <div class="flex items-center mb-4">
           <img
-            v-if="!imageError"
-            :src="currentPhoto"
-            alt="Enlarged photo"
-            class="enlarged-photo"
-            @error="imageError = true"
+            src="@/assets/camera-photo.svg"
+            alt="Photos icon"
+            class="photos-icon inline-block mr-2 w-8 h-8"
           />
-          <span v-else class="placeholder-text">Enlarged Photo</span>
+          <!-- Adjusted width and height -->
+          <h2 class="text-2xl font-bold">Photos</h2>
         </div>
-      </div>
+        <div class="grid grid-cols-3 gap-10">
+          <img
+            v-for="(photoUrl, index) in displayedPhotos"
+            :key="index"
+            :src="photoUrl"
+            alt="Uploaded photo"
+            class="photo-card"
+            @click="openModal(photoUrl)"
+          />
+        </div>
+        <!-- Modal section -->
+        <div v-if="isModalOpen" class="modal" @click.self="closeModal">
+          <div class="modal-content" :class="{ 'no-image': imageError }">
+            <span class="close" @click="closeModal">&times;</span>
+            <img
+              v-if="!imageError"
+              :src="currentPhoto"
+              alt="Enlarged photo"
+              class="enlarged-photo"
+              @error="imageError = true"
+            />
+            <span v-else class="placeholder-text">Enlarged Photo</span>
+          </div>
+        </div>
 
-      <div class="mt-10 text-center">
-        <button
-          v-if="!showAllImages && tripData.Photos && tripData.Photos.length > 6"
-          type="button"
-          class="text-xl inline-flex justify-center rounded-lg border border-[#C1C1C1] border-2 shadow-lg px-3 py-1 text-sm font-regular text-[#434343] hover:bg-[#C1C1C1] hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1C1C1] focus-visible:ring-offset-2"
-          @click="viewAllPhotos"
-        >
-          View All
-        </button>
-      </div>
-    </section>
+        <div class="mt-10 text-center">
+          <button
+            v-if="!showAllImages && tripData.Photos && tripData.Photos.length > 6"
+            type="button"
+            class="text-xl inline-flex justify-center rounded-lg border border-[#C1C1C1] border-2 shadow-lg px-3 py-1 text-sm font-regular text-[#434343] hover:bg-[#C1C1C1] hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1C1C1] focus-visible:ring-offset-2"
+            @click="viewAllPhotos"
+          >
+            View All
+          </button>
+        </div>
+      </section>
+    </div>
+    <GlobalFooter />
   </div>
 </template>
 
@@ -94,11 +96,16 @@
 import { db, firebaseApp } from '../firebase'
 import { getDoc, getDocs, doc, deleteDoc } from 'firebase/firestore'
 import { useRouter } from 'vue-router'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import NavBar from '@/components/NavBar.vue'
+import GlobalFooter from '@/components/GlobalFooter.vue'
+import GlobalTag from '@/components/GlobalTag.vue'
 
 export default {
   components: {
-    NavBar
+    NavBar,
+    GlobalFooter,
+    GlobalTag
   },
   data() {
     return {
@@ -108,6 +115,7 @@ export default {
       imageError: false, // Track loading errors for images.
       showAllImages: false, // New data property to control the display of images.,
       displayedPhotos: [],
+      tags: [],
     }
   },
   created() {
@@ -115,25 +123,37 @@ export default {
   },
   methods: {
     async fetchTripData() {
-      // const userId = this.$route.params.userId;
-      // const tripId = this.$route.params.tripId;
-      const userId = 'yNXZbTHBnLNiDu9Wb7EfepEgZTy1'
-      const tripId = 'EMms9ABgi6i4fUWvA9Yr'
+      const auth = getAuth()
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          const userRef = doc(db, 'users', user.email)
+          console.log(user.email)
+          console.log(this.$route.params.id)
+          const tripId = this.$route.params.id
+          console.log(userRef)
+          // const userId = 'yNXZbTHBnLNiDu9Wb7EfepEgZTy1'
+          // const tripId = 'EMms9ABgi6i4fUWvA9Yr'
+          try {
+            const tripRef = doc(userRef, 'trips', tripId)
+            const tripSnapshot = await getDoc(tripRef)
 
-      try {
-        const tripRef = doc(db, 'users', userId, 'trips', tripId)
-        const tripSnapshot = await getDoc(tripRef)
-
-        if (tripSnapshot.exists()) {
-          this.tripData = tripSnapshot.data()
-          this.displayedPhotos = this.tripData.Photos.slice(0, 6);
-          console.log('Trip data:', this.tripData)
+            if (tripSnapshot.exists()) {
+              this.tripData = tripSnapshot.data()
+              this.displayedPhotos = this.tripData.Photos.slice(0, 6)
+              this.tags = this.tripData.Tags
+              console.log('Trip data:', this.tripData)
+              console.log(this.$route.params.id)
+              console.log('Tags:', this.tripData.Tags)
+            } else {
+              console.error('No such trip!')
+            }
+          } catch (error) {
+            console.error('Error fetching trip data:', error)
+          }
         } else {
-          console.error('No such trip!')
+          console.log('No user is signed in.')
         }
-      } catch (error) {
-        console.error('Error fetching trip data:', error)
-      }
+      })
     },
     openModal(photoName) {
       this.currentPhoto = new URL(`${photoName}`, import.meta.url).href
@@ -169,9 +189,9 @@ export default {
       return editDate
     },
     viewAllPhotos() {
-      this.showAllImages = true;
-      this.displayedPhotos = this.tripData.Photos; // Show all photos
-    },
+      this.showAllImages = true
+      this.displayedPhotos = this.tripData.Photos // Show all photos
+    }
   },
   computed: {
     isMobile() {
@@ -280,7 +300,7 @@ export default {
   }
 }
 </style>
-  <!-- <div class="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+<!-- <div class="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
     <h1 class="text-6xl font-bold text-white">{{ tripData.Name }}</h1>
     <p class="text-xl text-white mt-4">In {{ tripData.Location }}</p>
   </div> -->
