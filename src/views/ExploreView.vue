@@ -26,19 +26,19 @@
     <div v-else class="mt-[35vh] bg-white text-left mx-auto max-w-7xl">
         <!-- Editors' Choice Section -->
         <h2 class="ml-20 font-semibold mb-2 text-base">Editors' Choice</h2>
-        <div class="flex justify-center space-x-12">
+        <div class="flex flex-wrap justify-center space-x-12">
             <ExploreCard v-for="card in filteredEditorsChoices" :key="card.guideTitle" :card="card" />
         </div>
 
         <!-- Regional Favourites Section -->
         <h2 class="ml-20 font-semibold mb-2 mt-4">Regional Favourites</h2>
-        <div class="flex justify-center space-x-12">
+        <div class="flex flex-wrap justify-center space-x-12">
             <ExploreCard v-for="card in filteredRegionalFavs" :key="card.guideTitle" :card="card" />
         </div>
 
         <!-- Recently Added Section -->
         <h2 v-if="recentlyAdded" class="ml-20 font-semibold mb-2 mt-4">Recently Added</h2>
-        <div class="flex justify-center space-x-12">
+        <div class="flex flex-wrap justify-center space-x-12">
             <ExploreCard v-for="card in recentlyAdded" :key="card.guideTitle" :card="card" />
         </div>
     </div>
@@ -92,15 +92,6 @@ export default {
                 if (docSnap.exists) {
                     const data = docSnap.data();
                     guides.push({
-                        // guidePicPath: data.Cover_Photo,
-                        // flagPath: data.Flag_Photo,
-                        // profilePicPath: data.Profile_Photo,
-                        // guideTitle: data.Guide_Title,
-                        // tagCat: data.Tags[0].category,
-                        // tagColor: data.Tags[0].colour,
-                        // tagBorder: data.Tags[0].colour,
-                        // isLiked: data.Is_Liked,
-
                         guidePicPath: data.Cover_Photo,
                         flagPath: data.Flag_Photo,
                         profilePicPath: data.Profile_Photo,

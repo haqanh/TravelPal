@@ -1,19 +1,20 @@
 <template>
-  <div class="flex flex-col items-center justify-center">
+  <div class="flex flex-col items-center">
     <div class="flex flex-col items-start space-y-3">
       <div
         class="bg-gray shadow-lg w-56 rounded-3xl guideCard cursor-pointer"
         v-on:click="openGuide"
         v-if="isVisible"
       >
-        <div class="relative h-48 overflow-hidden bg-gray-200 rounded-3xl">
+        <div class="flex flex-col relative h-48 overflow-hidden bg-gray-200 rounded-3xl">
           <!-- Guide Cover Photo -->
-          <img
-            :src="card.guidePicPath"
-            loading="lazy"
-            alt="Image"
-            class="object-cover rounded-t-2xl h-full w-full"
-          />
+            <img
+              :src="card.guidePicPath"
+              loading="lazy"
+              alt="Image"
+              class="object-cover rounded-t-2xl h-full w-full"
+            />
+
           <div class="flex absolute top-0 right-0 p-3">
             <!-- Profile Picture -->
             <img
@@ -35,7 +36,7 @@
 
       <div class="w-56 flex justify-between items-center place-items-center">
         <!-- Tag  -->
-        <div class="flex flex-wrap">
+        <div class="flex flex-wrap ">
           <div v-for="(tag, index) in card.tags" :key="index" class="mr-2 mb-2">
             <GlobalTag
               :tagCategory="tag"
