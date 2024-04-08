@@ -39,7 +39,7 @@
         <!-- Recently Added Section -->
         <h2 v-if="recentlyAdded" class="ml-20 font-semibold mb-2 mt-4">Recently Added</h2>
         <div class="flex flex-wrap justify-center space-x-12">
-            <ExploreCard v-for="card in recentlyAdded" :key="card.guideTitle" :card="card" />
+            <ExploreCard v-for="card in filteredRecentlyAdded" :key="card.guideTitle" :card="card" />
         </div>
     </div>
 </template>
@@ -80,6 +80,13 @@ export default {
                 return this.regionalFavs;
             } else {
                 return this.regionalFavs.filter(guide => guide.guideTitle.toLowerCase().startsWith(this.searchInput.toLowerCase()));
+            }
+        },
+        filteredRecentlyAdded() {
+            if (this.searchInput === '') {
+                return this.recentlyAdded;
+            } else {
+                return this.recentlyAdded.filter(guide => guide.guideTitle.toLowerCase().startsWith(this.searchInput.toLowerCase()));
             }
         },
     },
