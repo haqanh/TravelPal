@@ -1,7 +1,7 @@
 <template>
 
     <div class="flex items-center">
-        <div class="guide-card relative w-[32.8vh] h-[33.4vh] bg-white border border-gray-200 rounded-[2.63vh] custom-shadow dark:bg-gray-800 dark:border-gray-700">
+        <div class="guide-card relative w-[32.8vh] h-[33.4vh] bg-white border border-gray-200 rounded-[2.63vh] custom-shadow">
             <img class="rounded-t-[2.63vh] h-[23.7vh] w-[32.8vh] custom-shadow object-cover object-bottom" :src="GuideImage" alt="" />
             <div class="absolute top-0 right-0 mt-[1.05vh] mr-[1.05vh] flex items-center">
                 <img class="h-[1.8vh] w-[1.8vh] relative" src="../assets/map-pin.svg" alt="" />
@@ -10,10 +10,9 @@
             </div>
             <div class="p-[1.05vh]">
                 <div class="flex justify-between items-center">
-                    <p class="mb-[0.13vh] text-[3vh] font-semibold tracking-tight text-[#3F3D3D] dark:text-white">{{GuideName}}</p>
+                    <p class="mb-[0.13vh] text-[3vh] font-semibold tracking-tight text-[#3F3D3D]">{{GuideName}}</p>
                 </div>
-                <div class="flex justify-between items-center">
-                    <p class="pt-[0.3vh] text-[1.7vh] font-medium text-[#3F3D3D] text-opacity-60">{{ formattedDate }}</p>
+                <div class="flex pt-[0.3vh] justify-end items-right">
                     <span class="px-[1.05vh] font-semibold text-center text-[1.7vh] rounded-full guide-colour border undefined ">
                         Guide
                     </span>
@@ -35,14 +34,6 @@ export default {
             type: String,
             default: 'Location'
         },
-        GuideStartDate: {
-            type: String,
-            default: 'Guide Start Date'
-        },
-        GuideEndDate: {
-            type: String,
-            default: 'Guide End Date'
-        },
         guide: {
             type: Object,
             required: true
@@ -51,23 +42,6 @@ export default {
             type: String,
             default: ''
         
-        },
-    },
-    methods: {
-        formatDateRange(startTimestamp, endTimestamp) {
-            const formatDate = (timestamp) => {
-                if (!timestamp) return 'N/A';
-                const date = new Date(timestamp.seconds * 1000);
-                const month = date.toLocaleString('default', { month: 'short' });
-                const day = date.getDate();
-                const year = date.getFullYear().toString().substr(-2);
-                return `${month} ${day} ‘${year}`;
-            }
-
-            const startDate = formatDate(startTimestamp);
-            const endDate = formatDate(endTimestamp);
-
-            return `${startDate} - ${endDate}`;
         },
     },
     computed: {

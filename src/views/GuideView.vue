@@ -211,5 +211,6 @@ onMounted(async () => {
 onUnmounted(() => {
   //console.log('Component unmounted, removing scroll listener');
   window.removeEventListener('scroll', handleScroll);
+
 });
 </script>

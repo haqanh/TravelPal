@@ -13,22 +13,33 @@
             <span class="absolute inset-y-0 left-0 flex items-center pl-2">
                 <img src="../assets/MagnifyingGlass.svg" alt="search" class="w-5 h-5">
             </span>
-            <input type="text" placeholder="Search..." class="pl-10 p-2 w-96 h-12 rounded-lg border border-gray-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700">
+            <input v-model="searchInput" type="text" placeholder="Search..." class="pl-10 p-2 w-96 h-12 rounded-lg border border-gray-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700">
             </div>
         </div>
     </div>
 
-    <div class="mt-[35vh] bg-white text-left mx-auto max-w-7xl">
+    <!-- Loading spinner -->
+    <div v-if="isLoading" class="loading-spinner fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
+              <div class="spinner"></div>
+    </div>
+
+    <div v-else class="mt-[35vh] bg-white text-left mx-auto max-w-7xl">
         <!-- Editors' Choice Section -->
         <h2 class="ml-20 font-semibold mb-2 text-base">Editors' Choice</h2>
-        <div class="flex justify-center space-x-12">
-            <ExploreCard v-for="card in editorsChoices" :key="card.guideTitle" :card="card" />
+        <div class="flex flex-wrap justify-center space-x-12">
+            <ExploreCard v-for="card in filteredEditorsChoices" :key="card.guideTitle" :card="card" />
         </div>
 
         <!-- Regional Favourites Section -->
         <h2 class="ml-20 font-semibold mb-2 mt-4">Regional Favourites</h2>
-        <div class="flex justify-center space-x-12">
-            <ExploreCard v-for="card in regionalFavs" :key="card.guideTitle" :card="card" />
+        <div class="flex flex-wrap justify-center space-x-12">
+            <ExploreCard v-for="card in filteredRegionalFavs" :key="card.guideTitle" :card="card" />
+        </div>
+
+        <!-- Recently Added Section -->
+        <h2 v-if="recentlyAdded" class="ml-20 font-semibold mb-2 mt-4">Recently Added</h2>
+        <div class="flex flex-wrap justify-center space-x-12">
+            <ExploreCard v-for="card in filteredRecentlyAdded" :key="card.guideTitle" :card="card" />
         </div>
     </div>
 </template>
@@ -38,33 +49,8 @@
 import NavBar from '@/components/NavBar.vue'
 import ExploreCard from '@/components/ExploreCard.vue'
 
-import MountTaranaki from '../assets/guideCover/MountTaranaki.jpg'
-import NZflag from '../assets/flags/NZflag.svg'
-import ProfileWoman from '../assets/profiles/ProfileWoman.jpg'
-
-import Taipei from '../assets/guideCover/Taipei.jpg'
-import TWflag from '../assets/flags/TWflag.svg'
-import ProfileWoman2 from '../assets/profiles/ProfileWoman2.jpg'
-
-import Luxembourg from '../assets/guideCover/Luxembourg.jpg'
-import LUXflag from '../assets/flags/LUXflag.svg'
-import ProfileMan from '../assets/profiles/ProfileMan.jpg'
-
-import Mexico from '../assets/guideCover/Mexico.jpg'
-import MEXflag from '../assets/flags/MEXflag.svg'
-import ProfileMan2 from '../assets/profiles/ProfileMan2.jpg'
-
-import Matsuno from '../assets/guideCover/Matsuno.jpg'
-import JAPflag from '../assets/flags/JAPflag.svg'
-
-import Bangkok from '../assets/guideCover/Bangkok.jpg'
-import THAIflag from '../assets/flags/THAIflag.svg'
-
-import TajMahal from '../assets/guideCover/TajMahal.jpg'
-import INDflag from '../assets/flags/INDflag.svg'
-
-import Marbella from '../assets/guideCover/Marbella.jpg'
-import SPNflag from '../assets/flags/SPNflag.svg'
+import { db } from '@/firebase';
+import { getDoc, doc, collection, query, where, getDocs } from 'firebase/firestore';
 
 // import { storage } from '../firebase'
 // import { ref, getDownloadURL, getStorage} from 'firebase/storage'
@@ -76,234 +62,112 @@ export default {
     },
     data() {
         return {
-            editorsChoices:[
-                {
-                    guidePicPath: MountTaranaki,
-                    flagPath: NZflag,
-                    profilePicPath: ProfileWoman,
-                    guideTitle: 'Mount Taranaki',
-                    tagCat: 'Nature',
-                    tagColor: '#388e3c',
-                    tagBorder: '#388e3c',
-                    isLiked: false,
-                },
-                {
-                    guidePicPath: Taipei,
-                    flagPath: TWflag,
-                    profilePicPath: ProfileWoman2,
-                    guideTitle: 'Taipei',
-                    tagCat: 'Culture',
-                    tagColor: '#f57c00',
-                    tagBorder: '#f57c00',
-                    isLiked: false,
-                },
-                {
-                    guidePicPath: Luxembourg,
-                    flagPath: LUXflag,
-                    profilePicPath: ProfileMan,
-                    guideTitle: 'Luxembourg',
-                    tagCat: 'Entertainment',
-                    tagColor: '#9c27b0',
-                    tagBorder: '#9c27b0',
-                    isLiked: false,
-                },
-                {
-                    guidePicPath: Mexico,
-                    flagPath: MEXflag,
-                    profilePicPath: ProfileMan2,
-                    guideTitle: 'Mexico',
-                    tagCat: 'Food',
-                    tagColor: '#ec407a',
-                    tagBorder: '#ec407a',
-                    isLiked: false,
-                }
-            ],
-            regionalFavs: [
-                {
-                    guidePicPath: Matsuno,
-                    flagPath: JAPflag,
-                    profilePicPath: ProfileMan,
-                    guideTitle: 'Matsuno, Japan',
-                    tagCat: 'Nature',
-                    tagColor: '#388e3c',
-                    tagBorder: '#388e3c',
-                    isLiked: false,
-                },
-                {
-                    guidePicPath: Bangkok,
-                    flagPath: THAIflag,
-                    profilePicPath: ProfileMan2,
-                    guideTitle: 'Bangkok',
-                    tagCat: 'Food',
-                    tagColor: '#ec407a',
-                    tagBorder: '#ec407a',
-                    isLiked: false,
-                },
-                {
-                    guidePicPath: TajMahal,
-                    flagPath: INDflag,
-                    profilePicPath: ProfileWoman2,
-                    guideTitle: 'Taj Mahal',
-                    tagCat: 'Landmarks',
-                    tagColor: '#3f51b5',
-                    tagBorder: '#3f51b5',
-                    isLiked: false,
-                },
-                {
-                    guidePicPath: Marbella,
-                    flagPath: SPNflag,
-                    profilePicPath: ProfileWoman,
-                    guideTitle: 'Marbella',
-                    tagCat: 'Nature',
-                    tagColor: '#388e3c',
-                    tagBorder: '#388e3c',
-                    isLiked: false,
-                }
-            ],
+            editorsChoices: [],
+            regionalFavs: [],
+            recentlyAdded: [],
+            guides:[],
+            searchInput: '',
+            isLoading: true,
         };
     },
-//     methods: {
-//         async fetchEditorsChoice() {
-//             return [
-//                 {
-//                     guidePicPath: 'guides/MountTaranaki/MountTaranaki.jpg',
-//                     flagPath: 'guides/MountTaranaki/NZflag.svg',
-//                     profilePicPath: 'guides/MountTaranaki/ProfilePicWoman.jpg',
-//                     guideTitle: 'Mount Taranaki',
-//                     tagCat: 'Nature',
-//                     tagColor: '#388e3c',
-//                     tagBorder: '#388e3c',
-//                     isLiked: false,
-//                 },
-//                 {
-//                     guidePicPath: 'guides/Taipei/Taipei.jpg',
-//                     flagPath: 'guides/Taipei/TWflag.svg',
-//                     profilePicPath: 'guides/Taipei/profile.jpg',
-//                     guideTitle: 'Taipei',
-//                     tagCat: 'Culture',
-//                     tagColor: '#f57c00',
-//                     tagBorder: '#f57c00',
-//                     isLiked: false,
-//                 },
-//                 {
-//                     guidePicPath: 'guides/Luxembourg/Luxembourg.jpg',
-//                     flagPath: 'guides/Luxembourg/LUXflag.svg',
-//                     profilePicPath: 'guides/Luxembourg/profileman.jpg',
-//                     guideTitle: 'Luxembourg',
-//                     tagCat: 'Entertainment',
-//                     tagColor: '#9c27b0',
-//                     tagBorder: '#9c27b0',
-//                     isLiked: false,
-//                 },
-//                 {
-//                     guidePicPath: 'guides/Mexico/Mexico.jpg',
-//                     flagPath: 'guides/Mexico/MEXflag.svg',
-//                     profilePicPath: 'guides/Mexico/profileman2.jpg',
-//                     guideTitle: 'Mexico',
-//                     tagCat: 'Food',
-//                     tagColor: '#ec407a',
-//                     tagBorder: '#ec407a',
-//                     isLiked: false,
-//                 }
-//             ];
-//         },
-//         async fetchRegionalFav() {
-//             return [
-//                 {
-//                     guidePicPath: 'guides/Matsuno/Matsuno.jpg',
-//                     flagPath: 'guides/Matsuno/JAPflag.svg',
-//                     profilePicPath: 'guides/Matsuno/profileman.jpg',
-//                     guideTitle: 'Matsuno, Japan',
-//                     tagCat: 'Nature',
-//                     tagColor: '#388e3c',
-//                     tagBorder: '#388e3c',
-//                     isLiked: false,
-//                 },
-//                 {
-//                     guidePicPath: 'guides/Bangkok/Bangkok.jpg',
-//                     flagPath: 'guides/Bangkok/THAIflag.svg',
-//                     profilePicPath: 'guides/Bangkok/profileman2.jpg',
-//                     guideTitle: 'Bangkok',
-//                     tagCat: 'Food',
-//                     tagColor: '#ec407a',
-//                     tagBorder: '#ec407a',
-//                     isLiked: false,
-//                 },
-//                 {
-//                     guidePicPath: 'guides/TajMahal/TajMahal.jpg',
-//                     flagPath: 'guides/TajMahal/INDflag.svg',
-//                     profilePicPath: 'guides/TajMahal/profile.jpg',
-//                     guideTitle: 'Taj Mahal',
-//                     tagCat: 'Landmarks',
-//                     tagColor: '#3f51b5',
-//                     tagBorder: '#3f51b5',
-//                     isLiked: false,
-//                 },
-//                 {
-//                     guidePicPath: 'guides/Marbella/Marbella.jpg',
-//                     flagPath: 'guides/Marbella/SPNflag.svg',
-//                     profilePicPath: 'guides/Marbella/profile2.jpg',
-//                     guideTitle: 'Marbella',
-//                     tagCat: 'Nature',
-//                     tagColor: '#388e3c',
-//                     tagBorder: '#388e3c',
-//                     isLiked: false,
-//                 }
-//             ];
-//         },
-//         async fetchPhoto(path) {
-//             // const storage = getStorage()
-//             const photoRef = ref(storage, path)
-//             try {
-//                 const url = await getDownloadURL(photoRef)
-//                 return url
-//             } catch (error) {
-//                 console.log(error)
-//             }
-//         },
-//     },
-    
-//     async mounted() {
-//         const [editorsChoiceData, regionalFavData] = await Promise.all([
-//             this.fetchEditorsChoice(),
-//             this.fetchRegionalFav()
-//         ]);
-
-//         const editorsChoicesPromises = editorsChoiceData.map(async data => {
-//             const [guidePicPath, flagPath, profilePicPath] = await Promise.all([
-//             this.fetchPhoto(data.guidePicPath),
-//             this.fetchPhoto(data.flagPath),
-//             this.fetchPhoto(data.profilePicPath)
-//             ]);
-
-//             return {
-//             ...data,
-//             guidePicPath,
-//             flagPath,
-//             profilePicPath
-//             };
-//         });
-
-//         const regionalFavsPromises = regionalFavData.map(async data => {
-//             const [guidePicPath, flagPath, profilePicPath] = await Promise.all([
-//             this.fetchPhoto(data.guidePicPath),
-//             this.fetchPhoto(data.flagPath),
-//             this.fetchPhoto(data.profilePicPath)
-//             ]);
-
-//             return {
-//             ...data,
-//             guidePicPath,
-//             flagPath,
-//             profilePicPath
-//             };
-//         });
-
-//         this.editorsChoices = await Promise.all(editorsChoicesPromises);
-//         this.regionalFavs = await Promise.all(regionalFavsPromises);
-//     },
-// }
+    computed: {
+        filteredEditorsChoices() {
+            if (this.searchInput === '') {
+                return this.editorsChoices;
+            } else {
+                return this.editorsChoices.filter(guide => guide.guideTitle.toLowerCase().startsWith(this.searchInput.toLowerCase()));
+            }
+        },
+        filteredRegionalFavs() {
+            if (this.searchInput === '') {
+                return this.regionalFavs;
+            } else {
+                return this.regionalFavs.filter(guide => guide.guideTitle.toLowerCase().startsWith(this.searchInput.toLowerCase()));
+            }
+        },
+        filteredRecentlyAdded() {
+            if (this.searchInput === '') {
+                return this.recentlyAdded;
+            } else {
+                return this.recentlyAdded.filter(guide => guide.guideTitle.toLowerCase().startsWith(this.searchInput.toLowerCase()));
+            }
+        },
+    },
+    methods: {
+        async fetchMockGuides(guideIds) {
+            const guides = [];
+            for (const id of guideIds) {
+                const docRef = doc(db, 'guides', id);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists) {
+                    const data = docSnap.data();
+                    guides.push({
+                        guidePicPath: data.Cover_Photo,
+                        flagPath: data.Flag_Photo,
+                        profilePicPath: data.Profile_Photo,
+                        guideTitle: data.Guide_Title,
+                        tags: data.Tags,
+                        isLiked: data.Is_Liked,
+                        country: data.Country,
+                    });
+                } else {
+                    console.log(`No such document found with id: ${id}`);
+                }
+            }
+            return guides;
+        },
+        async fetchRecentlyAdded(excludeMock) {
+            const guidesRef = collection(db, 'guides');
+            const queryRef = query(guidesRef, where('Guide_Title', 'not-in', excludeMock));
+            let guides = [];
+            try {
+                const querySnapshotGuides = await getDocs(queryRef);
+                guides = querySnapshotGuides.docs.map(doc => ({
+                    guidePicPath: doc.data().Cover_Photo,
+                    flagPath: doc.data().Flag_Photo,
+                    profilePicPath: doc.data().Profile_Photo,
+                    guideTitle: doc.data().Guide_Title,
+                    tags: doc.data().Tags,
+                    isLiked: doc.data().Is_Liked,
+                    country: doc.data().Country,
+                }));
+            } catch (error) {
+                console.log(error);
+            }
+            return guides;
+        },
+    },
+    async mounted() {
+        const [editorsChoiceData, regionalFavData, recentlyAddedData] = await Promise.all([
+            this.fetchMockGuides(['Mount Taranaki', 'Taipei', 'Luxembourg', 'Mexico']),
+            this.fetchMockGuides(['Matsuno, Japan', 'Bangkok', 'Agra, India', 'Marbella']),
+            this.fetchRecentlyAdded(['Mount Taranaki', 'Taipei', 'Luxembourg', 'Mexico', 'Matsuno, Japan', 'Bangkok', 'Agra, India', 'Marbella']),
+        ]);
+        this.editorsChoices = editorsChoiceData;
+        this.regionalFavs = regionalFavData;
+        this.recentlyAdded = recentlyAddedData;
+        this.isLoading = false;
+    },
 }
 </script>
 
 
+<style scoped>
+.loading-spinner {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+.spinner {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #6b7280; /* Blue */
+    border-radius: 50%;
+    width: 75px;
+    height: 75px;
+    animation: spin 2s linear infinite;
+}
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>

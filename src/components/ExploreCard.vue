@@ -1,19 +1,20 @@
 <template>
-  <div class="flex flex-col items-center justify-center">
+  <div class="flex flex-col items-center">
     <div class="flex flex-col items-start space-y-3">
       <div
-        class="bg-gray shadow-lg w-56 rounded-3xl guideCard"
+        class="bg-gray shadow-lg w-56 rounded-3xl guideCard cursor-pointer"
         v-on:click="openGuide"
         v-if="isVisible"
       >
-        <div class="relative h-48 overflow-hidden bg-gray-200 rounded-3xl">
+        <div class="flex flex-col relative h-48 overflow-hidden bg-gray-200 rounded-3xl">
           <!-- Guide Cover Photo -->
-          <img
-            :src="card.guidePicPath"
-            loading="lazy"
-            alt="Image"
-            class="object-cover rounded-t-2xl h-full w-full"
-          />
+            <img
+              :src="card.guidePicPath"
+              loading="lazy"
+              alt="Image"
+              class="object-cover rounded-t-2xl h-full w-full"
+            />
+
           <div class="flex absolute top-0 right-0 p-3">
             <!-- Profile Picture -->
             <img
@@ -26,21 +27,25 @@
 
             <!-- Guide Title and Flag -->
           <div class="flex items-center absolute bottom-0 left-0 p-3">
-            <img :src="card.flagPath" loading="lazy" alt="flag" />
-            <span class="ml-2 text-white font-medium text-xs">{{ card.guideTitle }}</span>
+            <!-- <img :src="card.flagPath" loading="lazy" alt="flag" /> -->
+            <span :class="getFlagClass(card.country)" class="mr-2" loading="lazy"></span>
+            <span class="ml-2 text-white font-medium text-xs drop-shadow-lg">{{ card.guideTitle }}</span>
           </div>
         </div>
       </div>
-      <div class="w-56 flex justify-between items-center">
+
+      <div class="w-56 flex justify-between items-center place-items-center">
         <!-- Tag  -->
-        <GlobalTag
-          :tagCategory="card.tagCat"
-          :textColor="card.tagColor"
-          :borderColor="card.tagBorder"
-        ></GlobalTag>
+        <div class="flex flex-wrap ">
+          <div v-for="(tag, index) in card.tags" :key="index" class="mr-2 mb-2">
+            <GlobalTag
+              :tagCategory="tag"
+            ></GlobalTag>
+          </div>
+        </div>
 
         <!-- Like Button -->
-        <div @click="likeGuide">
+        <div @click="handleLike" class="cursor-pointer">
           <svg
             v-if="isLiked"
             xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +53,7 @@
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="red"
-            class="h-5 w-5 heart-icon"
+            class="h-5 w-5 heart-icon cursor-pointer"
             :class="{ 'animate-like': isLiked }"
           >
             <path
@@ -74,13 +79,18 @@
           </svg>
         </div>
       </div>
+    
     </div>
   </div>
 </template>
 
 <script>
 
-import GlobalTag from './GlobalTag.vue'
+import GlobalTag from './GlobalTag.vue';
+import { db } from '@/firebase';
+import { doc, collection, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+
+import { getAuth } from 'firebase/auth';
 
 export default {
   components: {
@@ -101,12 +111,238 @@ export default {
   },
   methods: {
     openGuide() {
-      this.isVisible = false
-      this.$router.push({ name: 'GuideView' })
+      this.isVisible = false;
+      this.$router.push(`/guide/${this.card.guideTitle}`);
     },
-    likeGuide() {
-      this.isLiked = !this.isLiked
-    }
+    async handleLike() {
+      this.isLiked = !this.isLiked;
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      // Get reference to the current guide
+      const currGuideRef = doc(collection(db, 'guides'), this.card.guideTitle);
+      const userRef = doc(collection(db, 'users'), user.email);
+
+      if (this.isLiked) {
+        // Add the current guide to the user's favourites
+        await updateDoc(userRef, {
+          Favourites: arrayUnion(currGuideRef)
+        })
+        .then(() => {
+          console.log('Successfully added to Favourites!');
+        })
+        .catch((error) => {
+          console.error('Error adding to favourites: ', error);
+        });
+      } else {
+        // Remove the current guide from the user's favourites
+        await updateDoc(userRef, {
+          Favourites: arrayRemove(currGuideRef)
+        })
+        .then(() => {
+          console.log('Successfully removed from Favourites!');
+        })
+        .catch((error) => {
+          console.error('Error removing from favourites: ', error);
+        });
+      }
+    },
+    getFlagClass(country) {
+      const countryCodes = {
+        "Albania": "fi fi-al",
+        "Algeria": "fi fi-dz",
+        "Andorra": "fi fi-ad",
+        "Angola": "fi fi-ao",
+        "Antigua and Barbuda": "fi fi-ag",
+        "Argentina": "fi fi-ar",
+        "Armenia": "fi fi-am",
+        "Australia": "fi fi-au",
+        "Austria": "fi fi-at",
+        "Azerbaijan": "fi fi-az",
+        "Bahamas": "fi fi-bs",
+        "Bahrain": "fi fi-bh",
+        "Bangladesh": "fi fi-bd",
+        "Barbados": "fi fi-bb",
+        "Belarus": "fi fi-by",
+        "Belgium": "fi fi-be",
+        "Belize": "fi fi-bz",
+        "Benin": "fi fi-bj",
+        "Bhutan": "fi fi-bt",
+        "Bolivia": "fi fi-bo",
+        "Bosnia and Herzegovina": "fi fi-ba",
+        "Botswana": "fi fi-bw",
+        "Brazil": "fi fi-br",
+        "Brunei": "fi fi-bn",
+        "Bulgaria": "fi fi-bg",
+        "Burkina Faso": "fi fi-bf",
+        "Burundi": "fi fi-bi",
+        "Cabo Verde": "fi fi-cv",
+        "Cambodia": "fi fi-kh",
+        "Cameroon": "fi fi-cm",
+        "Canada": "fi fi-ca",
+        "Central African Republic": "fi fi-cf",
+        "Chad": "fi fi-td",
+        "Chile": "fi fi-cl",
+        "China": "fi fi-cn",
+        "Colombia": "fi fi-co",
+        "Comoros": "fi fi-km",
+        "Congo (Congo-Brazzaville)": "fi fi-cg",
+        "Costa Rica": "fi fi-cr",
+        "Croatia": "fi fi-hr",
+        "Cuba": "fi fi-cu",
+        "Cyprus": "fi fi-cy",
+        "Czechia (Czech Republic)": "fi fi-cz",
+        "Democratic Republic of the Congo": "fi fi-cd",
+        "Denmark": "fi fi-dk",
+        "Djibouti": "fi fi-dj",
+        "Dominica": "fi fi-dm",
+        "Dominican Republic": "fi fi-do",
+        "Ecuador": "fi fi-ec",
+        "Egypt": "fi fi-eg",
+        "El Salvador": "fi fi-sv",
+        "Equatorial Guinea": "fi fi-gq",
+        "Eritrea": "fi fi-er",
+        "Estonia": "fi fi-ee",
+        "Eswatini": "fi fi-sz",
+        "Ethiopia": "fi fi-et",
+        "Fiji": "fi fi-fj",
+        "Finland": "fi fi-fi",
+        "France": "fi fi-fr",
+        "Gabon": "fi fi-ga",
+        "Gambia": "fi fi-gm",
+        "Georgia": "fi fi-ge",
+        "Germany": "fi fi-de",
+        "Ghana": "fi fi-gh",
+        "Greece": "fi fi-gr",
+        "Grenada": "fi fi-gd",
+        "Guatemala": "fi fi-gt",
+        "Guinea": "fi fi-gn",
+        "Guinea-Bissau": "fi fi-gw",
+        "Guyana": "fi fi-gy",
+        "Haiti": "fi fi-ht",
+        "Honduras": "fi fi-hn",
+        "Hungary": "fi fi-hu",
+        "Iceland": "fi fi-is",
+        "India": "fi fi-in",
+        "Indonesia": "fi fi-id",
+        "Iran": "fi fi-ir",
+        "Iraq": "fi fi-iq",
+        "Ireland": "fi fi-ie",
+        "Italy": "fi fi-it",
+        "Ivory Coast": "fi fi-ci",
+        "Jamaica": "fi fi-jm",
+        "Japan": "fi fi-jp",
+        "Jordan": "fi fi-jo",
+        "Kazakhstan": "fi fi-kz",
+        "Kenya": "fi fi-ke",
+        "Kiribati": "fi fi-ki",
+        "Kuwait": "fi fi-kw",
+        "Kyrgyzstan": "fi fi-kg",
+        "Laos": "fi fi-la",
+        "Latvia": "fi fi-lv",
+        "Lebanon": "fi fi-lb",
+        "Lesotho": "fi fi-ls",
+        "Liberia": "fi fi-lr",
+        "Libya": "fi fi-ly",
+        "Liechtenstein": "fi fi-li",
+        "Lithuania": "fi fi-lt",
+        "Luxembourg": "fi fi-lu",
+        "Madagascar": "fi fi-mg",
+        "Malawi": "fi fi-mw",
+        "Malaysia": "fi fi-my",
+        "Maldives": "fi fi-mv",
+        "Mali": "fi fi-ml",
+        "Malta": "fi fi-mt",
+        "Marshall Islands": "fi fi-mh",
+        "Mauritania": "fi fi-mr",
+        "Mauritius": "fi fi-mu",
+        "Mexico": "fi fi-mx",
+        "Micronesia": "fi fi-fm",
+        "Moldova": "fi fi-md",
+        "Monaco": "fi fi-mc",
+        "Mongolia": "fi fi-mn",
+        "Montenegro": "fi fi-me",
+        "Morocco": "fi fi-ma",
+        "Mozambique": "fi fi-mz",
+        "Myanmar (Burma)": "fi fi-mm",
+        "Namibia": "fi fi-na",
+        "Nauru": "fi fi-nr",
+        "Nepal": "fi fi-np",
+        "Netherlands": "fi fi-nl",
+        "New Zealand": "fi fi-nz",
+        "Nicaragua": "fi fi-ni",
+        "Niger": "fi fi-ne",
+        "Nigeria": "fi fi-ng",
+        "North Macedonia": "fi fi-mk",
+        "Norway": "fi fi-no",
+        "Oman": "fi fi-om",
+        "Palau": "fi fi-pw",
+        "Panama": "fi fi-pa",
+        "Papua New Guinea": "fi fi-pg",
+        "Paraguay": "fi fi-py",
+        "Peru": "fi fi-pe",
+        "Philippines": "fi fi-ph",
+        "Poland": "fi fi-pl",
+        "Portugal": "fi fi-pt",
+        "Qatar": "fi fi-qa",
+        "Romania": "fi fi-ro",
+        "Russia": "fi fi-ru",
+        "Rwanda": "fi fi-rw",
+        "Saint Kitts and Nevis": "fi fi-kn",
+        "Saint Lucia": "fi fi-lc",
+        "Saint Vincent and the Grenadines": "fi fi-vc",
+        "Samoa": "fi fi-ws",
+        "San Marino": "fi fi-sm",
+        "Sao Tome and Principe": "fi fi-st",
+        "Saudi Arabia": "fi fi-sa",
+        "Senegal": "fi fi-sn",
+        "Serbia": "fi fi-rs",
+        "Seychelles": "fi fi-sc",
+        "Sierra Leone": "fi fi-sl",
+        "Singapore": "fi fi-sg",
+        "Slovakia": "fi fi-sk",
+        "Slovenia": "fi fi-si",
+        "Solomon Islands": "fi fi-sb",
+        "Somalia": "fi fi-so",
+        "South Africa": "fi fi-za",
+        "South Korea": "fi fi-kr",
+        "South Sudan": "fi fi-ss",
+        "Spain": "fi fi-es",
+        "Sri Lanka": "fi fi-lk",
+        "Sudan": "fi fi-sd",
+        "Suriname": "fi fi-sr",
+        "Sweden": "fi fi-se",
+        "Switzerland": "fi fi-ch",
+        "Syria": "fi fi-sy",
+        "Taiwan": "fi fi-tw",
+        "Tajikistan": "fi fi-tj",
+        "Tanzania": "fi fi-tz",
+        "Thailand": "fi fi-th",
+        "Timor-Leste": "fi fi-tl",
+        "Togo": "fi fi-tg",
+        "Tonga": "fi fi-to",
+        "Trinidad and Tobago": "fi fi-tt",
+        "Tunisia": "fi fi-tn",
+        "Turkey": "fi fi-tr",
+        "Turkmenistan": "fi fi-tm",
+        "Tuvalu": "fi fi-tv",
+        "Uganda": "fi fi-ug",
+        "Ukraine": "fi fi-ua",
+        "United Arab Emirates": "fi fi-ae",
+        "United Kingdom": "fi fi-gb",
+        "United States": "fi fi-us",
+        "Uruguay": "fi fi-uy",
+        "Uzbekistan": "fi fi-uz",
+        "Vanuatu": "fi fi-vu",
+        "Vatican City": "fi fi-va",
+        "Venezuela": "fi fi-ve",
+        "Vietnam": "fi fi-vn",
+        "Yemen": "fi fi-ye",
+        "Zambia": "fi fi-zm",
+        "Zimbabwe": "fi fi-zw",
+      };
+      return countryCodes[country] || 'fi'; // Default class if country code not found
+    },
   },
   mounted() {
     console.log(this.guidePic)
