@@ -6,13 +6,15 @@ import EditTrip from '../components/EditTripFirstPopUp.vue'
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import LandingPage from '@/views/LandingPage.vue'
 
-import Home from '../views/Home.vue'
+// import Home from '../views/Home.vue'
 import ViewTrip from '../views/ViewTrip.vue'
 import Sidebar from '../components/SideBar.vue'
 import Explore from '../views/ExploreView.vue';
 import UserProfilingView from '../views/UserProfilingView.vue'
 import Dashboard from '../views/DashboardView.vue'
 import UserProfile from '../views/UserProfile.vue'
+
+import AddGuideBtn from '../components/AddGuideBtn.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,7 +46,7 @@ const router = createRouter({
       component: AddGuide2,
     },
     {
-      path: '/guide-view',
+      path: '/guide/:docRef',
       name: 'GuideView',
       component: GuideView,
     },
@@ -88,7 +90,12 @@ const router = createRouter({
     meta: {
       requiresAuth: true,
     }
-  }
+  },
+                            {
+    path: '/add-guide-btn',
+    name: 'add-guide-btn',
+    component: AddGuideBtn,
+  },
   ]
 });
 

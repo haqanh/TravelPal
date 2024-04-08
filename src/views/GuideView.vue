@@ -1,143 +1,207 @@
 <template>
-    <div class="guide-layout">
-      <GuideNav :sections="sections" :activeSection="activeSection" class="guide-sidebar justify-center m-10"/>
-      <main id="guideContent" class="guide-content">
-        <section id="generalAdvice" class="p-8">
-          <!-- General Advice content goes here -->
-          <h1 class="text-xl font-bold">
-            General Advice
-          </h1>
-          <h1 class="text-lg">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc nec odio ultricies ultricies. Nullam nec 
-            nunc nec odio ultricies ultricies.
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc nec odio ultricies ultricies. Nullam nec 
-            nunc nec odio ultricies ultricies.
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc nec odio ultricies ultricies. Nullam nec 
-            nunc nec odio ultricies ultricies.
-          </h1>
-        </section>
-        <section id="placesToVisit" class="p-8">
-          <!-- Places to Visit content goes here -->
-          <h1 class="text-xl font-bold">
-            Places to Visit
-          </h1>
-          <GuideComponent />
-          <GuideComponent />
-        </section>
-        <section id="placesToEat" class="p-8">
-          <!-- Places to Eat content goes here -->
-          <h1 class="text-xl font-bold">
-            Places to Eat
-          </h1>
-          <GuideComponent />
-          <GuideComponent />
-        </section>
-        <section id="placesToStay" class="p-8">
-          <!-- Places to Eat content goes here -->
-          <h1 class="text-xl font-bold">
-            Places to Stay
-          </h1>
-          <GuideComponent />
-          <GuideComponent />
-        </section>
-        <section id="nearbyPlaces" class="p-8">
-          <!-- Places to Eat content goes here -->
-          <h1 class="text-xl font-bold">
-            Nearby Places
-          </h1>
-          <GuideComponent />
-          <GuideComponent />
-        </section>
-      </main>
+  <div class="inset-x-0 top-0 h-2/5 absolute">
+  <img
+    src="@/assets/guideCover/Matsuno.jpg"
+    class="object-cover w-full h-full shadow-md rounded-b-3xl"
+    alt="San Francisco"
+  />
+  <div class="absolute inset-0 bg-gray-700 bg-opacity-50 rounded-b-3xl"></div>
+  <div class="absolute bottom-0 left-0 w-full p-4 text-center">
+    <h1 class="text-6xl font-bold text-white"> Matsuno </h1>
+    <p class="text-xl text-white my-4"> In Japan </p>
+  </div>
+</div>
+
+
+<NavBar />
+
+
+<div class="flex flex-grow ">
+    <!-- Guide Contents sidebar -->
+    <div class="guide-sidebar w-1/5 p-8 sticky top-0 h-1/3 z-20 mt-[32vh]">
+      <GuideNav :sections="sections" :activeSection="activeSection" class="h-screen overflow-y-auto sticky top-0 bottom-0"/>
     </div>
-  </template>
+    <main id="guideContent" class="guide-content mt-[35vh] overflow-auto px-10 w-3/4 ">
+      <h1 class="text-lg italic font-light py-4">
+      " {{ overview }} "
+      </h1>
+      <section id="generalAdvice" class="pb-4">
+        <!-- General Advice content goes here -->
+        <h1 class="text-2xl lg:text-3xl xl:text-4xl font-bold">
+          General Advice
+        </h1>
+        <h1 class="text-lg my-4">
+          <h1 v-for="advice in generalAdvice" :key="advice.id">
+            {{ advice.content }}
+          </h1>
+        </h1>
+      </section>
+      <section id="placesToVisit" class="py-4">
+        <!-- Places to Visit content goes here -->
+        <h1 class="text-2xl lg:text-3xl xl:text-4xl font-bold">
+          Places to Visit
+        </h1>
+        <GuideComponent
+          v-for="place in placesToVisit"
+          :key="place.id"
+          :place="place"
+        />
+      </section>
+      <section id="placesToEat" class="py-4">
+        <!-- Places to Eat content goes here -->
+        <h1 class="text-2xl lg:text-3xl xl:text-4xl font-bold">
+          Places to Eat
+        </h1>
+        <GuideComponent
+          v-for="place in placesToEat"
+          :key="place.id"
+          :place="place"
+        />
+      </section>
+      <section id="placesToStay" class="py-4">
+        <!-- Places to Eat content goes here -->
+        <h1 class="text-2xl lg:text-3xl xl:text-4xl font-bold">
+          Places to Stay
+        </h1>
+        <GuideComponent
+          v-for="place in placesToStay"
+          :key="place.id"
+          :place="place"
+        />
+      </section>
+      <section id="nearbyPlaces" class="py-4">
+        <!-- Places to Eat content goes here -->
+        <h1 class="text-2xl lg:text-3xl xl:text-4xl font-bold">
+          Nearby Places
+        </h1>
+        <GuideComponent
+          v-for="place in nearbyPlaces"
+          :key="place.id"
+          :place="place"
+        />
+      </section>
+    </main>
+  </div>
+
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue';
+import GuideNav from '@/components/GuideNav.vue';
+import NavBar from '@/components/NavBar.vue';
+import GuideComponent from '@/components/GuideComponent.vue';
+import { useRoute } from 'vue-router';
+import { db } from '@/firebase';
+import { doc, getDoc, getDocs, collection } from 'firebase/firestore';
+
+const route = useRoute();
+const guideData = ref(null);
+
+const sections = [
+  { id: 'generalAdvice', name: '1. General Advice' },
+  { id: 'placesToVisit', name: '2. Places to Visit' },
+  { id: 'placesToEat', name: '3. Places to Eat' },
+  { id: 'placesToStay', name: '4. Places to Stay'},
+  { id: 'nearbyPlaces', name: '5. Nearby Places'}
+];
+
+const place = ref('');
+const overview = ref('');
+
+const generalAdvice = ref('');
+const placesToVisit = ref([]);
+const placesToEat = ref([]);
+const placesToStay = ref([]);
+const nearbyPlaces = ref([]);
+
+const activeSection = ref(sections[0].id);
+
+const handleScroll = () => {
+  //console.log('Scrolling...');
+  let currentSection = sections[0].id;
+  let minOffset = Number.POSITIVE_INFINITY;
   
-  <script setup>
-  import { ref, onMounted, onUnmounted } from 'vue';
-  import GuideNav from '@/components/GuideNav.vue';
-  import GuideComponent from '@/components/GuideComponent.vue';
-  
-  const sections = [
-    { id: 'generalAdvice', name: '1. General Advice' },
-    { id: 'placesToVisit', name: '2. Places to Visit' },
-    { id: 'placesToEat', name: '3. Places to Eat' },
-    { id: 'placesToStay', name: '4. Places to Stay'},
-    { id: 'nearbyPlaces', name: '5. Nearby Places'}
-  ];
-  const activeSection = ref(sections[0].id);
 
-  const handleScroll = () => {
-    //console.log('Scrolling...');
-    let currentSection = sections[0].id;
-    let minOffset = Number.POSITIVE_INFINITY;
-    
+  sections.forEach((section) => {
+      const element = document.getElementById(section.id);
+      if (element) {
+      const rect = element.getBoundingClientRect();
+      // Use an offset value like header height if needed
+      const offset = 0; 
+      const top = rect.top + offset;
 
-    sections.forEach((section) => {
-        const element = document.getElementById(section.id);
-        if (element) {
-        const rect = element.getBoundingClientRect();
-        // Use an offset value like header height if needed
-        const offset = 0; 
-        const top = rect.top + offset;
+      if (top >= 0 && top < minOffset) {
+          currentSection = section.id;
+          minOffset = top;
+      }
+  }
+});
 
-        if (top >= 0 && top < minOffset) {
-            currentSection = section.id;
-            minOffset = top;
-        }
-    }
-  });
-
-  //console.log(currentSection); // Add this line to debug
-  activeSection.value = currentSection;
+//console.log(currentSection); // Add this line to debug
+activeSection.value = currentSection;
 };
 
-onMounted(() => {
-  //console.log('Component mounted, adding scroll listener');
-  guideContent.addEventListener('scroll', handleScroll);
+onMounted(async () => {
+window.addEventListener('scroll', handleScroll);
+
+const docId = route.params.docRef;
+if (docId) {
+  const docRef = await getDoc(doc(db, 'places', docId)); // to update places to guides
+
+
+  if (docRef.exists()) {
+    guideData.value = docRef.data();
+
+    
+    place.value = guideData.value.Name;
+    overview.value = guideData.value.Description;
+
+    const advicesCollectionRef = collection(docRef.ref, 'advices');
+    const advicesSnapshot = await getDocs(advicesCollectionRef);
+    
+    generalAdvice.value = advicesSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    const placesToVisitCollectionRef = collection(docRef.ref, 'places_to_visit');
+    const placesToVisitSnapshot = await getDocs(placesToVisitCollectionRef);
+    
+    placesToVisit.value = placesToVisitSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    const placesToEatCollectionRef = collection(docRef.ref, 'places_to_eat');
+    const placesToEatSnapshot = await getDocs(placesToEatCollectionRef);
+    placesToEat.value = placesToEatSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    const placesToStayCollectionRef = collection(docRef.ref, 'places_to_stay');
+    const placesToStaySnapshot = await getDocs(placesToStayCollectionRef);
+    placesToStay.value = placesToStaySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    const nearbyPlacesCollectionRef = collection(docRef.ref, 'nearby_places');
+    const nearbyPlacesSnapshot = await getDocs(nearbyPlacesCollectionRef);
+    nearbyPlaces.value = nearbyPlacesSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+  } else {
+    console.error('No such document!');
+    // Handle the "not found" case
+  }
+}
 });
 
 onUnmounted(() => {
-  //console.log('Component unmounted, removing scroll listener');
-  guideContent.removeEventListener('scroll', handleScroll);
+//console.log('Component unmounted, removing scroll listener');
+window.removeEventListener('scroll', handleScroll);
 });
-  </script>
-  
-  
-  <style>
-  .guide-layout {
-    display: flex;
-    height: 100vh; /* Viewport height */
-  }
-  
-  .guide-sidebar {
-    width: 250px; /* Width of the sidebar */
-    flex-shrink: 0; /* Prevents the sidebar from shrinking */
-    overflow-y: auto; /* Allows scrolling on the sidebar */
-    position: sticky;
-    top: 0;
-  }
-  
-  .guide-content {
-    flex-grow: 1; /* Allows the content area to take up the remaining space */
-    overflow-y: auto; /* Allows scrolling on the content area */
-    padding: 20px;
-  }
-  
-  /* Add additional global and responsive styles as needed */
-  
-  /* Style adjustments for smaller screens */
-  @media (max-width: 768px) {
-    .guide-layout {
-      flex-direction: column;
-    }
-  
-    .guide-sidebar {
-      width: 100%;
-      height: auto;
-    }
-  
-    .guide-content {
-      padding: 10px;
-    }
-  }
-  </style>
+</script>

@@ -291,7 +291,7 @@ export default {
     DialogTitle,
     AddTripSecondPopUp,
     Datepicker,
-  }
+  },
 }
 </script>
 
