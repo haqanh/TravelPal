@@ -51,7 +51,7 @@
         </div>
         <hr class="my-6 border-gray-200 sm:mx-auto border-gray-400 lg:my-8" />
         <div class="sm:flex sm:items-center sm:justify-between">
-            <span class="text-sm text-gray-400 sm:text-center">© 202 <a href="/dashboard" class="hover:underline">TravelPal</a>. All Rights Reserved.
+            <span class="text-sm text-gray-400 sm:text-center">© 2024 <a href="/dashboard" class="hover:underline">TravelPal</a>. All Rights Reserved.
             </span>
             <div class="flex mt-4 sm:justify-center sm:mt-0">
                 <a href="#" class="text-gray-100 hover:text-gray-900 hover:text-white">
