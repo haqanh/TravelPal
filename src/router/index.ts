@@ -67,12 +67,6 @@ const router = createRouter({
     }
   },
   {
-
-    path: '/add-guide-btn',
-    name: 'addGuideBtn',
-    component: AddGuideBtn
-  },
-  {
     path: '/explore',
     name: 'explore',
     component: Explore
