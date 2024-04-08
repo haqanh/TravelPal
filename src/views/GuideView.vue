@@ -83,6 +83,7 @@
     </main>
   </div>
 
+<GlobalFooter />
 </template>
 
 <script setup>
@@ -90,6 +91,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import GuideNav from '@/components/GuideNav.vue';
 import NavBar from '@/components/NavBar.vue';
 import GuideComponent from '@/components/GuideComponent.vue';
+import GlobalFooter from '@/components/GlobalFooter.vue';
 import { useRoute } from 'vue-router';
 import { db } from '@/firebase';
 import { doc, getDoc, getDocs, collection } from 'firebase/firestore';

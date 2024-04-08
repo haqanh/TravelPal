@@ -39,7 +39,7 @@
         <!-- Recently Added Section -->
         <h2 v-if="recentlyAdded" class="ml-20 font-semibold mb-2 mt-4">Recently Added</h2>
         <div class="flex flex-wrap justify-center space-x-12">
-            <ExploreCard v-for="card in recentlyAdded" :key="card.guideTitle" :card="card" />
+            <ExploreCard v-for="card in filteredRecentlyAdded" :key="card.guideTitle" :card="card" />
         </div>
     </div>
 </template>
@@ -51,33 +51,6 @@ import ExploreCard from '@/components/ExploreCard.vue'
 
 import { db } from '@/firebase';
 import { getDoc, doc, collection, query, where, getDocs } from 'firebase/firestore';
-import MountTaranaki from '../assets/guideCover/MountTaranaki.jpg'
-import ProfileWoman from '../assets/profiles/ProfileWoman.jpg'
-import NZflag from '../assets/flags/NZflag.svg'
-
-import Taipei from '../assets/guideCover/Taipei.jpg'
-import TWflag from '../assets/flags/TWflag.svg'
-import ProfileWoman2 from '../assets/profiles/ProfileWoman2.jpg'
-
-import Luxembourg from '../assets/guideCover/Luxembourg.jpg'
-import LUXflag from '../assets/flags/LUXflag.svg'
-import ProfileMan from '../assets/profiles/ProfileMan.jpg'
-
-import Mexico from '../assets/guideCover/Mexico.jpg'
-import MEXflag from '../assets/flags/MEXflag.svg'
-import ProfileMan2 from '../assets/profiles/ProfileMan2.jpg'
-
-import Matsuno from '../assets/guideCover/Matsuno.jpg'
-import JAPflag from '../assets/flags/JAPflag.svg'
-
-import Bangkok from '../assets/guideCover/Bangkok.jpg'
-import THAIflag from '../assets/flags/THAIflag.svg'
-
-import TajMahal from '../assets/guideCover/TajMahal.jpg'
-import INDflag from '../assets/flags/INDflag.svg'
-
-import Marbella from '../assets/guideCover/Marbella.jpg'
-import SPNflag from '../assets/flags/SPNflag.svg'
 
 // import { storage } from '../firebase'
 // import { ref, getDownloadURL, getStorage} from 'firebase/storage'
@@ -110,6 +83,13 @@ export default {
                 return this.regionalFavs;
             } else {
                 return this.regionalFavs.filter(guide => guide.guideTitle.toLowerCase().startsWith(this.searchInput.toLowerCase()));
+            }
+        },
+        filteredRecentlyAdded() {
+            if (this.searchInput === '') {
+                return this.recentlyAdded;
+            } else {
+                return this.recentlyAdded.filter(guide => guide.guideTitle.toLowerCase().startsWith(this.searchInput.toLowerCase()));
             }
         },
     },
