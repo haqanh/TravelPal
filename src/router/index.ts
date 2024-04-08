@@ -12,6 +12,7 @@ import Sidebar from '../components/SideBar.vue'
 import Explore from '../views/ExploreView.vue';
 import UserProfilingView from '../views/UserProfilingView.vue'
 import Dashboard from '../views/DashboardView.vue'
+import UserProfile from '../views/UserProfile.vue'
 
 import AddGuideBtn from '../components/AddGuideBtn.vue'
 
@@ -67,12 +68,6 @@ const router = createRouter({
     }
   },
   {
-
-    path: '/add-guide-btn',
-    name: 'addGuideBtn',
-    component: AddGuideBtn
-  },
-  {
     path: '/explore',
     name: 'explore',
     component: Explore
@@ -89,6 +84,14 @@ const router = createRouter({
 
   },
   {
+    path: '/user-profile',
+    name: 'user-profile',
+    component: UserProfile,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+                            {
     path: '/add-guide-btn',
     name: 'add-guide-btn',
     component: AddGuideBtn,
