@@ -16,7 +16,7 @@
                         </div>
                     </div>
                 </div>
-                <span class="pt-[0.3vh] text-[2vh] font-medium text-[#3F3D3D] text-opacity-60">{{ formattedDate }}</span>
+                <span class="flex pt-[0.3vh] text-[2vh] font-medium text-[#3F3D3D] text-opacity-60">{{ formattedDate }}</span>
             </div>
         </div>
     </div>
