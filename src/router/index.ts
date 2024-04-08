@@ -12,6 +12,7 @@ import Sidebar from '../components/SideBar.vue'
 import Explore from '../views/ExploreView.vue';
 import UserProfilingView from '../views/UserProfilingView.vue'
 import Dashboard from '../views/DashboardView.vue'
+import UserProfile from '../views/UserProfile.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -79,6 +80,14 @@ const router = createRouter({
     name: 'dashboard',
     component: Dashboard
 
+  },
+  {
+    path: '/user-profile',
+    name: 'user-profile',
+    component: UserProfile,
+    meta: {
+      requiresAuth: true,
+    }
   }
   ]
 });
