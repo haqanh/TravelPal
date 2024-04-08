@@ -337,12 +337,13 @@ async function SignUp() {
     createUserWithEmailAndPassword(auth, signUpEmail.value, signUpPassword.value)
       .then(async (userCredential) => {
         // Signed in
-        const user = userCredential.ur
+        const user = userCredential.user
         console.log(user)
         $toast.success('Welcome to TravelPal!', {
           position: 'top'
         })
         await addUser();
+        console.log('Document successfully written! (outside)')
         router.push('/userprofiling')
       })
       .catch(async (error) => {
@@ -393,10 +394,13 @@ function closeModal() {
 }
 
 async function addUser() {
+  console.log("inside addUser")
+  console.log(signUpEmail.value)
   try {
-    await setDoc(doc(db, "users", signUpEmail.value, {merge: true}), {
+    await setDoc(doc(db, "users", signUpEmail.value), {
       email: signUpEmail.value,
-    })
+    }, {merge: true});
+    console.log('Document successfully written!')
   } catch (e) {
     console.error('Error adding document: ', e)
   }
@@ -404,9 +408,9 @@ async function addUser() {
 
 async function addUserGoogle(email) {
   try {
-    await setDoc(doc(db, "users", email, {merge: true}), {
+    await setDoc(doc(db, "users", email), {
       email: email,
-    })
+    }, {merge: true});
   } catch (e) {
     console.error('Error adding document: ', e)
   }   
