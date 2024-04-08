@@ -14,6 +14,9 @@ import { getAuth } from 'firebase/auth'
 import Datepicker from 'vue3-datepicker'
 import GlobalTag from './GlobalTag.vue';
 
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
+
 export default {
   emits:['close', 'update-guide-id'],
   components: {
@@ -41,7 +44,6 @@ export default {
       showEndDatepicker: false,
       country: '',
       tagOptions: ['City', 'Nature', 'Culture', 'Entertainment', 'Food', 'Landmarks', 'Adventure', 'History', 'Science', 'Technology', 'Sports', 'Health', 'Fashion', 'Education', 'Travel', 'Art'], 
-      // tags: [],
       dropdownOpen: false,
       selectedTags:[],
       hovering: null,
@@ -49,8 +51,17 @@ export default {
   },
   methods: {
     openSecondModal() {
-      this.addGuide()
+      const $toast = useToast()
+      let fields = [this.guideTitle, this.destination, this.description, this.selectedPhoto, this.selectedEndDate, this.selectedStartDate, this.selectedTags]
 
+      if (fields.some(field => !field || (Array.isArray(field) && field.length === 0))) {
+        $toast.error('Please fill out all fields', {
+          position: 'top'
+        })
+        return
+      }
+
+      this.addGuide()
       this.isFirstOpen = false
       this.isSecondOpen = true
     },
@@ -73,6 +84,7 @@ export default {
       this.selectedTags = this.selectedTags.filter(tag => tag !== currTag);
     },
     handleFileChange(event) {
+      const $toast = useToast()
       const file = event.target.files[0]
       if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
         const reader = new FileReader()
@@ -84,13 +96,13 @@ export default {
       } else {
         // Reset selectedPhoto or show error message
         this.selectedPhoto = null
-        alert('Please select a JPEG, JPG, or PNG file.')
+        $toast.error('Please select a JPEG, JPG, or PNG file.', {
+          position: 'top'
+        })
       }
     },
     async addGuide() {
-      let fields = [this.guideTitle, this.destination, this.description, this.selectedPhoto, this.selectedEndDate, this.selectedStartDate, this.selectedTags]
-
-      if (fields.every((field) => field !== '')) {
+      
         try {
           const auth = getAuth()
           const user = auth.currentUser
@@ -153,11 +165,6 @@ export default {
         } catch (e) {
           console.error('Error updating document: ', e)
         }
-      } else {
-        alert('Please fill out all fields')
-        console.log('All fields must be non-empty')
-        return
-      }
     }
   },
   mounted() {

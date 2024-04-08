@@ -171,6 +171,8 @@
 <script>
 
 import GlobalTag from './GlobalTag.vue';
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
 
 export default {
   components: {
@@ -207,6 +209,7 @@ export default {
     },
 
     handleFileChange(event) {
+      const $toast = useToast();
       const file = event.target.files[0];
       this.count++;
       if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
@@ -221,7 +224,9 @@ export default {
       } else {
         // Reset selectedPhoto or show error message
         this.selectedPhoto = null;
-        alert('Please select a JPEG or JPG or PNG file.');
+        $toast.error('Please select a JPEG, JPG, or PNG file.', {
+          position: 'top'
+        })
       }
     },
     confirmRemove(event) {
@@ -230,6 +235,28 @@ export default {
         this.selectedPhoto = null;
       }
     },
+    // confirmRemove(event) {
+    //   const toast = useToast();
+    //   event.preventDefault();
+    //   toast.info('Are you sure you want to remove the Place?', {
+    //     timeout: false,
+    //     closeonClick: false,
+    //     actions: [
+    //       {
+    //         text: 'Yes',
+    //         onClick: () => {
+    //           this.selectedPhoto = null;
+    //         }
+    //       },
+    //       {
+    //         text: 'No',
+    //         onClick: () => {
+    //           toast.clear();
+    //         }
+    //       },
+    //     ],
+    //   })
+    // },
     selectTag(tag) {
       if (!this.selectedTags.includes(tag)) {
         this.selectedTags.push(tag);

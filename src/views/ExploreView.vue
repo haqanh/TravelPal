@@ -18,7 +18,12 @@
         </div>
     </div>
 
-    <div class="mt-[35vh] bg-white text-left mx-auto max-w-7xl">
+    <!-- Loading spinner -->
+    <div v-if="isLoading" class="loading-spinner fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
+              <div class="spinner"></div>
+    </div>
+
+    <div v-else class="mt-[35vh] bg-white text-left mx-auto max-w-7xl">
         <!-- Editors' Choice Section -->
         <h2 class="ml-20 font-semibold mb-2 text-base">Editors' Choice</h2>
         <div class="flex justify-center space-x-12">
@@ -59,6 +64,7 @@ export default {
             recentlyAdded: [],
             guides:[],
             searchInput: '',
+            isLoading: true,
         };
     },
     computed: {
@@ -101,6 +107,7 @@ export default {
                         guideTitle: data.Guide_Title,
                         tags: data.Tags,
                         isLiked: data.Is_Liked,
+                        country: data.Country,
                     });
                 } else {
                     console.log(`No such document found with id: ${id}`);
@@ -121,6 +128,7 @@ export default {
                     guideTitle: doc.data().Guide_Title,
                     tags: doc.data().Tags,
                     isLiked: doc.data().Is_Liked,
+                    country: doc.data().Country,
                 }));
             } catch (error) {
                 console.log(error);
@@ -137,8 +145,28 @@ export default {
         this.editorsChoices = editorsChoiceData;
         this.regionalFavs = regionalFavData;
         this.recentlyAdded = recentlyAddedData;
+        this.isLoading = false;
     },
 }
 </script>
 
 
+<style scoped>
+.loading-spinner {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+.spinner {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #6b7280; /* Blue */
+    border-radius: 50%;
+    width: 75px;
+    height: 75px;
+    animation: spin 2s linear infinite;
+}
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
