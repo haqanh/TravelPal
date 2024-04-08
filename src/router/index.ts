@@ -6,12 +6,14 @@ import EditTrip from '../components/EditTripFirstPopUp.vue'
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import LandingPage from '@/views/LandingPage.vue'
 
-import Home from '../views/Home.vue'
+// import Home from '../views/Home.vue'
 import ViewTrip from '../views/ViewTrip.vue'
 import Sidebar from '../components/SideBar.vue'
 import Explore from '../views/ExploreView.vue';
 import UserProfilingView from '../views/UserProfilingView.vue'
 import Dashboard from '../views/DashboardView.vue'
+
+import AddGuideBtn from '../components/AddGuideBtn.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -79,7 +81,12 @@ const router = createRouter({
     name: 'dashboard',
     component: Dashboard
 
-  }
+  },
+  {
+    path: '/add-guide-btn',
+    name: 'add-guide-btn',
+    component: AddGuideBtn,
+  },
   ]
 });
 

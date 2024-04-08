@@ -23,7 +23,7 @@
 
             <!-- Location Input -->
             <label for="location">
-              <input @keyup.enter="updateLocation" @input="updateLocation($event.target.value, place)" v-model= "location" type="text" id="location" class="input_style" name="location" placeholder="Location" />
+              <input ref="location_input" @keyup.enter="updateLocation" @input="updateLocation($event.target.value, place)" v-model= "location" type="text" id="location" class="input_style" name="location" placeholder="Location" />
             </label>
           </div>
           <br />
@@ -37,27 +37,43 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
               </svg>
             </span>
-            <!-- Tags Input -->
-            <!-- <label class="text-neutral-700" for="tags">
-              <input @keyup.enter="updateTags" @input="updateTags($event.target.value, place)" v-model= "tags" type="text" id="tags" class="input_style" name="tags" placeholder="Add Tags" />
-            </label> -->
         
-            <div class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-1/2 py-2 px-4 mr-2 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent">    
-              
+          
+            <div class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-1/2 p-1 mr-2 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent">
+
+              <!-- Tag Inputs that are rendered once selected-->
               <div class="flex-wrap flex">
-                <GlobalTag v-for='(tag, index) in tags' :key='index' :tagCategory='tag' @click="removeTag(index)" class="mr-2 mb-2"/>  
+                <div v-for="tag in selectedTags" :key="tag" class="mr-2 mb-2 relative flex items-center hover:text-gray-700 cursor-pointer" @mouseover="hovering = tag" @mouseleave="hovering = null">
+                  <GlobalTag :tagCategory="tag"/>
+                  <span @click="removeTag(tag)" class="ml-1 text-sm text-gray-400 hover:text-gray-700 cursor-pointer" v-show="hovering === tag">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                  </span>
+                  
+                </div>
               </div>
-              <input
-                  type='text'
-                  placeholder="Enter a Tag"
-                  @keyup.enter="updateTags" 
-                  @input="updateTags($event.target.value, place)"
-                  v-model="tagInput"
-                  @keydown.enter='addTag'
-                  @keydown.delete='removeLastTag'
-                  style="border: none; outline: none; background-color: transparent;"
-                  />
-            
+              <!-- Tag Options Dropdown -->
+              <div class="relative" @click="dropdownOpen = !dropdownOpen">
+                  <button
+                    class="py-2 px-3 w-full hover:bg-gray-700 hover:bg-opacity-10 flex items-center gap-2 rounded"
+                  >
+                    <span class="text-gray-400">Select Tags</span>
+                      <img v-if="!dropdownOpen" src="../assets/ChevronDown.svg" alt="chevron" width="30" height="30" fill="currentColor" viewbox="0 0 24 24" class="pointer-events-none absolute right-0 flex items-center pr-3">
+                      <img v-if="dropdownOpen" src="../assets/ChevronUp.svg" alt="chevron" width="30" height="30" fill="currentColor" viewbox="0 0 24 24" class="pointer-events-none absolute right-0 flex items-center pr-3">
+                    
+                  </button>
+                  <div v-if="dropdownOpen" class="relative bg-white mt-2 w-64 rounded-md">
+                    <ul class="py-1 text-base leading-6 rounded-md shadow-xs overflow-auto max-h-60">
+                      <li v-for="tag in tagOptions" :key="tag" @click="selectTag(tag)" class="mb-2 text-gray-700 cursor-pointer select-none relative py-2 pr-9 hover:bg-gray-300 hover:text-white rounded-md">
+                        <span class="font-normal ml-2block truncate">
+                          <GlobalTag :key='tag' :tagCategory='tag'/>  
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+              </div>
+              
             </div>
             
           </div>
@@ -125,7 +141,7 @@
               <!-- Summary Input -->
               <div class="w-full">
                   <label for="summary">
-                      <input @keyup.enter="updateSummary" @input="updateSummary($event.target.value, place)" v-model= "summary" type="text" id="summary"
+                      <textarea @keyup.enter="updateSummary" @input="updateSummary($event.target.value, place)" v-model= "summary" type="text" id="summary"
                           class="input_style"
                           name="summary" placeholder="Write a short summary" />
 
@@ -154,31 +170,37 @@
 
 <script>
 
-import GlobalTag from './GlobalTag.vue'
+import GlobalTag from './GlobalTag.vue';
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
 
 export default {
   components: {
-    GlobalTag
+    GlobalTag,
   },
   data() {
     return {
         location: '',
-        tags: [],
         cost: '',
         summary: '',
         selectedPhoto: null,
         isVisible: false,
         count: 1,
-        tagInput: '' // This holds the value of the input field
+        // tagInput: '',
+        tagOptions: ['City', 'Nature', 'Culture', 'Entertainment', 'Food', 'Landmarks', 'Adventure', 'History', 'Science', 'Technology', 'Sports', 'Health', 'Fashion', 'Education', 'Travel', 'Art'], 
+        // tags: [],
+        dropdownOpen: false,
+        selectedTags:[],
+        hovering: null,
     };
   },
   methods: {
     updateLocation() {
       this.$emit('location-updated', this.location);
     },
-    updateTags() {
-      this.$emit('tags-updated', this.tags);
-    },
+    // updateTags() {
+    //   this.$emit('tags-updated', this.tags);
+    // },
     updateCost() {
       this.$emit('cost-updated', this.cost);
     },
@@ -187,6 +209,7 @@ export default {
     },
 
     handleFileChange(event) {
+      const $toast = useToast();
       const file = event.target.files[0];
       this.count++;
       if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
@@ -201,7 +224,9 @@ export default {
       } else {
         // Reset selectedPhoto or show error message
         this.selectedPhoto = null;
-        alert('Please select a JPEG or JPG or PNG file.');
+        $toast.error('Please select a JPEG, JPG, or PNG file.', {
+          position: 'top'
+        })
       }
     },
     confirmRemove(event) {
@@ -210,42 +235,52 @@ export default {
         this.selectedPhoto = null;
       }
     },
-    addTag(event) {
-      if (event.key === 'Enter') {
-        event.preventDefault()
-        let val = this.tagInput.trim()
-        if (val.length > 0 && !this.tags.includes(val)) {
-          this.tags.push(val)
-          this.tagInput = ''
-          console.log(this.tags)
-        }
+    // confirmRemove(event) {
+    //   const toast = useToast();
+    //   event.preventDefault();
+    //   toast.info('Are you sure you want to remove the Place?', {
+    //     timeout: false,
+    //     closeonClick: false,
+    //     actions: [
+    //       {
+    //         text: 'Yes',
+    //         onClick: () => {
+    //           this.selectedPhoto = null;
+    //         }
+    //       },
+    //       {
+    //         text: 'No',
+    //         onClick: () => {
+    //           toast.clear();
+    //         }
+    //       },
+    //     ],
+    //   })
+    // },
+    selectTag(tag) {
+      if (!this.selectedTags.includes(tag)) {
+        this.selectedTags.push(tag);
+        this.$emit('update-selectedTags', this.selectedTags);
       }
-
-        // event.preventDefault()
-        // let val = event.target.value.trim()
-        // if (val.length > 0) {
-        //   if (this.tags.length >= 1) {
-        //     for (let i = 0; i < this.tags.length; i++) {
-        //       if (this.tags[i] === val) {
-        //         return false
-        //       }
-        //     }
-        //   }
-        //   this.tags.push(val)
-        //   event.target.value = ''
-        //   console.log(this.tags)
     },
-    removeTag(index) {
-      this.tags.splice(index, 1)
-    },
-    removeLastTag(event) {
-      if (event.target.value.length === 0) {
-        this.removeTag(this.tags.length - 1)
-      }
+    removeTag(currTag) {
+      this.selectedTags = this.selectedTags.filter(tag => tag !== currTag);
     },
   },      
   mounted() {
     this.isVisible = true;
+    this.$nextTick(() => {
+      const autocomplete = new google.maps.places.Autocomplete(this.$refs.location_input, {
+        fields: ['geometry.location', 'place_id', 'name', 'formatted_address'],
+        types: ['geocode']
+      })
+
+      google.maps.event.addListener(autocomplete, 'place_changed', () => {
+        const place = autocomplete.getPlace()
+        this.location = place.formatted_address
+        console.log(this.location)
+      })
+    })
   },
   props:['id'],
 };
