@@ -11,16 +11,16 @@
       >
         <div class="fixed inset-0 bg-black/25" />
       </TransitionChild>
-    <div class="fixed inset-0 flex items-center justify-center shadow-lg rounded-2xl dark:bg-gray-800">
+    <div class="fixed inset-0 flex items-center justify-center shadow-lg rounded-2xl">
       <div class="w-[40vw] h-[40vh] text-center border-2 rounded-[4rem] shadow-lg p-8 flex flex-col justify-between bg-white">
         <div class="flex items-center justify-start h-[10vh]">
           <img src="../assets/Delete Warning.svg" class="mt-[1.5vh] w-[8vw] h-[8vw]">
-          <p class="mt-[1vw] ml-[1vw] justify-center text-[2.5vw] font-bold text-gray-800 dark:text-gray-200">
+          <p class="mt-[1vw] ml-[1vw] justify-center text-[2.5vw] font-bold text-gray-800">
             Confirm Deletion
           </p>
         </div>
         <div class="flex flex-col items-center justify-center w-[30vw] h-[5vh] gap-[2vw] mt-[3.5vw]">
-          <p class="text-[1.3vw] text-[#3F3D3D] text-left ml-[1vw] dark:text-gray-400 font-medium ">
+          <p class="text-[1.3vw] text-[#3F3D3D] text-left ml-[1vw] font-medium ">
             Are you sure you would like to delete <strong>{{name}}</strong>? This action cannot be undone.
           </p>
         </div>
