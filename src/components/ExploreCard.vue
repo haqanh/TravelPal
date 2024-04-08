@@ -27,17 +27,20 @@
             <!-- Guide Title and Flag -->
           <div class="flex items-center absolute bottom-0 left-0 p-3">
             <img :src="card.flagPath" loading="lazy" alt="flag" />
-            <span class="ml-2 text-white font-medium text-xs">{{ card.guideTitle }}</span>
+            <span class="ml-2 text-white font-medium text-xs drop-shadow-lg">{{ card.guideTitle }}</span>
           </div>
         </div>
       </div>
-      <div class="w-56 flex justify-between items-center">
+
+      <div class="w-56 flex justify-between items-center place-items-center">
         <!-- Tag  -->
-        <GlobalTag
-          :tagCategory="card.tagCat"
-          :textColor="card.tagColor"
-          :borderColor="card.tagBorder"
-        ></GlobalTag>
+        <div class="flex flex-wrap">
+          <div v-for="(tag, index) in card.tags" :key="index" class="mr-2 mb-2">
+            <GlobalTag
+              :tagCategory="tag"
+            ></GlobalTag>
+          </div>
+        </div>
 
         <!-- Like Button -->
         <div @click="handleLike" class="cursor-pointer">
@@ -74,6 +77,7 @@
           </svg>
         </div>
       </div>
+    
     </div>
   </div>
 </template>

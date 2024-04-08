@@ -32,8 +32,10 @@
         </div>
 
         <!-- Recently Added Section -->
-        <h2 class="ml-20 font-semibold mb-2 mt-4">Recently Added</h2>
-
+        <h2 v-if="recentlyAdded" class="ml-20 font-semibold mb-2 mt-4">Recently Added</h2>
+        <div class="flex justify-center space-x-12">
+            <ExploreCard v-for="card in recentlyAdded" :key="card.guideTitle" :card="card" />
+        </div>
     </div>
 </template>
 
@@ -43,7 +45,7 @@ import NavBar from '@/components/NavBar.vue'
 import ExploreCard from '@/components/ExploreCard.vue'
 
 import { db } from '@/firebase';
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc, collection, query, where, getDocs } from 'firebase/firestore';
 
 export default {
     components: {
@@ -54,6 +56,7 @@ export default {
         return {
             editorsChoices: [],
             regionalFavs: [],
+            recentlyAdded: [],
             guides:[],
             searchInput: '',
         };
@@ -83,13 +86,20 @@ export default {
                 if (docSnap.exists) {
                     const data = docSnap.data();
                     guides.push({
+                        // guidePicPath: data.Cover_Photo,
+                        // flagPath: data.Flag_Photo,
+                        // profilePicPath: data.Profile_Photo,
+                        // guideTitle: data.Guide_Title,
+                        // tagCat: data.Tags[0].category,
+                        // tagColor: data.Tags[0].colour,
+                        // tagBorder: data.Tags[0].colour,
+                        // isLiked: data.Is_Liked,
+
                         guidePicPath: data.Cover_Photo,
                         flagPath: data.Flag_Photo,
                         profilePicPath: data.Profile_Photo,
                         guideTitle: data.Guide_Title,
-                        tagCat: data.Tag_Cat,
-                        tagColor: data.Tag_Colour,
-                        tagBorder: data.Tag_Colour,
+                        tags: data.Tags,
                         isLiked: data.Is_Liked,
                     });
                 } else {
@@ -98,22 +108,35 @@ export default {
             }
             return guides;
         },
-        async fetchAllGuides() {
+        async fetchRecentlyAdded(excludeMock) {
+            const guidesRef = collection(db, 'guides');
+            const queryRef = query(guidesRef, where('Guide_Title', 'not-in', excludeMock));
+            let guides = [];
             try {
-                const querySnapshotGuides = await getDocs(collection(db, 'guides'));
-                this.guides = querySnapshotGuides.docs.map(doc => doc.data());
+                const querySnapshotGuides = await getDocs(queryRef);
+                guides = querySnapshotGuides.docs.map(doc => ({
+                    guidePicPath: doc.data().Cover_Photo,
+                    flagPath: doc.data().Flag_Photo,
+                    profilePicPath: doc.data().Profile_Photo,
+                    guideTitle: doc.data().Guide_Title,
+                    tags: doc.data().Tags,
+                    isLiked: doc.data().Is_Liked,
+                }));
             } catch (error) {
                 console.log(error);
             }
+            return guides;
         },
     },
     async mounted() {
-        const [editorsChoiceData, regionalFavData] = await Promise.all([
+        const [editorsChoiceData, regionalFavData, recentlyAddedData] = await Promise.all([
             this.fetchMockGuides(['Mount Taranaki', 'Taipei', 'Luxembourg', 'Mexico']),
-            this.fetchMockGuides(['Matsuno, Japan', 'Bangkok', 'Agra, India', 'Marbella'])
+            this.fetchMockGuides(['Matsuno, Japan', 'Bangkok', 'Agra, India', 'Marbella']),
+            this.fetchRecentlyAdded(['Mount Taranaki', 'Taipei', 'Luxembourg', 'Mexico', 'Matsuno, Japan', 'Bangkok', 'Agra, India', 'Marbella']),
         ]);
         this.editorsChoices = editorsChoiceData;
         this.regionalFavs = regionalFavData;
+        this.recentlyAdded = recentlyAddedData;
     },
 }
 </script>

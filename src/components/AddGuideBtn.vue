@@ -9,7 +9,7 @@ import {
 } from '@headlessui/vue'
 import { ref, uploadString, getDownloadURL } from 'firebase/storage'
 import { db, storage } from '@/firebase'
-import { collection, addDoc, updateDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore'
+import { collection, addDoc, updateDoc, doc, setDoc, serverTimestamp, getDoc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import Datepicker from 'vue3-datepicker'
 import GlobalTag from './GlobalTag.vue';
@@ -40,13 +40,7 @@ export default {
       showStartDatepicker: false,
       showEndDatepicker: false,
       country: '',
-      tagOptions: [
-          {id: 1, category: 'Food', colour: "#ec407a"},
-          {id: 2, category: 'Nature', colour: "#388e3c"},
-          {id: 3, category: 'Landmarks', colour: "#3f51b5"},
-          {id: 4, category: 'Culture', colour: "#f57c00"},
-          {id: 5, category: 'Entertainment', colour: "#9c27b0"},
-      ], 
+      tagOptions: ['City', 'Nature', 'Culture', 'Entertainment', 'Food', 'Landmarks', 'Adventure', 'History', 'Science', 'Technology', 'Sports', 'Health', 'Fashion', 'Education', 'Travel', 'Art'], 
       // tags: [],
       dropdownOpen: false,
       selectedTags:[],
@@ -75,8 +69,8 @@ export default {
         this.$emit('update-selectedTags', this.selectedTags);
       }
     },
-    removeTag(tagId) {
-      this.selectedTags = this.selectedTags.filter(tag => tag.id !== tagId);
+    removeTag(currTag) {
+      this.selectedTags = this.selectedTags.filter(tag => tag !== currTag);
     },
     handleFileChange(event) {
       const file = event.target.files[0]
@@ -135,6 +129,9 @@ export default {
 
           console.log('Doc updated in user')
 
+          const userSnapshot = await getDoc(userRef);
+          const userProfile = userSnapshot.data().Profile_Photo; 
+
           const globalGuidesRef = doc(collection(db, 'guides'), this.guideTitle);
           await setDoc(globalGuidesRef, {
               Guide_Title: this.guideTitle,
@@ -146,6 +143,7 @@ export default {
               Country: this.country,
               Cover_Photo: photoURL,
               Tags: this.selectedTags,
+              Profile_Photo: userProfile,
           });
           console.log('Doc created in global guides collection');
 
@@ -265,9 +263,9 @@ export default {
                   <div class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-1/2 p-1 mr-2 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent">
                     <!-- Tag Inputs that are rendered once selected-->
                     <div class="flex-wrap flex">
-                      <div v-for="tag in selectedTags" :key="tag.id" class="mr-2 mb-2 relative flex items-center hover:text-gray-700 cursor-pointer" @mouseover="hovering = tag.id" @mouseleave="hovering = null">
-                        <GlobalTag :tagCategory="tag.category" :textColor="tag.colour" :borderColor="tag.colour"/>
-                        <span @click="removeTag(tag.id)" class="ml-1 text-sm text-gray-400 hover:text-gray-700 cursor-pointer" v-show="hovering === tag.id">
+                      <div v-for="tag in selectedTags" :key="tag" class="mr-2 mb-2 relative flex items-center hover:text-gray-700 cursor-pointer" @mouseover="hovering = tag" @mouseleave="hovering = null">
+                        <GlobalTag :tagCategory="tag"/>
+                        <span @click="removeTag(tag)" class="ml-1 text-sm text-gray-400 hover:text-gray-700 cursor-pointer" v-show="hovering === tag">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                           </svg>
@@ -287,9 +285,9 @@ export default {
                         </button>
                         <div v-if="dropdownOpen" class="relative bg-white mt-2 rounded-md w-full">
                           <ul class="py-1 text-base leading-6 rounded-md shadow-xs overflow-auto max-h-60">
-                            <li v-for="tag in tagOptions" :key="tag.id" @click="selectTag(tag)" class="mb-2 text-gray-700 cursor-pointer select-none relative py-2 pr-9 hover:bg-gray-300 hover:text-white rounded-md">
+                            <li v-for="tag in tagOptions" :key="tag" @click="selectTag(tag)" class="mb-2 text-gray-700 cursor-pointer select-none relative py-2 pr-9 hover:bg-gray-300 hover:text-white rounded-md">
                               <span class="font-normal ml-2block truncate">
-                                <GlobalTag :key='tag.id' :tagCategory='tag.category' :textColor="tag.colour" :borderColor="tag.colour"/>  
+                                <GlobalTag :key='tag' :tagCategory='tag'/>  
                               </span>
                             </li>
                           </ul>

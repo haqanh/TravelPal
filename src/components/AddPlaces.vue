@@ -43,9 +43,9 @@
 
               <!-- Tag Inputs that are rendered once selected-->
               <div class="flex-wrap flex">
-                <div v-for="tag in selectedTags" :key="tag.id" class="mr-2 mb-2 relative flex items-center hover:text-gray-700 cursor-pointer" @mouseover="hovering = tag.id" @mouseleave="hovering = null">
-                  <GlobalTag :tagCategory="tag.category" :textColor="tag.colour" :borderColor="tag.colour"/>
-                  <span @click="removeTag(tag.id)" class="ml-1 text-sm text-gray-400 hover:text-gray-700 cursor-pointer" v-show="hovering === tag.id">
+                <div v-for="tag in selectedTags" :key="tag" class="mr-2 mb-2 relative flex items-center hover:text-gray-700 cursor-pointer" @mouseover="hovering = tag" @mouseleave="hovering = null">
+                  <GlobalTag :tagCategory="tag"/>
+                  <span @click="removeTag(tag)" class="ml-1 text-sm text-gray-400 hover:text-gray-700 cursor-pointer" v-show="hovering === tag">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                       <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
@@ -65,9 +65,9 @@
                   </button>
                   <div v-if="dropdownOpen" class="relative bg-white mt-2 w-64 rounded-md">
                     <ul class="py-1 text-base leading-6 rounded-md shadow-xs overflow-auto max-h-60">
-                      <li v-for="tag in tagOptions" :key="tag.id" @click="selectTag(tag)" class="mb-2 text-gray-700 cursor-pointer select-none relative py-2 pr-9 hover:bg-gray-300 hover:text-white rounded-md">
+                      <li v-for="tag in tagOptions" :key="tag" @click="selectTag(tag)" class="mb-2 text-gray-700 cursor-pointer select-none relative py-2 pr-9 hover:bg-gray-300 hover:text-white rounded-md">
                         <span class="font-normal ml-2block truncate">
-                          <GlobalTag :key='tag.id' :tagCategory='tag.category' :textColor="tag.colour" :borderColor="tag.colour"/>  
+                          <GlobalTag :key='tag' :tagCategory='tag'/>  
                         </span>
                       </li>
                     </ul>
@@ -185,13 +185,7 @@ export default {
         isVisible: false,
         count: 1,
         // tagInput: '',
-        tagOptions: [
-          {id: 1, category: 'Food', colour: "#ec407a"},
-          {id: 2, category: 'Nature', colour: "#388e3c"},
-          {id: 3, category: 'Landmarks', colour: "#3f51b5"},
-          {id: 4, category: 'Culture', colour: "#f57c00"},
-          {id: 5, category: 'Entertainment', colour: "#9c27b0"},
-        ], 
+        tagOptions: ['City', 'Nature', 'Culture', 'Entertainment', 'Food', 'Landmarks', 'Adventure', 'History', 'Science', 'Technology', 'Sports', 'Health', 'Fashion', 'Education', 'Travel', 'Art'], 
         // tags: [],
         dropdownOpen: false,
         selectedTags:[],
@@ -236,47 +230,14 @@ export default {
         this.selectedPhoto = null;
       }
     },
-    addTag(event) {
-      if (event.key === 'Enter') {
-        event.preventDefault()
-        let val = this.tagInput.trim()
-        if (val.length > 0 && !this.tags.includes(val)) {
-          this.tags.push(val)
-          this.tagInput = ''
-          console.log(this.tags)
-        }
-      }
-
-        // event.preventDefault()
-        // let val = event.target.value.trim()
-        // if (val.length > 0) {
-        //   if (this.tags.length >= 1) {
-        //     for (let i = 0; i < this.tags.length; i++) {
-        //       if (this.tags[i] === val) {
-        //         return false
-        //       }
-        //     }
-        //   }
-        //   this.tags.push(val)
-        //   event.target.value = ''
-        //   console.log(this.tags)
-    },
-    // removeTag(index) {
-    //   this.tags.splice(index, 1)
-    // },
-    // removeLastTag(event) {
-    //   if (event.target.value.length === 0) {
-    //     this.removeTag(this.tags.length - 1)
-    //   }
-    // },
     selectTag(tag) {
       if (!this.selectedTags.includes(tag)) {
         this.selectedTags.push(tag);
         this.$emit('update-selectedTags', this.selectedTags);
       }
     },
-    removeTag(tagId) {
-      this.selectedTags = this.selectedTags.filter(tag => tag.id !== tagId);
+    removeTag(currTag) {
+      this.selectedTags = this.selectedTags.filter(tag => tag !== currTag);
     },
   },      
   mounted() {

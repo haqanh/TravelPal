@@ -702,7 +702,7 @@ export default {
 
 .spinner {
   border: 8px solid #f3f3f3; /* Light grey */
-  border-top: 8px solid #42a5f5; /* Blue */
+  border-top: 8px solid #6b7280; /* Blue */
   border-radius: 50%;
   width: 75px;
   height: 75px;
