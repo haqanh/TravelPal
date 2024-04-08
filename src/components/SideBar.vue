@@ -5,7 +5,7 @@
         <h5 class="text-xl font-semibold mb-4 text-left">Bucket List 🌍</h5>
         <ul class="grid grid-cols-2 gap-2">
           <li
-            v-for="(country, index) in userData.Bucket_list"
+            v-for="(country, index) in userData.Bucket_List"
             :key="index"
             class="flex items-center mt-2"
           >

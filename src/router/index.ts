@@ -15,6 +15,7 @@ import Dashboard from '../views/DashboardView.vue'
 import UserProfile from '../views/UserProfile.vue'
 import AddGuideBtn from '../components/AddGuideBtn.vue'
 import FavouritesView from '../views/FavouritesView.vue'
+import UserProfileVue from '../views/UserProfile.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
