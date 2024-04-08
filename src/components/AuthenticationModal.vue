@@ -316,7 +316,7 @@ const SignIn = () => {
       $toast.success('Welcome back!', {
         position: 'top'
       })
-      router.push('/about')
+      router.push('/dashboard')
       
     })
     .catch((error) => {
@@ -337,13 +337,13 @@ async function SignUp() {
     createUserWithEmailAndPassword(auth, signUpEmail.value, signUpPassword.value)
       .then(async (userCredential) => {
         // Signed in
-        const user = userCredential.user
+        const user = userCredential.ur
         console.log(user)
         $toast.success('Welcome to TravelPal!', {
           position: 'top'
         })
         await addUser();
-        router.push('/about')
+        router.push('/userprofiling')
       })
       .catch(async (error) => {
         const errorMessage = error.message

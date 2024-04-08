@@ -15,6 +15,7 @@ import Dashboard from '../views/DashboardView.vue'
 import UserProfile from '../views/UserProfile.vue'
 
 import AddGuideBtn from '../components/AddGuideBtn.vue'
+import FavouritesView from '../views/FavouritesView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,72 +33,95 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
       meta: {
-        requiresAuth: true,
+        requiresAuth: true
       }
-      
     },
-    { 
+    {
       path: '/add-trip',
       name: 'AddTrip',
       component: AddTrip
-  }, {
-    path: '/add-guide/second',
+    },
+    {
+      path: '/add-guide/second',
       name: 'AddGuide2',
-      component: AddGuide2,
+      component: AddGuide2
     },
     {
       path: '/guide/:docRef',
       name: 'GuideView',
-      component: GuideView,
+      component: GuideView
+    },
+    // {
+    //   path: '/viewtrip',
+    //   name: 'viewtrip',
+    //   component: ViewTrip
+    // },
+    { path: '/sidebar', name: 'sidebar', component: Sidebar },
+    {
+      path: '/userprofiling',
+      name: 'userprofiling',
+      component: UserProfilingView,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
-      path: '/viewtrip',
-      name: 'viewtrip',
-      component: ViewTrip
+      path: '/explore',
+      name: 'explore',
+      component: Explore
     },
-    { path: '/sidebar',
-      name: 'sidebar',
-      component: Sidebar
-  },
-  {
-    path: '/userprofiling',
-    name: 'userprofiling',
-    component: UserProfilingView,
-    meta: {
-      requiresAuth: true,
-    }
-  },
-  {
-    path: '/explore',
-    name: 'explore',
-    component: Explore
-  },
-  {
-    path: '/edit-trip',
-    name: 'edit-trip',
-    component: EditTrip
-  },
-  {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: Dashboard
+    {
+      path: '/edit-trip',
+      name: 'edit-trip',
+      component: EditTrip
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard
+    },
+    {
+      path: '/viewtrip/:id', 
+      name: 'viewtrip',
+      component: ViewTrip,
+      props: true
+    },
+    {
+      path: '/favourites',
+      name: 'favourites',
+      component: FavouritesView
+    },
+    {
+      path: '/explore',
+      name: 'explore',
+      component: Explore
+    },
+    {
+      path: '/edit-trip',
+      name: 'edit-trip',
+      component: EditTrip
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard
 
-  },
-  {
-    path: '/user-profile',
-    name: 'user-profile',
-    component: UserProfile,
-    meta: {
-      requiresAuth: true,
-    }
-  },
-                            {
-    path: '/add-guide-btn',
-    name: 'add-guide-btn',
-    component: AddGuideBtn,
-  },
+    },
+    {
+      path: '/user-profile',
+      name: 'user-profile',
+      component: UserProfile,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+                              {
+      path: '/add-guide-btn',
+      name: 'add-guide-btn',
+      component: AddGuideBtn,
+    },
   ]
-});
+})
 
 const getCurrentUser = () => {
   return new Promise((resolve, reject) => {

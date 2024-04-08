@@ -108,7 +108,7 @@ export default {
     "Chile": "fi fi-cl",
     "China": "fi fi-cn",
     "Colombia": "fi fi-co",
-    "Comoros": "fi fi-km",
+    "Comoros": "fi fi-km",       
     "Congo (Congo-Brazzaville)": "fi fi-cg",
     "Costa Rica": "fi fi-cr",
     "Croatia": "fi fi-hr",
