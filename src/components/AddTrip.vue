@@ -40,7 +40,7 @@
               </button>
               <div class="mt-[0.53vh]">
             <form>
-              <div class="mb-[2.1vh] text-center relative">
+              <div class="flex mb-[2.1vh] text-center relative">
                 <!-- Hidden file input to trigger file selection -->
                 <input type="file" id="photo-input" accept=".jpg, .jpeg, .png" class="hidden" multiple @change="handleFileChange">
                 
@@ -66,45 +66,50 @@
 
                 <!-- Trip Name Input -->
                 <div class="mb-[2.1vh]">
+                  <h5>Trip Name</h5>
                 <div class="flex relative ">
-                    <span class="rounded-l-md inline-flex  items-center px-[1.6vh] border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-[1.8vh]">
-                        <img src= "../assets/Trip Tag.svg" width="15" height="15" fill="currentColor" viewBox="0 0 1792 1792">
-                            <path d="M1792 710v794q0 66-47 113t-113 47h-1472q-66 0-113-47t-47-113v-794q44 49 101 87 362 246 497 345 57 42 92.5 65.5t94.5 48 110 24.5h2q51 0 110-24.5t94.5-48 92.5-65.5q170-123 498-345 57-39 100-87zm0-294q0 79-49 151t-122 123q-376 261-468 325-10 7-42.5 30.5t-54 38-52 32.5-57.5 27-50 9h-2q-23 0-50-9t-57.5-27-52-32.5-54-38-42.5-30.5q-91-64-262-182.5t-205-142.5q-62-42-117-115.5t-55-136.5q0-78 41.5-130t118.5-52h1472q65 0 112.5 47t47.5 113z">
-                            </path>
+                    <span class="rounded-l-md inline-flex  items-center px-[2vh] border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-[1.8vh]">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                      stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+                      </svg>
                     </span>
                     <input v-model="tripName" type="text" id="trip-name-with-icon" class=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-[1.05vh] px-[2.1vh] bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="email" placeholder="Trip Name"/>
                     </div>
                 </div>
 
                 <!-- Trip Location Dropdown -->
-                <div class="mb-[2.1vh]">
+                <div class="mb-[2.1vh] mt-[4.5vh]">
+                  <h5>Destination</h5>
                     <div class="flex relative">
-                        <span class="rounded-l-md inline-flex items-center px-[1.6vh] border-t bg-white border-l border-b border-gray-300 text-gray-500 shadow-sm text-[1.8vh]">
-                            <img src="../assets/Airplane Take Off.svg" width="15" height="15" fill="currentColor" viewBox="0 0 1792 1792">
+                        <span class="rounded-l-md inline-flex items-center px-[2vh] border-t bg-white border-l border-b border-gray-300 text-gray-500 shadow-sm text-[1.8vh]">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                          stroke="currentColor" class="w-6 h-6">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.01.216 1.49l-.51.766a2.25 2.25 0 0 1-1.161.886l-.143.048a1.107 1.107 0 0 0-.57 1.664c.369.555.169 1.307-.427 1.605L9 13.125l.423 1.059a.956.956 0 0 1-1.652.928l-.679-.906a1.125 1.125 0 0 0-1.906.172L4.5 15.75l-.612.153M12.75 3.031a9 9 0 0 0-8.862 12.872M12.75 3.031a9 9 0 0 1 6.69 14.036m0 0-.177-.529A2.25 2.25 0 0 0 17.128 15H16.5l-.324-.324a1.453 1.453 0 0 0-2.328.377l-.036.073a1.586 1.586 0 0 1-.982.816l-.99.282c-.55.157-.894.702-.8 1.267l.073.438c.08.474.49.821.97.821.846 0 1.598.542 1.865 1.345l.215.643m5.276-3.67a9.012 9.012 0 0 1-5.276 3.67m0 0a9 9 0 0 1-10.275-4.835M15.75 9c0 .896-.393 1.7-1.016 2.25" />
+                          </svg>
                         </span>
-                        <input v-model="tripLocation" type="text" id="trip-location-with-icon" class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-[1.05vh] px-[2.1vh] bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="location" placeholder="Where?" />
+                        <input ref="location_input" v-model="tripLocation" type="text" id="trip-location-with-icon" class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-[1.05vh] px-[2.1vh] bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="location" placeholder="Where?" />
                     </div>
                 </div>
 
 
                 <!-- Select Dates Inputs -->
 
-                <div class="mb-4">
-                  <div class="flex items-center mb-2">
-                      <div class="text-[#3F3D3D] text-lg font-semibold mr-2">Dates</div>
-                      <div class="mr-2">
-                          <img src="../assets/Calendar.svg" alt="Calendar Icon" class="w-6 h-6">
-
-                      </div>
+                <div class="mb-[2.1vh] mt-[4.5vh]">
+                  <div class="flex items-center">
+                      <h5>Dates</h5>
                   </div>
 
                   <div date-rangepicker class="flex items-center justify-between">
                     <div class="relative">
                       <Datepicker v-model="selectedStartDate" :show="showStartDatepicker" @update:show="val => showStartDatepicker = val" class="w-[20vw] h-[7vh] border border-gray-300 text-gray-900 text-sm rounded-lg pl-12 pr-2.5 pt-2.5 pb-2.5 focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Start Date">
                         </Datepicker>
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-[1.4vh] pointer-events-none">
-                          <svg class="w-[2.1vh] h-[2.1vh] text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-[1.4vh] pointer-events-none text-gray-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                           </svg>
                         </div>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-[1.4vh] cursor-pointer" @click="clearStartDate">
@@ -115,9 +120,9 @@
                       <div class="relative">
                         <Datepicker v-model="selectedEndDate" :show="showEndDatepicker" @update:show="val => showEndDatepicker = val" class="w-[20vw] h-[7vh] border border-gray-300 text-gray-900 text-sm rounded-lg pl-12 pr-2.5 pt-2.5 pb-2.5 focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="End Date">
                         </Datepicker>
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-[1.6vh] pointer-events-none">
-                          <svg class="w-[2.1vh] h-[2.1vh] text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-[1.6vh] pointer-events-none text-gray-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                           </svg>
                         </div>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-[1.6vh] cursor-pointer" @click="clearEndDate">
@@ -129,18 +134,16 @@
                 
               <!-- Cost Input -->
 
-                <div class="mb-4">
-                <label for="cost" class="text-[#3F3D3D] text-lg font-semibold mr-2">
-
+                <div class="mb-[2.1vh] mt-[4.5vh]">
+                <h5 for="cost">
                     Cost
-                </label>
+                </h5>
                 <div class="mb-[2.1vh]">
                 <div class="flex relative">
                     <span class="rounded-l-md inline-flex items-center px-[1.6vh] border-t bg-white border-l border-b border-gray-300 text-gray-500 shadow-sm text-[1.8vh]">
-                        <img src= "../assets/Stack Of Coins.svg" width="15" height="15" fill="currentColor" viewBox="0 0 1792 1792">
-
-                            <path d="M1792 710v794q0 66-47 113t-113 47h-1472q-66 0-113-47t-47-113v-794q44 49 101 87 362 246 497 345 57 42 92.5 65.5t94.5 48 110 24.5h2q51 0 110-24.5t94.5-48 92.5-65.5q170-123 498-345 57-39 100-87zm0-294q0 79-49 151t-122 123q-376 261-468 325-10 7-42.5 30.5t-54 38-52 32.5-57.5 27-50 9h-2q-23 0-50-9t-57.5-27-52-32.5-54-38-42.5-30.5q-91-64-262-182.5t-205-142.5q-62-42-117-115.5t-55-136.5q0-78 41.5-130t118.5-52h1472q65 0 112.5 47t47.5 113z">
-                            </path>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                      </svg>
                     </span>
                     <input type="number" v-model="tripCost" id="cost-input" class=" appearance-none rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-[1.05vh] px-[2.05vh] bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent" name="cost" placeholder="Cost (In SGD)"/>
                     </div>
@@ -181,9 +184,13 @@ import {
 import AddTripSecondPopUp from './AddTripSecondPopUp.vue'
 import Datepicker from 'vue3-datepicker';
 import { firebaseApp, db } from '@/firebase'
-import { doc, setDoc, collection, getDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, collection, getDoc, updateDoc, increment } from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
+
+const $toast = useToast()
 
 export default {
   data() {
@@ -195,7 +202,23 @@ export default {
       selectedEndDate: null,
       showStartDatepicker: false,
       showEndDatepicker: false,
+      tripLocation: '',
+      selectedTempPlace: '',
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      const autocomplete = new google.maps.places.Autocomplete(this.$refs.location_input, {
+      fields: ["geometry.location", "place_id", "name", "formatted_address"],
+      types: ["geocode"],
+      });
+
+      google.maps.event.addListener(autocomplete, "place_changed", () => {
+        const place = autocomplete.getPlace();
+        this.selectedTempPlace = place;
+        console.log(this.selectedTempPlace.formatted_address)
+      });
+    });
   },
   methods: {
     clearStartDate() {
@@ -205,9 +228,16 @@ export default {
       this.selectedEndDate = null;
     },
     navigateToNextStep() {
-      this.isfirstDialog = false;
-      this.isSecondDialog = true;
-      this.saveTrip();
+      if (this.fieldsFilled()) {
+        this.isfirstDialog = false;
+        this.isSecondDialog = true;
+        this.saveTrip();
+      } else {
+        const errorMessage = 'Please fill in all fields!'
+        $toast.error(errorMessage, {
+          position: 'top'
+        })
+      }
     },
     closeDialog() {
       this.$emit('closetrip')
@@ -232,12 +262,56 @@ export default {
         }
       }
     },
+    fieldsFilled() {
+      return this.tripName && this.tripLocation && this.selectedStartDate && this.selectedEndDate && this.tripCost && this.selectedPhoto.length > 0;
+    },
+    calculateDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371; // Radius of the earth in km
+      const dLat = this.deg2rad(lat2-lat1);
+      const dLon = this.deg2rad(lon2-lon1); 
+      const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2)
+        ; 
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      const distance = R * c; // Distance in km
+      return parseFloat(distance.toFixed(2));
+    },
+    deg2rad(deg) {
+      return deg * (Math.PI/180)
+    },
+    num_of_steps(days) {
+      let steps = 0;
+      for (let i = 0; i < days; i++) {
+        steps += Math.floor(Math.random() * (15000 - 5000 + 1)) + 5000;
+      }
+      return steps;
+    },
     async saveTrip() {
       const auth = getAuth();
       const user = auth.currentUser;
       const userRef = doc(db, 'users', user.email);
       const currentTimestamp = new Date();
-      await setDoc(userRef, {});
+      this.tripLocation = this.selectedTempPlace.formatted_address;
+      const distance = this.calculateDistance(this.selectedTempPlace.geometry.location.lat(), this.selectedTempPlace.geometry.location.lng(), 
+      1.352083, 103.819836); //Latitude and Longitude of Singapore
+      const numDays = Math.round((this.selectedEndDate - this.selectedStartDate) / (1000 * 60 * 60 * 24));
+      const steps = this.num_of_steps(numDays);
+      const userDoc = await getDoc(userRef);
+      if (!userDoc.exists()) {
+        await setDoc(userRef, {
+          Distance_Travelled: 0,
+          Num_Visited: 0,
+          Steps: 0,
+        });
+      }
+
+      await updateDoc(userRef, {
+          Distance_Travelled: increment(distance),
+          Num_Visited: increment(1),
+          Steps: increment(steps),
+      });
 
       const tripRef = doc(collection(userRef, 'trips'), this.tripName);
       await setDoc(tripRef, {
@@ -247,6 +321,8 @@ export default {
         End_Date: this.selectedEndDate,
         Cost: this.tripCost,
         Last_Edit: currentTimestamp,
+        Distance_Travelled: distance,
+        Steps: steps,
       });
 
       for(let i = 0; i < this.selectedPhoto.length; i++) {
@@ -295,7 +371,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .scrollbar::-webkit-scrollbar {
     width: 10px; 
     height: 10px; 
