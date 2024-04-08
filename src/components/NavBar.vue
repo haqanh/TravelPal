@@ -95,7 +95,7 @@
               v-show="dropdownOpen"
               class="dropdown-menu absolute bg-white text-gray-700 rounded-lg shadow-lg w-48 mt-2"
             >
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 rounded-lg">Your Profile</a>
+              <a href="/user-profile" class="block px-4 py-2 hover:bg-gray-100 rounded-lg">Your Profile</a>
               <a href="/" class="block px-4 py-2 hover:bg-gray-100 rounded-lg">Logout</a>
             </div>
           </transition>
