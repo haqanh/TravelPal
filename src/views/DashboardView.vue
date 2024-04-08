@@ -3,7 +3,7 @@
     <NavBar />
   </div>
   <div class="flex">
-    <!-- <SideBar /> -->
+    <SideBar />
     <div class="w-80vw p-10 my-10 mx-10">
       <div
         class="DashboardContents flex flex-col lg:flex-row justify-between lg:items-center -mx-10"
