@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-3 mt-auto w-11/12 mx-auto mb-4">
     <div v-if="page != 1" @click="goPrevPage(), pageChange()" class="flex cursor-pointer">
-      <svg class="w-7 h-7 text-[#4285F4] dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+      <svg class="w-7 h-7 text-[#4285F4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
       </svg>
       <p class="ml-2 text-xl text-[#4285F4] select-none">Back</p>
@@ -31,7 +31,7 @@
     <div @click="goNextPage(), pageChange()" class="flex cursor-pointer justify-self-end">
       <div v-if="page == 5" class="mr-2 text-xl text-[#4285F4] select-none">Finish</div>
       <div v-else class="mr-2 text-xl text-[#4285F4] select-none">Next</div>
-      <svg class="w-7 h-7 text-[#4285F4] dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+      <svg class="w-7 h-7 text-[#4285F4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
       </svg>
     </div>
