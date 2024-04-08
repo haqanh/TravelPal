@@ -59,7 +59,7 @@
           />
         </section>
         <section id="placesToStay" class="py-4">
-          <!-- Places to Eat content goes here -->
+          <!-- Places to Stay content goes here -->
           <h1 class="text-2xl lg:text-3xl xl:text-4xl font-bold">
             Places to Stay
           </h1>
@@ -70,7 +70,7 @@
           />
         </section>
         <section id="nearbyPlaces" class="py-4">
-          <!-- Places to Eat content goes here -->
+          <!-- Nearby Places content goes here -->
           <h1 class="text-2xl lg:text-3xl xl:text-4xl font-bold">
             Nearby Places
           </h1>
@@ -137,7 +137,6 @@
     }
   });
 
-  //console.log(currentSection); // Add this line to debug
   activeSection.value = currentSection;
 };
 
@@ -146,7 +145,7 @@ onMounted(async () => {
 
   const docId = route.params.docRef;
   if (docId) {
-    const docRef = await getDoc(doc(db, 'places', docId)); // to update places to guides
+    const docRef = await getDoc(doc(db, 'guides', docId)); // can change to places to test
 
 
     if (docRef.exists()) {
