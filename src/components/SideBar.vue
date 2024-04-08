@@ -86,7 +86,11 @@ export default {
       }
     },
     formatNumber(number) {
-      return number.toLocaleString()
+      if (number === undefined || isNaN(number)) {
+        // Return a default value, such as '0', or handle the case as needed
+        return '0';
+      }
+      return number.toLocaleString();
     },
     getFlagClass(country) {
       const countryCodes = {
