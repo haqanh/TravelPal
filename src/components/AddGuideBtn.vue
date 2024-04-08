@@ -17,6 +17,7 @@ import GlobalTag from './GlobalTag.vue';
 import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
 
+
 export default {
   emits:['close', 'update-guide-id'],
   components: {
@@ -108,8 +109,7 @@ export default {
           const user = auth.currentUser
           const userRef = doc(db, 'users', user.email)
   
-          const docRef = doc(collection(userRef, 'guides'), this.guideTitle);
-          await setDoc(docRef, {
+          const docRef = await addDoc(collection(db, 'users', user.email, "guides"), {
             Guide_Title: this.guideTitle,
             Destination: this.destination,
             Description: this.description,
@@ -118,12 +118,23 @@ export default {
             Last_Edited: serverTimestamp(),
             Country: this.country,
             Tags: this.selectedTags,
-          });
+          })
+          // const docRef = doc(collection(userRef, 'guides'), this.guideTitle);
+          // await setDoc(docRef, {
+          //   Guide_Title: this.guideTitle,
+          //   Destination: this.destination,
+          //   Description: this.description,
+          //   Start_Date: this.selectedStartDate,
+          //   End_Date: this.selectedEndDate,
+          //   Last_Edited: serverTimestamp(),
+          //   Country: this.country,
+          //   Tags: this.selectedTags,
+          // });
           console.log('Doc created')
 
           //Get the generated ID
-          this.guideId = this.guideTitle
-          console.log('Guide ID:', this.guideTitle) // Check guideId value
+          this.guideId = docRef.id;
+          console.log('Guide ID:', this.guideId) // Check guideId value
 
           // Create storage reference using the generated ID
           const storageRef = ref(storage, `users/${user.email}/guides/${this.guideTitle}/coverPhoto`)
@@ -141,10 +152,11 @@ export default {
 
           console.log('Doc updated in user')
 
-          const userSnapshot = await getDoc(userRef);
-          const userProfile = userSnapshot.data().Profile_Photo; 
+          // const userSnapshot = await getDoc(userRef);
+          // const userProfile = userSnapshot.data().Profile_Photo; 
+          const userProfile = "https://firebasestorage.googleapis.com/v0/b/travelpal-bt3103.appspot.com/o/icons8-user-96.png?alt=media&token=3753cfb2-7430-41de-b2e2-618cd3ca12dd"
 
-          const globalGuidesRef = doc(collection(db, 'guides'), this.guideTitle);
+          const globalGuidesRef = doc(collection(db, 'guides'), this.guideId);
           await setDoc(globalGuidesRef, {
               Guide_Title: this.guideTitle,
               Destination: this.destination,
