@@ -12,7 +12,7 @@
           <img src="../assets/DefaultAvatar.png" alt="Default Avatar" class="w-[20vh] h-[20vh]">
         </div>
       </div> -->
-      <div class="mb-[2.1vh] text-center flex justify-center w-fit">
+      <div class="mb-3 text-center flex justify-center w-fit">
         <!-- Hidden file input to trigger file selection -->
         <input type="file" id="photo-input" accept=".jpg, .jpeg, .png" class="hidden" multiple @change="handleFileChange">
         
@@ -21,12 +21,12 @@
             for="photo-input"
             class="relative h-32 w-32 flex items-center justify-center cursor-pointer rounded-lg"
           >
-          <div v-if="selectedPhoto.length === 0" className="relative w-[16vh] h-[16vh] overflow-hidden bg-gray-500 hover:bg-gray-400 rounded-full dark:bg-gray-600 cursor-pointer">
-            <img src="../assets/DefaultAvatar.png" alt="Default Avatar" class="w-[16vh] h-[16vh]">
+          <div v-if="selectedPhoto.length === 0" className="relative w-28 h-28 overflow-hidden bg-gray-500 hover:bg-gray-400 rounded-full cursor-pointer">
+            <img src="../assets/DefaultAvatar.png" alt="Default Avatar" class="w-28 h-28">
           </div>
           <div class="flex items-center justify-center mx-[0vw] ">
             <div v-for="(photo, index) in selectedPhoto" :key="index">
-              <img :src="photo" alt="Selected Photo" class="h-[16vh] w-[16vh] object-fit-cover cursor-pointer rounded-full" @click="openFileInput">
+              <img :src="photo" alt="Selected Photo" class="h-28 w-28 object-fit-cover cursor-pointer rounded-full" @click="openFileInput">
             </div>
               <div v-if="selectedPhoto.length === 0" class="flex flex-col items-center justify-center">
             </div>

@@ -6,24 +6,24 @@
     <div class="pt-5 pb-3">
       <p class="w-8/12 m-auto text-xl">We will use the information to personalise your TravelPal experience</p>
     </div>
-    <div class="mb-[2.1vh] text-center flex justify-center">
+    <div class="text-center flex justify-center">
       <!-- Hidden file input to trigger file selection -->
       <input type="file" id="photo-input" accept=".jpg, .jpeg, .png" class="hidden" multiple @change="handleFileChange">
       
       <!-- Label for the file input, shows the camera icon if no photo selected -->
       <label
           for="photo-input"
-          class="relative h-[13vh] w-[13vh] flex items-center justify-center cursor-pointer rounded-lg"
+          class="relative h-24 w-24 flex items-center justify-center cursor-pointer rounded-lg"
         >
-        <div v-if="selectedPhoto.length === 0" class=" h-[13vh] w-[13vh] items-center justify-center"
-        :class="{ 'border border-dashed border-gray-500 rounded-full dark:hover:bg-bray-800 dark:bg-gray-500 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600': selectedPhoto }">
-          <img src="../assets/Camera.svg" alt="Add Photo" class="h-[6vh] w-[6vh] m-auto mt-[1.3vh] mb-[0.3vh]">
-          <p class="text-[1.5vh] text-[#3F3D3D] font-semibold">Add Profile</p>
-          <p class="text-[1.5vh] text-[#3F3D3D] font-semibold">Picture</p>
+        <div v-if="selectedPhoto.length === 0" class=" h-24 w-24 items-center justify-center"
+        :class="{ 'border border-dashed border-gray-500 rounded-full hover:bg-gray-100': selectedPhoto }">
+          <img src="../assets/Camera.svg" alt="Add Photo" class="h-11 w-11 m-auto mt-2.5 mb-1">
+          <p class="text-xs text-[#3F3D3D] font-semibold">Add Profile</p>
+          <p class="text-xs text-[#3F3D3D] font-semibold">Picture</p>
         </div>
         <div class="flex items-center justify-center mx-[0vw] ">
           <div v-for="(photo, index) in selectedPhoto" :key="index">
-            <img :src="photo" alt="Selected Photo" class="h-[13vh] w-[13vh] object-fit-cover cursor-pointer rounded-full" @click="openFileInput">
+            <img :src="photo" alt="Selected Photo" class="h-24 w-24 object-fit-cover cursor-pointer rounded-full" @click="openFileInput">
           </div>
             <div v-if="selectedPhoto.length === 0" class="flex flex-col items-center justify-center">
           </div>
