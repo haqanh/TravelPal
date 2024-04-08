@@ -1,16 +1,16 @@
 <template>
-    <div class="inset-x-0 top-0 h-2/5 absolute">
-    <img
-      src="@/assets/guideCover/Matsuno.jpg"
-      class="object-cover w-full h-full shadow-md rounded-b-3xl"
-      alt="San Francisco"
-    />
-    <div class="absolute inset-0 bg-gray-700 bg-opacity-50 rounded-b-3xl"></div>
-    <div class="absolute bottom-0 left-0 w-full p-4 text-center">
-      <h1 class="text-6xl font-bold text-white"> Matsuno </h1>
-      <p class="text-xl text-white my-4"> In Japan </p>
+      <div class="inset-x-0 top-0 h-2/5 absolute">
+      <img
+        :src= photo
+        class="object-cover w-full h-full shadow-md rounded-b-3xl"
+        alt="cover photo"
+      />
+      <div class="absolute inset-0 bg-gray-700 bg-opacity-50 rounded-b-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-full p-4 text-center">
+        <h1 class="text-6xl font-bold text-white"> {{ title }} </h1>
+        <p class="text-xl text-white my-4"> Country: {{ country }} </p>
+      </div>
     </div>
-  </div>
 
   
   <NavBar />
@@ -82,7 +82,8 @@
         </section>
       </main>
     </div>
-
+    
+<GlobalFooter />
 </template>
   
 <script setup>
@@ -90,6 +91,7 @@
   import GuideNav from '@/components/GuideNav.vue';
   import NavBar from '@/components/NavBar.vue';
   import GuideComponent from '@/components/GuideComponent.vue';
+  import GlobalFooter from '@/components/GlobalFooter.vue';
   import { useRoute } from 'vue-router';
   import { db } from '@/firebase';
   import { doc, getDoc, getDocs, collection } from 'firebase/firestore';
@@ -105,7 +107,10 @@
     { id: 'nearbyPlaces', name: '5. Nearby Places'}
   ];
 
-  const place = ref('');
+  const title = ref('');
+  const country = ref('');
+  const photo = ref('');
+
   const overview = ref('');
 
   const generalAdvice = ref('');
@@ -136,7 +141,8 @@
         }
     }
   });
-
+      
+  //console.log(currentSection); // Add this line to debug
   activeSection.value = currentSection;
 };
 
@@ -151,8 +157,11 @@ onMounted(async () => {
     if (docRef.exists()) {
       guideData.value = docRef.data();
 
-      
-      place.value = guideData.value.Name;
+    
+      title.value = guideData.value.Guide_Title;
+      country.value = guideData.value.Country;
+      photo.value = guideData.value.Cover_Photo;
+
       overview.value = guideData.value.Description;
 
       const advicesCollectionRef = collection(docRef.ref, 'advices');
