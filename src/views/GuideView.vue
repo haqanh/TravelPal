@@ -172,7 +172,7 @@ onMounted(async () => {
         ...doc.data()
       }));
 
-      const placesToVisitCollectionRef = collection(docRef.ref, 'places_to_visit');
+      const placesToVisitCollectionRef = collection(docRef.ref, 'placesToVisit');
       const placesToVisitSnapshot = await getDocs(placesToVisitCollectionRef);
       
       placesToVisit.value = placesToVisitSnapshot.docs.map(doc => ({
@@ -180,21 +180,21 @@ onMounted(async () => {
         ...doc.data()
       }));
 
-      const placesToEatCollectionRef = collection(docRef.ref, 'places_to_eat');
+      const placesToEatCollectionRef = collection(docRef.ref, 'placesToEat');
       const placesToEatSnapshot = await getDocs(placesToEatCollectionRef);
       placesToEat.value = placesToEatSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
 
-      const placesToStayCollectionRef = collection(docRef.ref, 'places_to_stay');
+      const placesToStayCollectionRef = collection(docRef.ref, 'placesToStay');
       const placesToStaySnapshot = await getDocs(placesToStayCollectionRef);
       placesToStay.value = placesToStaySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
 
-      const nearbyPlacesCollectionRef = collection(docRef.ref, 'nearby_places');
+      const nearbyPlacesCollectionRef = collection(docRef.ref, 'nearbyPlaces');
       const nearbyPlacesSnapshot = await getDocs(nearbyPlacesCollectionRef);
       nearbyPlaces.value = nearbyPlacesSnapshot.docs.map(doc => ({
         id: doc.id,
