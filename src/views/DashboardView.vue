@@ -22,7 +22,7 @@
           <input
             type="text"
             v-model="searchInput"
-            class="block w-full py-3 pl-10 pr-4 leading-normal rounded-xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-800 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-[#3F3D3D] aa-input"
+            class="block w-full py-3 pl-10 pr-4 leading-normal rounded-xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-800 ring-opacity-90 bg-gray-100 text-gray-[#3F3D3D] aa-input"
             placeholder="Search"
           />
         </div>
