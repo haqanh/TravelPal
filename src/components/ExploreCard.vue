@@ -107,7 +107,6 @@ export default {
     openGuide() {
       this.isVisible = false;
       this.$router.push(`/guide/${this.card.guideTitle}`);
-      // this.$router.push({ name: 'GuideView' })
     },
     async handleLike() {
       this.isLiked = !this.isLiked;

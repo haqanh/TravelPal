@@ -37,27 +37,43 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
               </svg>
             </span>
-            <!-- Tags Input -->
-            <!-- <label class="text-neutral-700" for="tags">
-              <input @keyup.enter="updateTags" @input="updateTags($event.target.value, place)" v-model= "tags" type="text" id="tags" class="input_style" name="tags" placeholder="Add Tags" />
-            </label> -->
         
-            <div class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-1/2 py-2 px-4 mr-2 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent">    
-              
+          
+            <div class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-1/2 p-1 mr-2 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent">
+
+              <!-- Tag Inputs that are rendered once selected-->
               <div class="flex-wrap flex">
-                <GlobalTag v-for='(tag, index) in tags' :key='index' :tagCategory='tag' @click="removeTag(index)" class="mr-2 mb-2"/>  
+                <div v-for="tag in selectedTags" :key="tag.id" class="mr-2 mb-2 relative flex items-center hover:text-gray-700 cursor-pointer" @mouseover="hovering = tag.id" @mouseleave="hovering = null">
+                  <GlobalTag :tagCategory="tag.category" :textColor="tag.colour" :borderColor="tag.colour"/>
+                  <span @click="removeTag(tag.id)" class="ml-1 text-sm text-gray-400 hover:text-gray-700 cursor-pointer" v-show="hovering === tag.id">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                  </span>
+                  
+                </div>
               </div>
-              <input
-                  type='text'
-                  placeholder="Enter a Tag"
-                  @keyup.enter="updateTags" 
-                  @input="updateTags($event.target.value, place)"
-                  v-model="tagInput"
-                  @keydown.enter='addTag'
-                  @keydown.delete='removeLastTag'
-                  style="border: none; outline: none; background-color: transparent;"
-                  />
-            
+              <!-- Tag Options Dropdown -->
+              <div class="relative" @click="dropdownOpen = !dropdownOpen">
+                  <button
+                    class="py-2 px-3 w-full hover:bg-gray-700 hover:bg-opacity-10 flex items-center gap-2 rounded"
+                  >
+                    <span class="text-gray-400">Select Tags</span>
+                      <img v-if="!dropdownOpen" src="../assets/ChevronDown.svg" alt="chevron" width="30" height="30" fill="currentColor" viewbox="0 0 24 24" class="pointer-events-none absolute right-0 flex items-center pr-3">
+                      <img v-if="dropdownOpen" src="../assets/ChevronUp.svg" alt="chevron" width="30" height="30" fill="currentColor" viewbox="0 0 24 24" class="pointer-events-none absolute right-0 flex items-center pr-3">
+                    
+                  </button>
+                  <div v-if="dropdownOpen" class="relative bg-white mt-2 w-64 rounded-md">
+                    <ul class="py-1 text-base leading-6 rounded-md shadow-xs overflow-auto max-h-60">
+                      <li v-for="tag in tagOptions" :key="tag.id" @click="selectTag(tag)" class="mb-2 text-gray-700 cursor-pointer select-none relative py-2 pr-9 hover:bg-gray-300 hover:text-white rounded-md">
+                        <span class="font-normal ml-2block truncate">
+                          <GlobalTag :key='tag.id' :tagCategory='tag.category' :textColor="tag.colour" :borderColor="tag.colour"/>  
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+              </div>
+              
             </div>
             
           </div>
@@ -154,31 +170,41 @@
 
 <script>
 
-import GlobalTag from './GlobalTag.vue'
+import GlobalTag from './GlobalTag.vue';
 
 export default {
   components: {
-    GlobalTag
+    GlobalTag,
   },
   data() {
     return {
         location: '',
-        tags: [],
         cost: '',
         summary: '',
         selectedPhoto: null,
         isVisible: false,
         count: 1,
-        tagInput: '' // This holds the value of the input field
+        // tagInput: '',
+        tagOptions: [
+          {id: 1, category: 'Food', colour: "#ec407a"},
+          {id: 2, category: 'Nature', colour: "#388e3c"},
+          {id: 3, category: 'Landmarks', colour: "#3f51b5"},
+          {id: 4, category: 'Culture', colour: "#f57c00"},
+          {id: 5, category: 'Entertainment', colour: "#9c27b0"},
+        ], 
+        // tags: [],
+        dropdownOpen: false,
+        selectedTags:[],
+        hovering: null,
     };
   },
   methods: {
     updateLocation() {
       this.$emit('location-updated', this.location);
     },
-    updateTags() {
-      this.$emit('tags-updated', this.tags);
-    },
+    // updateTags() {
+    //   this.$emit('tags-updated', this.tags);
+    // },
     updateCost() {
       this.$emit('cost-updated', this.cost);
     },
@@ -235,13 +261,22 @@ export default {
         //   event.target.value = ''
         //   console.log(this.tags)
     },
-    removeTag(index) {
-      this.tags.splice(index, 1)
-    },
-    removeLastTag(event) {
-      if (event.target.value.length === 0) {
-        this.removeTag(this.tags.length - 1)
+    // removeTag(index) {
+    //   this.tags.splice(index, 1)
+    // },
+    // removeLastTag(event) {
+    //   if (event.target.value.length === 0) {
+    //     this.removeTag(this.tags.length - 1)
+    //   }
+    // },
+    selectTag(tag) {
+      if (!this.selectedTags.includes(tag)) {
+        this.selectedTags.push(tag);
+        this.$emit('update-selectedTags', this.selectedTags);
       }
+    },
+    removeTag(tagId) {
+      this.selectedTags = this.selectedTags.filter(tag => tag.id !== tagId);
     },
   },      
   mounted() {

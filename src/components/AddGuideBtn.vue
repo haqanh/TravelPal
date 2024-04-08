@@ -12,6 +12,7 @@ import { db, storage } from '@/firebase'
 import { collection, addDoc, updateDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import Datepicker from 'vue3-datepicker'
+import GlobalTag from './GlobalTag.vue';
 
 export default {
   emits:['close', 'update-guide-id'],
@@ -22,7 +23,8 @@ export default {
     DialogTitle,
     TransitionRoot,
     TransitionChild,
-    Datepicker
+    Datepicker,
+    GlobalTag,
   },
   data() {
     return {
@@ -38,6 +40,17 @@ export default {
       showStartDatepicker: false,
       showEndDatepicker: false,
       country: '',
+      tagOptions: [
+          {id: 1, category: 'Food', colour: "#ec407a"},
+          {id: 2, category: 'Nature', colour: "#388e3c"},
+          {id: 3, category: 'Landmarks', colour: "#3f51b5"},
+          {id: 4, category: 'Culture', colour: "#f57c00"},
+          {id: 5, category: 'Entertainment', colour: "#9c27b0"},
+      ], 
+      // tags: [],
+      dropdownOpen: false,
+      selectedTags:[],
+      hovering: null,
     }
   },
   methods: {
@@ -56,7 +69,15 @@ export default {
     clearEndDate() {
       this.selectedEndDate = null
     },
-
+    selectTag(tag) {
+      if (!this.selectedTags.includes(tag)) {
+        this.selectedTags.push(tag);
+        this.$emit('update-selectedTags', this.selectedTags);
+      }
+    },
+    removeTag(tagId) {
+      this.selectedTags = this.selectedTags.filter(tag => tag.id !== tagId);
+    },
     handleFileChange(event) {
       const file = event.target.files[0]
       if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
@@ -73,7 +94,7 @@ export default {
       }
     },
     async addGuide() {
-      let fields = [this.guideTitle, this.destination, this.description, this.selectedPhoto]
+      let fields = [this.guideTitle, this.destination, this.description, this.selectedPhoto, this.selectedEndDate, this.selectedStartDate, this.selectedTags]
 
       if (fields.every((field) => field !== '')) {
         try {
@@ -89,7 +110,8 @@ export default {
             Start_Date: this.selectedStartDate,
             End_Date: this.selectedEndDate,
             Last_Edited: serverTimestamp(),
-            Country: this.country
+            Country: this.country,
+            Tags: this.selectedTags,
           });
           console.log('Doc created')
 
@@ -123,6 +145,7 @@ export default {
               Last_Edited: serverTimestamp(),
               Country: this.country,
               Cover_Photo: photoURL,
+              Tags: this.selectedTags,
           });
           console.log('Doc created in global guides collection');
 
@@ -210,7 +233,7 @@ export default {
                 <h5>Guide Title</h5>
                 <div class="flex relative">
                   <span class="rounded-l-md inline-flex items-center px-3 border-t bg-white border-l border-b border-gray-300 text-gray-500 shadow-sm text-sm">
-                    <img src='@/assets/tagIcon.svg' alt="tag" width="20" height="20" fill="currentColor"
+                    <img src='@/assets/PencilSquare.svg' alt="tag" width="20" height="20" fill="currentColor"
                       viewBox="0 0 1792 1792">
                   </span>
                   <input type="text" v-model="guideTitle" id="guideTitle"
@@ -232,6 +255,51 @@ export default {
                 </div>
                 <br />
 
+                <h5>Tags</h5>
+                <div class="flex relative ">
+                  <span class="rounded-l-md inline-flex items-center px-3 border-t bg-white border-l border-b border-gray-300 text-gray-500 shadow-sm text-sm">
+                    <img src='@/assets/tagIcon.svg' alt="tag" width="20" height="20" fill="currentColor"
+                      viewBox="0 0 1792 1792">
+                  </span>
+
+                  <div class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-1/2 p-1 mr-2 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-0 focus:ring-2 focus:ring-gray-800 focus:border-transparent">
+                    <!-- Tag Inputs that are rendered once selected-->
+                    <div class="flex-wrap flex">
+                      <div v-for="tag in selectedTags" :key="tag.id" class="mr-2 mb-2 relative flex items-center hover:text-gray-700 cursor-pointer" @mouseover="hovering = tag.id" @mouseleave="hovering = null">
+                        <GlobalTag :tagCategory="tag.category" :textColor="tag.colour" :borderColor="tag.colour"/>
+                        <span @click="removeTag(tag.id)" class="ml-1 text-sm text-gray-400 hover:text-gray-700 cursor-pointer" v-show="hovering === tag.id">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                          </svg>
+                        </span>
+                        
+                      </div>
+                    </div>
+                    <!-- Tag Options Dropdown -->
+                    <div class="relative w-full" @click="dropdownOpen = !dropdownOpen">
+                        <button
+                          class="py-2 px-3 w-full hover:bg-gray-700 hover:bg-opacity-10 flex items-center gap-2 rounded"
+                        >
+                          <span class="text-gray-400">Select Tags</span>
+                            <img v-if="!dropdownOpen" src="../assets/ChevronDown.svg" alt="chevron" width="30" height="30" fill="currentColor" viewbox="0 0 24 24" class="pointer-events-none absolute right-0 flex items-center pr-3">
+                            <img v-if="dropdownOpen" src="../assets/ChevronUp.svg" alt="chevron" width="30" height="30" fill="currentColor" viewbox="0 0 24 24" class="pointer-events-none absolute right-0 flex items-center pr-3">
+                          
+                        </button>
+                        <div v-if="dropdownOpen" class="relative bg-white mt-2 rounded-md w-full">
+                          <ul class="py-1 text-base leading-6 rounded-md shadow-xs overflow-auto max-h-60">
+                            <li v-for="tag in tagOptions" :key="tag.id" @click="selectTag(tag)" class="mb-2 text-gray-700 cursor-pointer select-none relative py-2 pr-9 hover:bg-gray-300 hover:text-white rounded-md">
+                              <span class="font-normal ml-2block truncate">
+                                <GlobalTag :key='tag.id' :tagCategory='tag.category' :textColor="tag.colour" :borderColor="tag.colour"/>  
+                              </span>
+                            </li>
+                          </ul>
+                        </div>
+                    </div>
+                  </div>
+              
+                </div>
+                <br />
+
                 <h5>Dates</h5>
                 <div class="flex relative">
                   <!-- Select Dates Inputs -->
@@ -244,7 +312,7 @@ export default {
                           placeholder="Start Date">
                         </Datepicker>
                         <div class="absolute inset-y-0 left-0 flex items-center pl-[1.4vh] pointer-events-none">
-                          <svg class="w-[2.1vh] h-[2.1vh] text-gray-500 dark:text-gray-400" aria-hidden="true"
+                          <svg class="w-[2.1vh] h-[2.1vh] text-gray-800 dark:text-gray-400" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                             <path
                               d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
@@ -263,7 +331,7 @@ export default {
                           placeholder="End Date">
                         </Datepicker>
                         <div class="absolute inset-y-0 left-0 flex items-center pl-[1.6vh] pointer-events-none">
-                          <svg class="w-[2.1vh] h-[2.1vh] text-gray-500 dark:text-gray-400" aria-hidden="true"
+                          <svg class="w-[2.1vh] h-[2.1vh] text-gray-800 dark:text-gray-400" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                             <path
                               d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />

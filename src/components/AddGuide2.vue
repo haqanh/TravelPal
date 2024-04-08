@@ -472,7 +472,8 @@ export default {
                           <div v-for="(place) in places" :key="place.id" @contextmenu.prevent="deletePlace(place)">
                             <div v-if="place.visible"></div>
 
-                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
+                            <!-- <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/> -->
+                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
 
                           <br />
                         </div>
@@ -521,7 +522,7 @@ export default {
                         <div v-for="(place) in placesToEat" :key="place.id" @contextmenu.prevent="deletePlaceToEat(place)">
                             <div v-if="place.visible"></div>
 
-                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
+                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
 
                           <br />
                         </div>
@@ -574,7 +575,7 @@ export default {
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesToStay" :key="place.id" @contextmenu.prevent="deletePlaceToStay(place)">
                             <div v-if="place.visible"></div>
-                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
+                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
                           <br />
                         </div>
 
@@ -626,7 +627,7 @@ export default {
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesNearby" :key="place.id" @contextmenu.prevent="deletePlaceNearby(place)">
                             <div v-if="place.visible"></div>
-                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
+                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
                           <br />
                         </div>
 
@@ -684,7 +685,7 @@ export default {
 }
 
 .photoInput_style {
-  @apply rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent;
+  @apply rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:border-transparent;
 }
 
 .nextBtn_style {
@@ -692,7 +693,7 @@ export default {
 }
 
 .disclosureButton {
-  @apply flex w-full justify-between rounded-lg bg-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-900 hover:bg-blue-400 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75;
+  @apply flex w-full justify-between rounded-lg bg-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-900 hover:bg-gray-500 focus:outline-none focus-visible:ring ;
 }
 
 .loading-spinner {
