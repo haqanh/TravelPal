@@ -39,8 +39,8 @@ import NavBar from '@/components/NavBar.vue'
 import ExploreCard from '@/components/ExploreCard.vue'
 
 import MountTaranaki from '../assets/guideCover/MountTaranaki.jpg'
-import NZflag from '../assets/flags/NZflag.svg'
 import ProfileWoman from '../assets/profiles/ProfileWoman.jpg'
+import NZflag from '../assets/flags/NZflag.svg'
 
 import Taipei from '../assets/guideCover/Taipei.jpg'
 import TWflag from '../assets/flags/TWflag.svg'
@@ -83,8 +83,6 @@ export default {
                     profilePicPath: ProfileWoman,
                     guideTitle: 'Mount Taranaki',
                     tagCat: 'Nature',
-                    tagColor: '#388e3c',
-                    tagBorder: '#388e3c',
                     isLiked: false,
                 },
                 {
@@ -93,8 +91,6 @@ export default {
                     profilePicPath: ProfileWoman2,
                     guideTitle: 'Taipei',
                     tagCat: 'Culture',
-                    tagColor: '#f57c00',
-                    tagBorder: '#f57c00',
                     isLiked: false,
                 },
                 {
@@ -103,8 +99,6 @@ export default {
                     profilePicPath: ProfileMan,
                     guideTitle: 'Luxembourg',
                     tagCat: 'Entertainment',
-                    tagColor: '#9c27b0',
-                    tagBorder: '#9c27b0',
                     isLiked: false,
                 },
                 {
@@ -113,8 +107,6 @@ export default {
                     profilePicPath: ProfileMan2,
                     guideTitle: 'Mexico',
                     tagCat: 'Food',
-                    tagColor: '#ec407a',
-                    tagBorder: '#ec407a',
                     isLiked: false,
                 }
             ],
@@ -125,8 +117,6 @@ export default {
                     profilePicPath: ProfileMan,
                     guideTitle: 'Matsuno, Japan',
                     tagCat: 'Nature',
-                    tagColor: '#388e3c',
-                    tagBorder: '#388e3c',
                     isLiked: false,
                 },
                 {
@@ -135,8 +125,6 @@ export default {
                     profilePicPath: ProfileMan2,
                     guideTitle: 'Bangkok',
                     tagCat: 'Food',
-                    tagColor: '#ec407a',
-                    tagBorder: '#ec407a',
                     isLiked: false,
                 },
                 {
@@ -145,8 +133,6 @@ export default {
                     profilePicPath: ProfileWoman2,
                     guideTitle: 'Taj Mahal',
                     tagCat: 'Landmarks',
-                    tagColor: '#3f51b5',
-                    tagBorder: '#3f51b5',
                     isLiked: false,
                 },
                 {
@@ -155,8 +141,6 @@ export default {
                     profilePicPath: ProfileWoman,
                     guideTitle: 'Marbella',
                     tagCat: 'Nature',
-                    tagColor: '#388e3c',
-                    tagBorder: '#388e3c',
                     isLiked: false,
                 }
             ],

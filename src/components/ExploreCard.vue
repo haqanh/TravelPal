@@ -35,8 +35,6 @@
         <!-- Tag  -->
         <GlobalTag
           :tagCategory="card.tagCat"
-          :textColor="card.tagColor"
-          :borderColor="card.tagBorder"
         ></GlobalTag>
 
         <!-- Like Button -->

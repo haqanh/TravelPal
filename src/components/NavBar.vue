@@ -2,7 +2,7 @@
 
   <nav class="top-0 z-50 bg-white bg-opacity-0 backdrop-filter backdrop-blur-lg border-gray-200">
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-1 sm:px-2 lg:px-3">
       <div class="flex justify-between h-16 items-center">
         <div class="flex space-x-4">
           <!-- Mobile Menu Button -->
@@ -30,22 +30,22 @@
           <!-- End Mobile Menu Button -->
           <div class="hidden md:flex items-center space-x-4">
             <a
-              href="/viewtrip"
+              href="/dashboard"
               class="text-gray-300 hover:bg-gray-700 hover:bg-opacity-10 hover:text-white px-3 py-2 rounded-md font-bold"
               >TravelPal</a
             >
             <a
-              href="/"
+              href="/dashboard"
               class="text-gray-300 hover:bg-gray-700 hover:bg-opacity-10 hover:text-white px-3 py-2 rounded-md"
               >Home</a
             >
             <a
-              href="#"
+              href="/explore"
               class="text-gray-300 hover:bg-gray-700 hover:bg-opacity-10 hover:text-white px-3 py-2 rounded-md"
               >Explore</a
             >
             <a
-              href="#"
+              href="/favourites"
               class="text-gray-300 hover:bg-gray-700 hover:bg-opacity-10 hover:text-white px-3 py-2 rounded-md"
               >Favourites</a
             >
@@ -96,7 +96,7 @@
               class="dropdown-menu absolute bg-white text-gray-700 rounded-lg shadow-lg w-48 mt-2"
             >
               <a href="#" class="block px-4 py-2 hover:bg-gray-100 rounded-lg">Your Profile</a>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 rounded-lg">Logout</a>
+              <a href="/" class="block px-4 py-2 hover:bg-gray-100 rounded-lg">Logout</a>
             </div>
           </transition>
         </div>
