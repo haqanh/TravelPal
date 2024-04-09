@@ -369,7 +369,7 @@ async function SignInWithGoogle() {
 
       addUserGoogle(user.email);
 
-      router.push('/about')
+      router.push('/dashboard')
     })
     .catch((error) => {
       // Handle Errors here.
