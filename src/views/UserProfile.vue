@@ -12,7 +12,8 @@
           <img src="../assets/DefaultAvatar.png" alt="Default Avatar" class="w-[20vh] h-[20vh]">
         </div>
       </div> -->
-      <div class="mb-3 text-center flex justify-center w-fit">
+      <div class="mb-3 text-center flex justify-center w-fit relative tooltip">
+        <span class="tooltiptext">Change your profile photo!</span>
         <!-- Hidden file input to trigger file selection -->
         <input type="file" id="photo-input" accept=".jpg, .jpeg, .png" class="hidden" multiple @change="handleFileChange">
         
@@ -65,6 +66,10 @@ import { doc, setDoc, collection, getDoc, updateDoc } from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
+const $toast = useToast()
+
 export default {
   data() {
     return {
@@ -116,6 +121,9 @@ export default {
           reader.onload = async (e) => {
             this.selectedPhoto.push(e.target.result); // push the result into the array
             await this.uploadImage(e.target.result, user!.email)
+            $toast.success('Profile photo updated successfully!', {
+              position: 'top'
+            })
           };
           reader.readAsDataURL(file);
         } else {
@@ -152,5 +160,54 @@ export default {
   background-image: url('@/assets/forest.jpg');
   background-size: cover;
   background-position: center;
+}
+
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 240px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  bottom: 100%;
+  left: 3%;
+  margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 100%; /* At the bottom of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.tooltip .tooltiptext {
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.tooltip:hover .tooltiptext {
+  opacity: 1;
 }
 </style>
