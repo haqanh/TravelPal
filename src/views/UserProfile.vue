@@ -66,6 +66,10 @@ import { doc, setDoc, collection, getDoc, updateDoc } from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
+const $toast = useToast()
+
 export default {
   data() {
     return {
@@ -117,6 +121,9 @@ export default {
           reader.onload = async (e) => {
             this.selectedPhoto.push(e.target.result); // push the result into the array
             await this.uploadImage(e.target.result, user!.email)
+            $toast.success('Profile photo updated successfully!', {
+              position: 'top'
+            })
           };
           reader.readAsDataURL(file);
         } else {
