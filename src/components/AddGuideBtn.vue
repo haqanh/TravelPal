@@ -120,6 +120,7 @@ export default {
             Last_Edited: serverTimestamp(),
             Country: this.country,
             Tags: this.selectedTags,
+            Liked_By: [],
           })
           
           console.log('Doc created')
@@ -160,6 +161,7 @@ export default {
               Cover_Photo: photoURL,
               Tags: this.selectedTags,
               Profile_Photo: userProfile,
+              Liked_By: [],
           });
           console.log('Doc created in global guides collection');
 

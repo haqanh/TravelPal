@@ -106,7 +106,7 @@ export default {
   data() {
     return {
       isVisible: true,
-      isLiked: false
+      isLiked: this.card.isLiked,
     }
   },
   methods: {
@@ -135,6 +135,19 @@ export default {
         .catch((error) => {
           console.error('Error adding to favourites: ', error);
         });
+
+        // Add the user's email to the guide's Liked_By array
+        await updateDoc(currGuideRef, {
+          Liked_By: arrayUnion(user.email)
+        })
+        .then(() => {
+          console.log('Successfully added to Liked_By!');
+        })
+        .catch((error) => {
+          console.error('Error adding to Liked_By: ', error);
+        });
+
+
       } else {
         // Remove the current guide from the user's favourites
         await updateDoc(userRef, {
@@ -145,6 +158,17 @@ export default {
         })
         .catch((error) => {
           console.error('Error removing from favourites: ', error);
+        });
+
+        // Remove the user's email from the guide's Liked_By array
+        await updateDoc(currGuideRef, {
+          Liked_By: arrayRemove(user.email)
+        })
+        .then(() => {
+          console.log('Successfully removed from Liked_By!');
+        })
+        .catch((error) => {
+          console.error('Error removing from Liked_By: ', error);
         });
       }
     },

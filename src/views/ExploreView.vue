@@ -39,7 +39,9 @@
         <!-- Recently Added Section -->
         <h2 v-if="recentlyAdded" class="ml-20 font-semibold mb-2 mt-4">Recently Added</h2>
         <div class="flex flex-wrap justify-center space-x-12">
-            <ExploreCard v-for="card in filteredRecentlyAdded" :key="card.guideTitle" :card="card" />
+        <div class="grid grid-cols-4 gap-12">
+            <!-- <ExploreCard v-for="card in filteredRecentlyAdded" :key="card.guideTitle" :card="card" />  -->
+        </div>
         </div>
     </div>
 </template>
@@ -51,6 +53,7 @@ import ExploreCard from '@/components/ExploreCard.vue'
 
 import { db } from '@/firebase';
 import { getDoc, doc, collection, query, where, getDocs } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 // import { storage } from '../firebase'
 // import { ref, getDownloadURL, getStorage} from 'firebase/storage'
@@ -96,24 +99,29 @@ export default {
     methods: {
         async fetchMockGuides(guideIds) {
             const guides = [];
-            for (const id of guideIds) {
-                const docRef = doc(db, 'guides', id);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists) {
-                    const data = docSnap.data();
-                    console.log(data)
-                    guides.push({
-                        guidePicPath: data.Cover_Photo,
-                        flagPath: data.Flag_Photo,
-                        profilePicPath: data.Profile_Photo,
-                        guideTitle: data.Guide_Title,
-                        tags: data.Tags,
-                        isLiked: data.Is_Liked,
-                        country: data.Country,
-                        guideId: docRef.id,
-                    });
-                } else {
-                    console.log(`No such document found with id: ${id}`);
+            const auth = getAuth();
+            const user = auth.currentUser;
+
+            if (user) {
+                for (const id of guideIds) {
+                    const docRef = doc(db, 'guides', id);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists) {
+                        const data = docSnap.data();
+                        console.log(data)
+                        guides.push({
+                            guidePicPath: data.Cover_Photo,
+                            flagPath: data.Flag_Photo,
+                            profilePicPath: data.Profile_Photo,
+                            guideTitle: data.Guide_Title,
+                            tags: data.Tags,
+                            isLiked: data.Liked_By.includes(user.email),
+                            country: data.Country,
+                            guideId: docRef.id,
+                        });
+                    } else {
+                        console.log(`No such document found with id: ${id}`);
+                    }
                 }
             }
             return guides;
@@ -121,23 +129,28 @@ export default {
         async fetchRecentlyAdded(excludeMock) {
             const guidesRef = collection(db, 'guides');
             const queryRef = query(guidesRef, where('__name__', 'not-in', excludeMock));
+
+            const auth = getAuth();
+            const user = auth.currentUser;
             let guides = [];
-            try {
-                const querySnapshotGuides = await getDocs(queryRef);
-                guides = querySnapshotGuides.docs.map(doc => ({
-                    guidePicPath: doc.data().Cover_Photo,
-                    flagPath: doc.data().Flag_Photo,
-                    profilePicPath: doc.data().Profile_Photo,
-                    guideTitle: doc.data().Guide_Title,
-                    tags: doc.data().Tags,
-                    isLiked: doc.data().Is_Liked,
-                    country: doc.data().Country,
-                    guideId: doc.id,
-                }));
-            } catch (error) {
-                console.log(error);
-            }
-            return guides;
+            if (user) {
+                try {
+                    const querySnapshotGuides = await getDocs(queryRef);
+                    guides = querySnapshotGuides.docs.map(doc => ({
+                        guidePicPath: doc.data().Cover_Photo,
+                        flagPath: doc.data().Flag_Photo,
+                        profilePicPath: doc.data().Profile_Photo,
+                        guideTitle: doc.data().Guide_Title,
+                        tags: doc.data().Tags,
+                        isLiked: doc.data().Liked_By.includes(user.email),
+                        country: doc.data().Country,
+                        guideId: doc.id,
+                    }));
+                } catch (error) {
+                    console.log(error);
+                }
+                return guides;
+            }  
         },
     },
     async mounted() {
