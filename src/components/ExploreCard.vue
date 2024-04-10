@@ -28,7 +28,7 @@
             <!-- Guide Title and Flag -->
           <div class="flex items-center absolute bottom-0 left-0 p-3">
             <!-- <img :src="card.flagPath" loading="lazy" alt="flag" /> -->
-            <span :class="getFlagClass(card.country)" class="mr-2" loading="lazy"></span>
+            <span :class="getFlagClass(card.country)" class="mr-2"></span>
             <span class="ml-2 text-white font-medium text-xs drop-shadow-lg">{{ card.guideTitle }}</span>
           </div>
         </div>

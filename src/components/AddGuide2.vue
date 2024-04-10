@@ -72,11 +72,11 @@ export default {
             console.log(this.advices)
             const newAdviceRef = doc(db, 'users', user.email, "guides", this.guideId, 'advices', `advice${numAdvice}`);
             await setDoc(newAdviceRef, {
-              Content: advice.content,
+              content: advice.content,
             })
             const globalGuideRef = doc(db, 'guides', this.guideId, 'advices', `advice${numAdvice}`);
             await setDoc(globalGuideRef, {
-              Content: advice.content,
+              content: advice.content,
             })
             numAdvice++
             // const newAdviceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'advices'), {
@@ -92,7 +92,7 @@ export default {
             console.log(place.location)
 
             //create storage reference
-            const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/places/${place.location}`)
+            const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToVisit/${place.location}`)
 
             const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
             // Upload the selectedPhoto to Firebase Storage
@@ -104,20 +104,22 @@ export default {
       
             const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToVisit', place.location)
             await setDoc(newPlaceRef, {
+              Description: place.summary,
               Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
 
             const globalGuideRef = doc(db, 'guides', this.guideId, 'placesToVisit', place.location)
             await setDoc(globalGuideRef, {
+              Description: place.summary,
               Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
             console.log("Place document written with ID: ", newPlaceRef.id);
           }
@@ -135,20 +137,22 @@ export default {
 
             const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToEat', place.location)
             await setDoc(newPlaceRef, {
+              Description: place.summary,
               Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
 
             const globalGuideRef = doc(db, 'guides', this.guideId, 'placesToEat', place.location)
             await setDoc(globalGuideRef, {
+              Description: place.summary,
               Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
             console.log("Place document written with ID: ", newPlaceRef.id);
           }
@@ -167,20 +171,22 @@ export default {
 
             const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToStay', place.location)
             await setDoc(newPlaceRef, {
+              Description: place.summary,
               Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
 
             const globalGuideRef = doc(db, 'guides', this.guideId, 'placesToStay', place.location)
             await setDoc(globalGuideRef, {
+              Description: place.summary,
               Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
             console.log("Place document written with ID: ", newPlaceRef.id);
           }
@@ -199,20 +205,22 @@ export default {
 
             const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesNearby', place.location)
             await setDoc(newPlaceRef, {
+              Description: place.summary,
               Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
 
             const globalGuideRef = doc(db, 'guides', this.guideId, 'placesNearby', place.location)
             await setDoc(globalGuideRef, {
+              Description: place.summary,
               Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
             console.log("Place document written with ID: ", newPlaceRef.id);
           }
