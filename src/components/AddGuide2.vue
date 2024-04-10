@@ -12,9 +12,9 @@ import {
 import AddPlaces from './AddPlaces.vue'
 import AddGeneralAdvice from './AddGeneralAdvice.vue'
 import { db, storage} from '@/firebase'
-import { collection, addDoc, deleteDoc, doc, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, setDoc, GeoPoint} from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
-import { ref, uploadString, getDownloadURL, uploadBytesResumable} from 'firebase/storage'
+import { ref, getDownloadURL, uploadBytesResumable} from 'firebase/storage'
 
 
 export default {
@@ -41,10 +41,10 @@ export default {
       isOpen: true,
       isLoading: false,
       advices: [{ id: 1, content: '', visible: true }],
-      places: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
-      placesToEat: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
-      placesToStay: [{ id: 1, location: '', tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
-      placesNearby: [{ id: 1, location: '', tags: [], cost: '', summary:'', selectedPhoto: '', visible: true }]
+      places: [{ id: 1, location: '', lat: 0, lng: 0, tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
+      placesToEat: [{ id: 1, location: '', lat: 0, lng: 0, tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
+      placesToStay: [{ id: 1, location: '', lat: 0, lng: 0, tags: [], cost: '', summary: '', selectedPhoto: '', visible: true }],
+      placesNearby: [{ id: 1, location: '', lat: 0, lng: 0, tags: [], cost: '', summary:'', selectedPhoto: '', visible: true }]
     }
   },
   methods: {
@@ -72,11 +72,11 @@ export default {
             console.log(this.advices)
             const newAdviceRef = doc(db, 'users', user.email, "guides", this.guideId, 'advices', `advice${numAdvice}`);
             await setDoc(newAdviceRef, {
-              Content: advice.content,
+              content: advice.content,
             })
             const globalGuideRef = doc(db, 'guides', this.guideId, 'advices', `advice${numAdvice}`);
             await setDoc(globalGuideRef, {
-              Content: advice.content,
+              content: advice.content,
             })
             numAdvice++
             // const newAdviceRef = addDoc(collection(db, 'users', user.email, "guides", this.guideId, 'advices'), {
@@ -92,7 +92,7 @@ export default {
             console.log(place.location)
 
             //create storage reference
-            const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/places/${place.location}`)
+            const storageRef = ref(storage,`users/${user.email}/guides/${this.guideId}/placesToVisit/${place.location}`)
 
             const file = this.dataURLtoFile(place.selectedPhoto, `image_${place.location}.jpg`)
             // Upload the selectedPhoto to Firebase Storage
@@ -100,23 +100,26 @@ export default {
 
             // Get the URL of the uploaded image
             const photoURL = await getDownloadURL(uploadTask.ref);
+            console.log("IS LAT AND LONG GETTING PASSED: ", place.lat, place.lng);
       
-            const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'places', place.location)
+            const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToVisit', place.location)
             await setDoc(newPlaceRef, {
-              Location: place.location,
+              Description: place.summary,
+              Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
 
-            const globalGuideRef = doc(db, 'guides', this.guideId, 'places', place.location)
+            const globalGuideRef = doc(db, 'guides', this.guideId, 'placesToVisit', place.location)
             await setDoc(globalGuideRef, {
-              Location: place.location,
+              Description: place.summary,
+              Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
             console.log("Place document written with ID: ", newPlaceRef.id);
           }
@@ -134,20 +137,22 @@ export default {
 
             const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToEat', place.location)
             await setDoc(newPlaceRef, {
-              Location: place.location,
+              Description: place.summary,
+              Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
 
             const globalGuideRef = doc(db, 'guides', this.guideId, 'placesToEat', place.location)
             await setDoc(globalGuideRef, {
-              Location: place.location,
+              Description: place.summary,
+              Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
             console.log("Place document written with ID: ", newPlaceRef.id);
           }
@@ -166,20 +171,22 @@ export default {
 
             const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesToStay', place.location)
             await setDoc(newPlaceRef, {
-              Location: place.location,
+              Description: place.summary,
+              Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
 
             const globalGuideRef = doc(db, 'guides', this.guideId, 'placesToStay', place.location)
             await setDoc(globalGuideRef, {
-              Location: place.location,
+              Description: place.summary,
+              Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
             console.log("Place document written with ID: ", newPlaceRef.id);
           }
@@ -198,20 +205,22 @@ export default {
 
             const newPlaceRef = doc(db, 'users', user.email, "guides", this.guideId, 'placesNearby', place.location)
             await setDoc(newPlaceRef, {
-              Location: place.location,
+              Description: place.summary,
+              Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
 
             const globalGuideRef = doc(db, 'guides', this.guideId, 'placesNearby', place.location)
             await setDoc(globalGuideRef, {
-              Location: place.location,
+              Description: place.summary,
+              Location: new GeoPoint(place.lat, place.lng),
+              Name: place.location,
+              Price: place.cost,
               Tags: place.tags,
-              Cost: place.cost,
-              Summary: place.summary,
-              Photo: photoURL,
+              imageUrl: photoURL,
             })
             console.log("Place document written with ID: ", newPlaceRef.id);
           }
@@ -220,8 +229,8 @@ export default {
       } catch (e) {
         console.error("Error adding document: ", e);
       } finally {
-        this.isLoading = false;
-        this.isOpen = false
+        // this.isLoading = false;
+        // this.isOpen = false
         this.$emit('close')
       }
     },
@@ -260,6 +269,12 @@ export default {
     updateLocation(place, location) {
       place.location = location
     },
+    updateLat(place, lat) {
+      place.lat = lat
+    },
+    updateLng(place, lng) {
+      place.lng = lng
+    },
     updateTags(place, tags) {
       place.tags = tags
     },
@@ -271,7 +286,6 @@ export default {
     },
     updatePhoto(place, photo) {
       place.selectedPhoto = photo
-
     },
     addPlace() {
       const newPlace = {
@@ -298,7 +312,9 @@ export default {
       const newPlace = {
         id: `place-${this.placesToEat.length + 1}`,
         location: '', 
-        tags: [], 
+        tags: [],
+        lat: 0,
+        lng: 0, 
         cost: '', 
         summary: '', 
         selectedPhoto: '',
@@ -320,6 +336,8 @@ export default {
         id: `place-${this.placesToStay.length + 1}`,
         location: '', 
         tags: [], 
+        lat: 0,
+        lng: 0,
         cost: '', 
         summary: '', 
         selectedPhoto: '',
@@ -340,7 +358,9 @@ export default {
       const newPlace = {
         id: `place-${this.placesNearby.length + 1}`,
         location: '', 
-        tags: [], 
+        tags: [],
+        lat: 0,
+        lng: 0, 
         cost: '', 
         summary: '', 
         selectedPhoto: '',
@@ -473,7 +493,7 @@ export default {
                             <div v-if="place.visible"></div>
 
                             <!-- <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @tags-updated="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/> -->
-                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
+                            <AddPlaces :id="place.id" @lat-updated='updateLat(place, $event)' @lng-updated='updateLng(place, $event)' @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
 
                           <br />
                         </div>
@@ -522,7 +542,7 @@ export default {
                         <div v-for="(place) in placesToEat" :key="place.id" @contextmenu.prevent="deletePlaceToEat(place)">
                             <div v-if="place.visible"></div>
 
-                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
+                            <AddPlaces :id="place.id" @lat-updated='updateLat(place, $event)' @lng-updated='updateLng(place, $event)' @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
 
                           <br />
                         </div>
@@ -575,7 +595,7 @@ export default {
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesToStay" :key="place.id" @contextmenu.prevent="deletePlaceToStay(place)">
                             <div v-if="place.visible"></div>
-                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
+                            <AddPlaces :id="place.id" @lat-updated='updateLat(place, $event)' @lng-updated='updateLng(place, $event)' @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
                           <br />
                         </div>
 
@@ -627,7 +647,7 @@ export default {
                       <div class="flex flex-col w-full">
                         <div v-for="(place) in placesNearby" :key="place.id" @contextmenu.prevent="deletePlaceNearby(place)">
                             <div v-if="place.visible"></div>
-                            <AddPlaces :id="place.id" @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
+                            <AddPlaces :id="place.id" @lat-updated='updateLat(place, $event)' @lng-updated='updateLng(place, $event)' @location-updated="updateLocation(place, $event)" @update-selectedTags="updateTags(place, $event)" @cost-updated="updateCost(place, $event)" @summary-updated="updateSummary(place, $event)" @photo-updated="updatePhoto(place, $event)"/>
                           <br />
                         </div>
 

@@ -9,7 +9,7 @@ import {
 } from '@headlessui/vue'
 import { ref, uploadString, getDownloadURL } from 'firebase/storage'
 import { db, storage } from '@/firebase'
-import { collection, addDoc, updateDoc, doc, setDoc, serverTimestamp, getDoc } from 'firebase/firestore'
+import { collection, addDoc, updateDoc, doc, setDoc, serverTimestamp, getDoc , GeoPoint} from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import Datepicker from 'vue3-datepicker'
 import GlobalTag from './GlobalTag.vue';
@@ -48,6 +48,8 @@ export default {
       dropdownOpen: false,
       selectedTags:[],
       hovering: null,
+      lat: 0,
+      lng: 0,
     }
   },
   methods: {
@@ -111,7 +113,7 @@ export default {
   
           const docRef = await addDoc(collection(db, 'users', user.email, "guides"), {
             Guide_Title: this.guideTitle,
-            Destination: this.destination,
+            Destination: new GeoPoint(this.lat, this.lng),
             Description: this.description,
             Start_Date: this.selectedStartDate,
             End_Date: this.selectedEndDate,
@@ -119,17 +121,7 @@ export default {
             Country: this.country,
             Tags: this.selectedTags,
           })
-          // const docRef = doc(collection(userRef, 'guides'), this.guideTitle);
-          // await setDoc(docRef, {
-          //   Guide_Title: this.guideTitle,
-          //   Destination: this.destination,
-          //   Description: this.description,
-          //   Start_Date: this.selectedStartDate,
-          //   End_Date: this.selectedEndDate,
-          //   Last_Edited: serverTimestamp(),
-          //   Country: this.country,
-          //   Tags: this.selectedTags,
-          // });
+          
           console.log('Doc created')
 
           //Get the generated ID
@@ -159,7 +151,7 @@ export default {
           const globalGuidesRef = doc(collection(db, 'guides'), this.guideId);
           await setDoc(globalGuidesRef, {
               Guide_Title: this.guideTitle,
-              Destination: this.destination,
+              Destination: new GeoPoint(this.lat, this.lng),
               Description: this.description,
               Start_Date: this.selectedStartDate,
               End_Date: this.selectedEndDate,
@@ -189,6 +181,9 @@ export default {
       google.maps.event.addListener(autocomplete, 'place_changed', () => {
         const place = autocomplete.getPlace()
         this.destination = place.formatted_address
+        this.lat = place.geometry.location.lat()
+        this.lng = place.geometry.location.lng()
+        console.log("print place:", this.lat, this.lng)
 
         // Extract the country from the address components
         const countryComponent = place.address_components.find(component => component.types.includes('country'));
@@ -325,7 +320,7 @@ export default {
                       <div class="relative">
                         <Datepicker v-model="selectedStartDate" :show="showStartDatepicker"
                           @update:show="(val) => (showStartDatepicker = val)"
-                          class="w-[20vw] h-[7vh] border border-gray-300 text-gray-900 text-sm rounded-lg pl-12 pr-2.5 pt-2.5 pb-2.5 focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          class="w-[20vw] h-[7vh] border border-gray-300 text-gray-900 text-sm rounded-lg pl-12 pr-2.5 pt-2.5 pb-2.5 focus:ring-blue-500 focus:border-blue-500 block"
                           placeholder="Start Date">
                         </Datepicker>
                         <div class="absolute inset-y-0 left-0 flex items-center pl-[1.4vh] pointer-events-none">
@@ -344,7 +339,7 @@ export default {
                       <div class="relative">
                         <Datepicker v-model="selectedEndDate" :show="showEndDatepicker"
                           @update:show="(val) => (showEndDatepicker = val)"
-                          class="w-[20vw] h-[7vh] border border-gray-300 text-gray-900 text-sm rounded-lg pl-12 pr-2.5 pt-2.5 pb-2.5 focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          class="w-[20vw] h-[7vh] border border-gray-300 text-gray-900 text-sm rounded-lg pl-12 pr-2.5 pt-2.5 pb-2.5 focus:ring-blue-500 focus:border-blue-500 block dark:placeholder-gray-400"
                           placeholder="End Date">
                         </Datepicker>
                         <div class="absolute inset-y-0 left-0 flex items-center pl-[1.6vh] pointer-events-none">

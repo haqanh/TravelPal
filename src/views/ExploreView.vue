@@ -101,6 +101,7 @@ export default {
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists) {
                     const data = docSnap.data();
+                    console.log(data)
                     guides.push({
                         guidePicPath: data.Cover_Photo,
                         flagPath: data.Flag_Photo,
@@ -139,9 +140,9 @@ export default {
     },
     async mounted() {
         const [editorsChoiceData, regionalFavData, recentlyAddedData] = await Promise.all([
-            this.fetchMockGuides(['Mount Taranaki', 'Taipei', 'Luxembourg', 'Mexico']),
-            this.fetchMockGuides(['Matsuno, Japan', 'Bangkok', 'Agra, India', 'Marbella']),
-            this.fetchRecentlyAdded(['Mount Taranaki', 'Taipei', 'Luxembourg', 'Mexico', 'Matsuno, Japan', 'Bangkok', 'Agra, India', 'Marbella']),
+            this.fetchMockGuides(['MountTaranaki', 'Taipei', 'Luxembourg', 'Mexico']),
+            this.fetchMockGuides(['Matsuno,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
+            this.fetchRecentlyAdded(['MountTaranaki', 'Taipei', 'Luxembourg', 'Mexico', 'Matsuno,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
         ]);
         this.editorsChoices = editorsChoiceData;
         this.regionalFavs = regionalFavData;

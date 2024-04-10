@@ -186,21 +186,18 @@ export default {
         selectedPhoto: null,
         isVisible: false,
         count: 1,
-        // tagInput: '',
         tagOptions: ['City', 'Nature', 'Culture', 'Entertainment', 'Food', 'Landmarks', 'Adventure', 'History', 'Science', 'Technology', 'Sports', 'Health', 'Fashion', 'Education', 'Travel', 'Art'], 
-        // tags: [],
         dropdownOpen: false,
         selectedTags:[],
         hovering: null,
+        lat: 0,
+        lng: 0,
     };
   },
   methods: {
     updateLocation() {
       this.$emit('location-updated', this.location);
     },
-    // updateTags() {
-    //   this.$emit('tags-updated', this.tags);
-    // },
     updateCost() {
       this.$emit('cost-updated', this.cost);
     },
@@ -235,28 +232,6 @@ export default {
         this.selectedPhoto = null;
       }
     },
-    // confirmRemove(event) {
-    //   const toast = useToast();
-    //   event.preventDefault();
-    //   toast.info('Are you sure you want to remove the Place?', {
-    //     timeout: false,
-    //     closeonClick: false,
-    //     actions: [
-    //       {
-    //         text: 'Yes',
-    //         onClick: () => {
-    //           this.selectedPhoto = null;
-    //         }
-    //       },
-    //       {
-    //         text: 'No',
-    //         onClick: () => {
-    //           toast.clear();
-    //         }
-    //       },
-    //     ],
-    //   })
-    // },
     selectTag(tag) {
       if (!this.selectedTags.includes(tag)) {
         this.selectedTags.push(tag);
@@ -277,8 +252,13 @@ export default {
 
       google.maps.event.addListener(autocomplete, 'place_changed', () => {
         const place = autocomplete.getPlace()
-        this.location = place.formatted_address
-        console.log(this.location)
+        this.location = place.formatted_address;
+        this.lat = place.geometry.location.lat();
+        this.lng = place.geometry.location.lng();
+        console.log(this.location);
+        console.log("Place:", this.lat, this.lng);
+        this.$emit('lat-updated', this.lat);
+        this.$emit('lng-updated', this.lng);
       })
     })
   },
