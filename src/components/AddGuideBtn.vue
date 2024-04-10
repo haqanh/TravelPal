@@ -113,7 +113,7 @@ export default {
   
           const docRef = await addDoc(collection(db, 'users', user.email, "guides"), {
             Guide_Title: this.guideTitle,
-            Destination: new GeoPoint(this.lat, this.lng),
+            Destination: this.destination,
             Description: this.description,
             Start_Date: this.selectedStartDate,
             End_Date: this.selectedEndDate,
@@ -151,7 +151,7 @@ export default {
           const globalGuidesRef = doc(collection(db, 'guides'), this.guideId);
           await setDoc(globalGuidesRef, {
               Guide_Title: this.guideTitle,
-              Destination: new GeoPoint(this.lat, this.lng),
+              Destination: this.destination,
               Description: this.description,
               Start_Date: this.selectedStartDate,
               End_Date: this.selectedEndDate,
