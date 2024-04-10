@@ -112,7 +112,8 @@ export default {
   methods: {
     openGuide() {
       this.isVisible = false;
-      this.$router.push(`/guide/${this.card.guideTitle}`);
+      console.log("Passing the correct guideId:", this.card.guideId)
+      this.$router.push(`/guide/${this.card.guideId}`);
     },
     async handleLike() {
       this.isLiked = !this.isLiked;
@@ -120,7 +121,7 @@ export default {
       const user = auth.currentUser;
 
       // Get reference to the current guide
-      const currGuideRef = doc(collection(db, 'guides'), this.card.guideTitle);
+      const currGuideRef = doc(collection(db, 'guides'), this.card.guideId);
       const userRef = doc(collection(db, 'users'), user.email);
 
       if (this.isLiked) {

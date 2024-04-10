@@ -110,6 +110,7 @@ export default {
                         tags: data.Tags,
                         isLiked: data.Is_Liked,
                         country: data.Country,
+                        guideId: docRef.id,
                     });
                 } else {
                     console.log(`No such document found with id: ${id}`);
@@ -119,7 +120,7 @@ export default {
         },
         async fetchRecentlyAdded(excludeMock) {
             const guidesRef = collection(db, 'guides');
-            const queryRef = query(guidesRef, where('Guide_Title', 'not-in', excludeMock));
+            const queryRef = query(guidesRef, where('__name__', 'not-in', excludeMock));
             let guides = [];
             try {
                 const querySnapshotGuides = await getDocs(queryRef);
@@ -131,6 +132,7 @@ export default {
                     tags: doc.data().Tags,
                     isLiked: doc.data().Is_Liked,
                     country: doc.data().Country,
+                    guideId: doc.id,
                 }));
             } catch (error) {
                 console.log(error);
