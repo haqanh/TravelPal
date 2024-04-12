@@ -24,15 +24,15 @@ export default {
         Entertainment: '#dc3545', // Bootstrap danger red
         Food: '#fd7e14', // Bootstrap orange
         Landmarks: '#6f42c1', // Bootstrap indigo
-        Adventure: '#20c997', // Bootstrap teal
-        History: '#6610f2', // Bootstrap purple
+        Adventure: '#65a30d', // Lime Colour
+        History: '#c026d3', // Fushia
         Science: '#d63384', // Bootstrap pink
-        Technology: '#adb5bd', // Bootstrap secondary gray
-        Sports: '#0dcaf0', // Bootstrap info cyan
+        Technology: '#0e7490', // Dark Cyan  
+        Sports: '#1e40af', // Dark Blue
         Health: '#198754', // Bootstrap success green, reused
-        Fashion: '#f8f9fa', // Bootstrap light
+        Fashion: '#431407', // Brown
         Education: '#6c757d', // Bootstrap dark gray
-        Travel: '#0c63e4', // A slightly different shade of blue
+        Travel: '#0c63e4', // A slightly different shade of blue  
         Art: '#e83e8c', // Bootstrap pink, different shade
         // Add more categories as needed
       };
