@@ -194,7 +194,7 @@ onMounted(async () => {
         ...doc.data()
       }));
 
-      const nearbyPlacesCollectionRef = collection(docRef.ref, 'nearbyPlaces');
+      const nearbyPlacesCollectionRef = collection(docRef.ref, 'placesNearby');
       const nearbyPlacesSnapshot = await getDocs(nearbyPlacesCollectionRef);
       nearbyPlaces.value = nearbyPlacesSnapshot.docs.map(doc => ({
         id: doc.id,
