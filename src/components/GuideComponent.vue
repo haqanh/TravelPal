@@ -9,9 +9,13 @@
           <span class="text-xl font-bold">{{ priceSymbol }}</span>
         </div>
         <div class="flex flex-wrap mb-4">
-          <span class="bg-gray-200 rounded px-2 py-1 text-sm mt-2 mr-2 mb-2" 
+          <span class="tags px-2 py-1 mt-2 mr-2 mb-2" 
                 v-for="tag in place.Tags" 
-                :key="tag">{{ tag }}</span>
+                :key="tag">
+            <GlobalTag
+              :tagCategory="tag"
+            ></GlobalTag>    
+          </span>
         </div>
         <p class="text-gray-600 text-base">{{ place.Description }}</p>
       </div>
@@ -32,6 +36,7 @@
 
 <script>
 import MapDisplay from '@/components/MapDisplay.vue';
+import GlobalTag from './GlobalTag.vue';
 
 export default {
   name: 'GuideComponent',
@@ -45,7 +50,8 @@ export default {
     }
   },
   components: {
-    MapDisplay
+    MapDisplay,
+    GlobalTag
   }
 };
 </script>
