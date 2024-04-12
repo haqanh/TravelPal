@@ -57,10 +57,12 @@
       </div>
     </div>
   </div>
+  <GlobalFooter />
 </template>
 
 <script lang="ts">
 import NavBar from '../components/NavBar.vue'
+import GlobalFooter from '@/components/GlobalFooter.vue';
 import { firebaseApp, db } from '@/firebase'
 import { doc, setDoc, collection, getDoc, updateDoc } from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
@@ -86,6 +88,7 @@ export default {
   },
   components: {
     NavBar,
+    GlobalFooter,
   },
   methods: {
     async fetchAndRenderImage(user) {
