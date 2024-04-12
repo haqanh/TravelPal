@@ -1,7 +1,5 @@
 <template>
-
   <nav class="top-0 z-50 bg-white bg-opacity-0 backdrop-filter backdrop-blur-lg border-gray-200">
-
     <div class="max-w-7xl mx-auto px-1 sm:px-2 lg:px-3">
       <div class="flex justify-between h-16 items-center">
         <div class="flex space-x-4">
@@ -60,7 +58,17 @@
           <button
             class="dropdown-toggle py-2 px-3 hover:bg-gray-700 hover:bg-opacity-10 flex items-center gap-2 rounded"
           >
-            <span class="text-gray-300">User Profile</span>
+            <!-- <span class="text-gray-300">User Profile</span> -->
+            <!-- Check if there is a selected photo -->
+            <!-- Check if there is a selected photo -->
+            <img
+              v-if="selectedPhoto"
+              :src="selectedPhoto"
+              alt="Profile Picture"
+              class="h-8 w-8 rounded-full object-cover"
+            />
+            <img v-else :src="defaultAvatar" alt="Default Avatar" class="h-8 w-8 rounded-full" />
+
             <svg
               class="w-3 h-3 text-gray-300"
               xmlns="http://www.w3.org/2000/svg"
@@ -93,9 +101,11 @@
           >
             <div
               v-show="dropdownOpen"
-              class="dropdown-menu absolute bg-white text-gray-700 rounded-lg shadow-lg w-48 mt-2"
+              class="dropdown-menu absolute right-0 bg-white text-gray-700 rounded-lg shadow-lg w-48 mt-2"
             >
-              <a href="/user-profile" class="block px-4 py-2 hover:bg-gray-100 rounded-lg">Your Profile</a>
+              <a href="/user-profile" class="block px-4 py-2 hover:bg-gray-100 rounded-lg"
+                >Your Profile</a
+              >
               <a href="/" class="block px-4 py-2 hover:bg-gray-100 rounded-lg">Logout</a>
             </div>
           </transition>
@@ -135,14 +145,48 @@
 </template>
 
 <script lang="ts">
+import { firebaseApp } from '@/firebase'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { getStorage, ref, getDownloadURL } from 'firebase/storage'
+import defaultAvatar from '@/assets/DefaultAvatar.png'
+
 export default {
   data() {
     return {
       dropdownOpen: false,
-      mobileMenuOpen: false // Added for mobile menu toggle
+      mobileMenuOpen: false,
+      selectedPhoto: '', // Changed to a string to hold a single photo URL
+      user: null,
+      defaultAvatar: defaultAvatar // Add this line
     }
   },
+  created() {
+    this.setupAuthListener()
+  },
   methods: {
+    setupAuthListener() {
+      const auth = getAuth()
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          this.user = user
+          this.fetchAndRenderImage(user)
+        } else {
+          // User is signed out
+          this.selectedPhoto = ''
+        }
+      })
+    },
+    async fetchAndRenderImage(user) {
+      const storage = getStorage(firebaseApp)
+      const fileRef = ref(storage, `users/${user!.email}/profile_pic/profile_pic.jpg`)
+
+      try {
+        const fileUrl = await getDownloadURL(fileRef)
+        this.selectedPhoto = fileUrl
+      } catch (err) {
+        this.selectedPhoto = this.defaultAvatar // Use the imported default avatar
+      }
+    },
     toggleDropdown() {
       this.dropdownOpen = !this.dropdownOpen
     },
@@ -155,42 +199,42 @@ export default {
     },
 
     beforeEnter(el) {
-      el.style.height = 0;
-      el.style.overflow = "hidden";
+      el.style.height = 0
+      el.style.overflow = 'hidden'
     },
     enter(el, done) {
       const increaseHeight = () => {
         if (el.clientHeight < el.scrollHeight) {
-          const height = `${parseInt(el.style.height) + 5}px`;
-          el.style.height = height;
+          const height = `${parseInt(el.style.height) + 5}px`
+          el.style.height = height
         } else {
-          clearInterval(this.enterInterval);
-          done();
+          clearInterval(this.enterInterval)
+          done()
         }
-      };
-      this.enterInterval = setInterval(increaseHeight, 10);
+      }
+      this.enterInterval = setInterval(increaseHeight, 10)
     },
     afterEnter(el) {},
     enterCancelled(el) {
-      clearInterval(this.enterInterval);
+      clearInterval(this.enterInterval)
     },
     beforeLeave(el) {},
     leave(el, done) {
       const decreaseHeight = () => {
         if (el.clientHeight > 0) {
-          const height = `${parseInt(el.style.height) - 5}px`;
-          el.style.height = height;
+          const height = `${parseInt(el.style.height) - 5}px`
+          el.style.height = height
         } else {
-          clearInterval(this.leaveInterval);
-          done();
+          clearInterval(this.leaveInterval)
+          done()
         }
-      };
-      this.leaveInterval = setInterval(decreaseHeight, 10);
+      }
+      this.leaveInterval = setInterval(decreaseHeight, 10)
     },
     afterLeave(el) {},
     leaveCancelled(el) {
-      clearInterval(this.leaveInterval);
-    },
+      clearInterval(this.leaveInterval)
+    }
   }
 }
 </script>
@@ -226,5 +270,28 @@ export default {
 
 .dropdown-menu a:hover {
   background-color: #f0f0f0;
+}
+
+/* If .max-w-7xl is restricting your width too much, try setting it to 100% or a larger max-width */
+.max-w-7xl {
+  max-width: 90%;
+}
+
+/* Adjust the padding as needed to reduce side margins */
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+.px-4 {
+  padding-left: 1rem; /* 16px; adjust or set to 0 if needed */
+  padding-right: 1rem; /* 16px; adjust or set to 0 if needed */
+}
+.sm\:px-6 {
+  padding-left: 1.5rem; /* 24px; adjust or set to 0 if needed */
+  padding-right: 1.5rem; /* 24px; adjust or set to 0 if needed */
+}
+.lg\:px-8 {
+  padding-left: 2rem; /* 32px; adjust or set to 0 if needed */
+  padding-right: 2rem; /* 32px; adjust or set to 0 if needed */
 }
 </style>
