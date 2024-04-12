@@ -2,7 +2,7 @@
   <div class="container mx-auto p-8" v-if="place">
     <div class="flex">
       <!-- Text container -->
-      <div class="flex-1 min-w-0">
+      <div class="flex-1 min-w-0 mx-2">
         <div class="flex items-center mb-1 space-x-4"> 
           <img src="@/assets/map-marker.svg" alt="Map Pin" class="w-10 h-10">
           <h2 class="text-2xl font-bold truncate">{{ place.Name }}</h2>
@@ -21,12 +21,12 @@
       </div>
 
       <!-- Photo container -->
-      <div class="flex-none w-1/4 h-72 px-4">
+      <div class="flex-none w-1/3 h-72 px-4 mx-2">
         <img :src="place.imageUrl" :alt="place.Name" class="w-full h-full object-cover rounded-xl">
       </div>
 
       <!-- Map container -->
-      <div class="flex-none w-1/4">
+      <div class="flex-none mx-2">
         <MapDisplay :latitude="place.Location.latitude" :longitude="place.Location.longitude" :description="place.Name" />
       </div>
     </div>
