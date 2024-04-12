@@ -4,6 +4,7 @@
       <hr class="relative h-[1px] border-0 bg-gray-600 top-[6rem]" />
       <keep-alive>
         <Transition :name="slide" mode="out-in">
+        <keep-alive>
         <component 
           :is="components[page]" 
           :name="name" @update-name="updateName" 
@@ -18,6 +19,7 @@
           :selectedCountries="selectedCountries" @toggle-country="toggleCountry"
           :selectedInterests="selectedInterests" @toggle-interest="toggleInterest"
         />
+        </keep-alive>
         </Transition>
       </keep-alive>
       <TheFooter @page-change="updatePage"/>
