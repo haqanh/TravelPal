@@ -95,6 +95,11 @@ export default {
                 return this.recentlyAdded.filter(guide => guide.guideTitle.toLowerCase().startsWith(this.searchInput.toLowerCase()));
             }
         },
+        userEmail() {
+            const auth = getAuth();
+            const user = auth.currentUser;
+            return user.email;
+        }
     },
     methods: {
 
@@ -106,6 +111,7 @@ export default {
             for (const id of guideIds) {
                 const docRef = doc(db, 'guides', id);
                 const docSnap = await getDoc(docRef);
+
                 if (docSnap.exists) {
                 const data = docSnap.data();
                 console.log(data);
@@ -117,7 +123,7 @@ export default {
                     tags: data.Tags,
                     country: data.Country,
                     guideId: docRef.id,
-                    isLiked: false,
+                    isLiked: data.Liked_By.includes(this.userEmail) ? true : false,
                 });
                 } else {
                 console.log(`No such document found with id: ${id}`);
@@ -146,7 +152,7 @@ export default {
                 tags: doc.data().Tags,
                 country: doc.data().Country,
                 guideId: doc.id,
-                isLiked: false,
+                isLiked: doc.data().Liked_By.includes(this.userEmail) ? true : false,
             }));
             return guides;
             } catch (error) {
