@@ -3,7 +3,8 @@
     <div class="flex flex-col justify-between h-[600px] w-[600px] shadow-2xl rounded-3xl bg-white relative">
       <hr class="relative h-[1px] border-0 bg-gray-600 top-[6rem]" />
       <keep-alive>
-        <Transition :name="slide" mode="out-in">
+        <transition name="fade" mode="out-in">
+        <keep-alive>
         <component 
           :is="components[page]" 
           :name="name" @update-name="updateName" 
@@ -18,7 +19,8 @@
           :selectedCountries="selectedCountries" @toggle-country="toggleCountry"
           :selectedInterests="selectedInterests" @toggle-interest="toggleInterest"
         />
-        </Transition>
+        </keep-alive>
+        </transition>
       </keep-alive>
       <TheFooter @page-change="updatePage"/>
     </div>
@@ -55,13 +57,7 @@ export default {
       privateOrPublic: "private",
       selectedCountries: [],
       selectedInterests: [],
-      slideRight: true,
       auth: null,
-    }
-  },
-  computed: {
-    slide() {
-      return this.slideRight ? "slide-right" : "slide-left"
     }
   },
   components: {
@@ -171,22 +167,13 @@ export default {
 </script>
 
 <style scoped>
-.slide-right-leave-active {
-  animation: slideRight 0.3s ease-out;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
 }
 
-.slide-left-leave-active {
-  animation: slideLeft 0.3s ease-out;
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
-
-@keyframes slideRight {
-  0% { transform: translateX(0px); width: 600px }
-  100% { transform: translateX(-40px); opacity: 1; width: 600px }
-}
-
-@keyframes slideLeft {
-  0% { transform: translateX(0px); width: 600px }
-  100% { transform: translateX(40px); opacity: 1; width: 600px }
-}
-
 </style>
