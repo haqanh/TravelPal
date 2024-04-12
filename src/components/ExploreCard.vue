@@ -10,7 +10,6 @@
           <!-- Guide Cover Photo -->
             <img
               :src="card.guidePicPath"
-              loading="lazy"
               alt="Image"
               class="object-cover rounded-t-2xl h-full w-full"
             />
@@ -19,7 +18,6 @@
             <!-- Profile Picture -->
             <img
               :src="card.profilePicPath"
-              loading="lazy"
               alt="profile"
               class="object-cover rounded-full h-7 w-7"
             />
