@@ -274,7 +274,7 @@ export default {
 
 /* If .max-w-7xl is restricting your width too much, try setting it to 100% or a larger max-width */
 .max-w-7xl {
-  max-width: 90%;
+  max-width: 95%;
 }
 
 /* Adjust the padding as needed to reduce side margins */
