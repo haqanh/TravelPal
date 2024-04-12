@@ -27,7 +27,7 @@ export default {
         Adventure: '#65a30d', // Lime Colour
         History: '#c026d3', // Fushia
         Science: '#d63384', // Bootstrap pink
-        Technology: '#0e7490', // Dark Cyan  
+        Technology: '#0e7490', // Dark Cya  
         Sports: '#1e40af', // Dark Blue
         Health: '#198754', // Bootstrap success green, reused
         Fashion: '#431407', // Brown
