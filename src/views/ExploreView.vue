@@ -164,9 +164,9 @@ export default {
     async mounted() {
         try {
             let [editorsChoiceData, regionalFavData, recentlyAddedData] = await Promise.all([
-            this.fetchMockGuides(['MountTaranaki', 'Taipei', 'Luxembourg', 'Mexico']),
-            this.fetchMockGuides(['Matsuno,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
-            this.fetchRecentlyAdded(['MountTaranaki', 'Taipei', 'Luxembourg', 'Mexico', 'Matsuno,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
+            this.fetchMockGuides(['NewZealand', 'Taipei', 'Luxembourg', 'Mexico']),
+            this.fetchMockGuides(['Osaka,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
+            this.fetchRecentlyAdded(['NewZealand', 'Taipei', 'Luxembourg', 'Mexico', 'Osaka,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
             ]);
 
             console.log("Editorschoicesdata", editorsChoiceData)
