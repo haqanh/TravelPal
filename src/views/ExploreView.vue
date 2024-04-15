@@ -1,19 +1,19 @@
 <template>
-    <div class="absolute inset-x-0 top-0 h-2/5">
+    <div class="absolute inset-x-0 top-0 h-1/3">
         <img src="@/assets/ExploreCrop.jpg" class="object-cover w-full h-full rounded-b-3xl" alt="Desert" />
         <div class="absolute inset-0 bg-opacity-50 rounded-b-3xl"></div>
     </div>
     <NavBar />
     <div class="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-        <h1 class="mb-1 text-5xl font-semibold text-white">Explore our guides...</h1>
+        <h1 class="text-4xl font-semibold text-white">Explore our guides...</h1>
 
         <!-- Search Bar -->
-        <div class="absolute top-3/5 left-1/2 transform -translate-x-1/2 translate-y-1/2 text-center">
-            <div class="relative mt-4">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+        <div class="absolute top-1/4 left-1/2 transform -translate-x-1/2 translate-y-1/2 text-center">
+            <div class="relative mt-[2vh]">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-[2vh]">
                 <img src="../assets/MagnifyingGlass.svg" alt="search" class="w-5 h-5">
             </span>
-            <input v-model="searchInput" type="text" placeholder="Search..." class="pl-10 p-2 w-96 h-12 rounded-lg border border-gray-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700">
+            <input v-model="searchInput" type="text" placeholder="Search..." class="pl-[5.5vh] p-[2vh] w-[60vh] h-[6.5vh] border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700">
             </div>
         </div>
     </div>
@@ -23,28 +23,30 @@
               <div class="spinner"></div>
     </div>
 
-    <div v-else class="mt-[35vh] bg-white text-left mx-auto max-w-7xl">
+    <div v-else class="mt-[30vh] bg-white text-left mx-auto max-w-7xl"> 
         <!-- Editors' Choice Section -->
-        <h2 class="ml-20 font-semibold mb-2 text-base">Editors' Choice</h2>
+        <h2 class="ml-[5vw] font-semibold mb-[2vh] text-base">Editors' Choice</h2>
         <div class="flex flex-wrap justify-center space-x-12">
             <ExploreCard v-for="card in filteredEditorsChoices" :key="card.guideTitle" :card="card" />
         </div>
 
         <!-- Regional Favourites Section -->
-        <h2 class="ml-20 font-semibold mb-2 mt-4">Regional Favourites</h2>
+        <h2 class="ml-[5vw] font-semibold mb-[2vh] mt-[3vh]">Regional Favourites</h2>
         <div class="flex flex-wrap justify-center space-x-12">
             <ExploreCard v-for="card in filteredRegionalFavs" :key="card.guideTitle" :card="card" />
         </div>
 
         <!-- Recently Added Section -->
-        <h2 v-if="recentlyAdded" class="ml-20 font-semibold mb-2 mt-4">Recently Added</h2>
+        <h2 v-if="recentlyAdded" class="ml-[5vw] font-semibold mb-[2vh] mt-[3vh]">Recently Added</h2>
         <div class="flex flex-wrap justify-center space-x-12">
-        <div class="grid grid-cols-4 gap-12">
+        <div class="grid grid-cols-4 gap-[3.5vw]">
             <ExploreCard v-for="card in filteredRecentlyAdded" :key="card.guideTitle" :card="card" /> 
         </div>
         </div>
     </div>
 </template>
+
+
 
 
 <script>
@@ -102,7 +104,6 @@ export default {
         }
     },
     methods: {
-
         async fetchMockGuides(guideIds) {
             console.log('fetchMockGuides is being called');
             let guides = [];
