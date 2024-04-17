@@ -15,6 +15,8 @@ import { db, storage} from '@/firebase'
 import { deleteDoc, doc, setDoc, GeoPoint} from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
 import { ref, getDownloadURL, uploadBytesResumable} from 'firebase/storage'
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
 
 
 export default {
@@ -229,9 +231,14 @@ export default {
       } catch (e) {
         console.error("Error adding document: ", e);
       } finally {
-        // this.isLoading = false;
-        // this.isOpen = false
+        this.isLoading = false;
+        const $toast = useToast()
+        $toast.success('Guide Successfully Added!', {
+          position: 'top'
+        })
+        this.isOpen = false
         this.$emit('close')
+
       }
     },
     async exit() {

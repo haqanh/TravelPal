@@ -2,11 +2,11 @@
   <div class="flex flex-col items-center">
     <div class="flex flex-col items-start space-y-3">
       <div
-        class="bg-gray shadow-lg w-56 rounded-3xl guideCard cursor-pointer"
+        class="bg-gray shadow-lg w-[17.5vw] rounded-3xl guideCard cursor-pointer"
         v-on:click="openGuide"
         v-if="isVisible"
       >
-        <div class="flex flex-col relative h-48 overflow-hidden bg-gray-200 rounded-3xl">
+        <div class="flex flex-col relative h-[28vh] overflow-hidden bg-gray-200 rounded-3xl">
           <!-- Guide Cover Photo -->
             <img
               :src="card.guidePicPath"
@@ -26,13 +26,13 @@
             <!-- Guide Title and Flag -->
           <div class="flex items-center absolute bottom-0 left-0 p-3">
             <!-- <img :src="card.flagPath" loading="lazy" alt="flag" /> -->
-            <span :class="getFlagClass(card.country)" class="mr-2"></span>
+            <span :class="getFlagClass(card.country)" class="mr-[0.5vw]"></span>
             <span class="ml-2 text-white font-medium text-xs drop-shadow-lg">{{ card.guideTitle }}</span>
           </div>
         </div>
       </div>
 
-      <div class="w-56 flex justify-between items-center place-items-center">
+      <div class="w-[17.5vw] flex justify-between items-center place-items-center">
         <!-- Tag  -->
         <div class="flex flex-wrap ">
           <div v-for="(tag, index) in card.tags" :key="index" class="mr-2 mb-2">
