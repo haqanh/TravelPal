@@ -48,6 +48,7 @@
         </div>
         </div>
     </div>
+    <GlobalFooter />
 </template>
 
 
@@ -60,6 +61,7 @@ import ExploreCard from '@/components/ExploreCard.vue'
 import { db } from '@/firebase';
 import { getDoc, doc, collection, query, where, getDocs } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import GlobalFooter from '@/components/GlobalFooter.vue'
 
 // import { storage } from '../firebase'
 // import { ref, getDownloadURL, getStorage} from 'firebase/storage'
@@ -68,6 +70,7 @@ export default {
     components: {
         NavBar,
         ExploreCard,
+        GlobalFooter,
     },
     data() {
         return {
@@ -105,6 +108,22 @@ export default {
             const auth = getAuth();
             const user = auth.currentUser;
             return user.email;
+        }
+    },
+    async created() {
+        try {
+            let [editorsChoiceData, regionalFavData, recentlyAddedData] = await Promise.all([
+            this.fetchMockGuides(['NewZealand', 'Taipei', 'Luxembourg', 'Mexico']),
+            this.fetchMockGuides(['Osaka,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
+            this.fetchRecentlyAdded(['NewZealand', 'Taipei', 'Luxembourg', 'Mexico', 'Osaka,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
+            ]);
+
+            this.editorsChoices = editorsChoiceData;
+            this.regionalFavs = regionalFavData;
+            this.recentlyAdded = recentlyAddedData;
+            this.isLoading = false
+        } catch (error) {
+            console.error('Error fetching data:', error);
         }
     },
     methods: {
@@ -166,28 +185,28 @@ export default {
             }
         },
     },
-    async mounted() {
-        try {
-            let [editorsChoiceData, regionalFavData, recentlyAddedData] = await Promise.all([
-            this.fetchMockGuides(['NewZealand', 'Taipei', 'Luxembourg', 'Mexico']),
-            this.fetchMockGuides(['Osaka,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
-            this.fetchRecentlyAdded(['NewZealand', 'Taipei', 'Luxembourg', 'Mexico', 'Osaka,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
-            ]);
+    // async mounted() {
+    //     try {
+    //         let [editorsChoiceData, regionalFavData, recentlyAddedData] = await Promise.all([
+    //         this.fetchMockGuides(['NewZealand', 'Taipei', 'Luxembourg', 'Mexico']),
+    //         this.fetchMockGuides(['Osaka,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
+    //         this.fetchRecentlyAdded(['NewZealand', 'Taipei', 'Luxembourg', 'Mexico', 'Osaka,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
+    //         ]);
 
-            console.log("Editorschoicesdata", editorsChoiceData)
-            console.log("RegionalFavsdata", regionalFavData)
-            console.log("RecentlyAddedData", recentlyAddedData)
-            this.editorsChoices = editorsChoiceData;
-            this.regionalFavs = regionalFavData;
-            this.recentlyAdded = recentlyAddedData;
-            console.log("Editorschoices", this.editorsChoices)
-            console.log("RegionalFavs", this.regionalFavs)
-            console.log("RecentlyAdded", this.recentlyAdded)
-            this.isLoading = false
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    },
+    //         console.log("Editorschoicesdata", editorsChoiceData)
+    //         console.log("RegionalFavsdata", regionalFavData)
+    //         console.log("RecentlyAddedData", recentlyAddedData)
+    //         this.editorsChoices = editorsChoiceData;
+    //         this.regionalFavs = regionalFavData;
+    //         this.recentlyAdded = recentlyAddedData;
+    //         console.log("Editorschoices", this.editorsChoices)
+    //         console.log("RegionalFavs", this.regionalFavs)
+    //         console.log("RecentlyAdded", this.recentlyAdded)
+    //         this.isLoading = false
+    //     } catch (error) {
+    //         console.error('Error fetching data:', error);
+    //     }
+    // },
 }
 </script>
 

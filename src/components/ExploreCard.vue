@@ -6,11 +6,10 @@
         v-on:click="openGuide"
         v-if="isVisible"
       >
-        <div class="flex flex-col relative h-[32vh] overflow-hidden bg-gray-200 rounded-3xl">
+        <div class="flex flex-col relative h-[28vh] overflow-hidden bg-gray-200 rounded-3xl">
           <!-- Guide Cover Photo -->
             <img
               :src="card.guidePicPath"
-              loading="lazy"
               alt="Image"
               class="object-cover rounded-t-2xl h-full w-full"
             />
@@ -19,7 +18,6 @@
             <!-- Profile Picture -->
             <img
               :src="card.profilePicPath"
-              loading="lazy"
               alt="profile"
               class="object-cover rounded-full h-7 w-7"
             />
@@ -34,7 +32,7 @@
         </div>
       </div>
 
-      <div class="w-56 flex justify-between items-center place-items-center">
+      <div class="w-[17.5vw] flex justify-between items-center place-items-center">
         <!-- Tag  -->
         <div class="flex flex-wrap ">
           <div v-for="(tag, index) in card.tags" :key="index" class="mr-2 mb-2">
