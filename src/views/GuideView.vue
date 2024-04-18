@@ -18,7 +18,7 @@
 
   <div class="flex flex-grow ">
       <!-- Guide Contents sidebar -->
-      <div class="guide-sidebar w-1/5 p-8 sticky top-0 h-1/3 z-20 mt-[32vh]">
+      <div class="guide-sidebar w-1/5 p-9 sticky top-0 h-1/3 z-20 mt-[32vh]">
         <GuideNav :sections="sections" :activeSection="activeSection" class="h-screen overflow-y-auto sticky top-0 bottom-0"/>
       </div>
       <main id="guideContent" class="guide-content mt-[35vh] overflow-auto px-10 w-3/4 ">
@@ -122,29 +122,39 @@
   const activeSection = ref(sections[0].id);
 
   const handleScroll = () => {
-    //console.log('Scrolling...');
-    let currentSection = sections[0].id;
-    let minOffset = Number.POSITIVE_INFINITY;
-    
+    // Threshold to consider that the user is at the bottom of the page, e.g., 10 pixels from the bottom
+    const bottomThreshold = 10;
+    const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - bottomThreshold;
 
-    sections.forEach((section) => {
-        const element = document.getElementById(section.id);
-        if (element) {
-        const rect = element.getBoundingClientRect();
-        // Use an offset value like header height if needed
-        const offset = 0; 
-        const top = rect.top + offset;
+    if (scrolledToBottom) {
+        // If the user is at the bottom, set the active section to the last section
+        activeSection.value = sections[sections.length - 1].id;
+    } else {
+        let currentSection = sections[0].id;
+        let minOffset = Number.POSITIVE_INFINITY;
 
-        if (top >= 0 && top < minOffset) {
-            currentSection = section.id;
-            minOffset = top;
-        }
+        sections.forEach((section) => {
+            const element = document.getElementById(section.id);
+            if (element) {
+                const rect = element.getBoundingClientRect();
+                // Use an offset value like header height if needed
+                const offset = 0; 
+                const top = rect.top + offset;
+                const bottom = rect.bottom + offset;
+
+                // Check if the element is visible enough to be considered as the active section
+                // This condition checks if the element's top is within the viewport and also if a significant portion of it is visible
+                if ((top >= 0 && top < minOffset) || (top < 0 && bottom > 0)) {
+                    currentSection = section.id;
+                    minOffset = Math.abs(top);  // Choosing the section that is closest to aligning to the top
+                }
+            }
+        });
+
+        activeSection.value = currentSection;
     }
-  });
-      
-  //console.log(currentSection); // Add this line to debug
-  activeSection.value = currentSection;
 };
+
 
 onMounted(async () => {
   window.addEventListener('scroll', handleScroll);
@@ -194,7 +204,7 @@ onMounted(async () => {
         ...doc.data()
       }));
 
-      const nearbyPlacesCollectionRef = collection(docRef.ref, 'nearbyPlaces');
+      const nearbyPlacesCollectionRef = collection(docRef.ref, 'placesNearby');
       const nearbyPlacesSnapshot = await getDocs(nearbyPlacesCollectionRef);
       nearbyPlaces.value = nearbyPlacesSnapshot.docs.map(doc => ({
         id: doc.id,

@@ -63,5 +63,5 @@ export default {
 </script>
 
 <template>
-    <div ref="mapElement" style="height: 300px; width: 300px;"></div>
+    <div ref="mapElement" style="height: 30vh; width: 30vh;"></div>
 </template>

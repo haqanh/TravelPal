@@ -151,6 +151,9 @@
           Tags: this.tags,
         });
         console.log('Trip part 2 saved successfully');
+        $toast.success('Trip Successfully Added!', {
+          position: 'top'
+        })
     },
     fieldsFilled() {
       return this.summary && this.tags.length > 0;

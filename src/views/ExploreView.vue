@@ -1,19 +1,19 @@
 <template>
-    <div class="absolute inset-x-0 top-0 h-2/5">
+    <div class="absolute inset-x-0 top-0 h-1/3">
         <img src="@/assets/ExploreCrop.jpg" class="object-cover w-full h-full rounded-b-3xl" alt="Desert" />
-        <div class="absolute inset-0 bg-opacity-50 rounded-b-3xl"></div>
+        <div class="absolute inset-0 bg-opacity-50 rounded-b-xl"></div>
     </div>
     <NavBar />
     <div class="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-        <h1 class="mb-1 text-5xl font-semibold text-white">Explore our guides...</h1>
+        <h1 class="text-4xl font-semibold text-white">Explore our guides...</h1>
 
         <!-- Search Bar -->
-        <div class="absolute top-3/5 left-1/2 transform -translate-x-1/2 translate-y-1/2 text-center">
-            <div class="relative mt-4">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+        <div class="absolute top-1/4 left-1/2 transform -translate-x-1/2 translate-y-1/2 text-center">
+            <div class="relative mt-[2vh]">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-[2vh]">
                 <img src="../assets/MagnifyingGlass.svg" alt="search" class="w-5 h-5">
             </span>
-            <input v-model="searchInput" type="text" placeholder="Search..." class="pl-10 p-2 w-96 h-12 rounded-lg border border-gray-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700">
+            <input v-model="searchInput" type="text" placeholder="Search..." class="pl-[5.5vh] p-[2vh] w-[65vh] h-[6.5vh] border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700">
             </div>
         </div>
     </div>
@@ -23,28 +23,35 @@
               <div class="spinner"></div>
     </div>
 
-    <div v-else class="mt-[35vh] bg-white text-left mx-auto max-w-7xl">
+    <div v-else class="mt-[30vh] bg-white text-left mx-auto max-w-7xl"> 
         <!-- Editors' Choice Section -->
-        <h2 class="ml-20 font-semibold mb-2 text-base">Editors' Choice</h2>
+        <h2 class="ml-[5vw] font-semibold mb-[2vh] text-base">Editors' Choice</h2>
         <div class="flex flex-wrap justify-center space-x-12">
-            <ExploreCard v-for="card in filteredEditorsChoices" :key="card.guideTitle" :card="card" />
+            <div class="grid grid-cols-4 gap-[3.8vw]">
+                <ExploreCard v-for="card in filteredEditorsChoices" :key="card.guideTitle" :card="card" />
+            </div>
         </div>
 
         <!-- Regional Favourites Section -->
-        <h2 class="ml-20 font-semibold mb-2 mt-4">Regional Favourites</h2>
+        <h2 class="ml-[5vw] font-semibold mb-[2vh] mt-[3vh]">Regional Favourites</h2>
         <div class="flex flex-wrap justify-center space-x-12">
-            <ExploreCard v-for="card in filteredRegionalFavs" :key="card.guideTitle" :card="card" />
+            <div class="grid grid-cols-4 gap-[3.8vw]">
+                <ExploreCard v-for="card in filteredRegionalFavs" :key="card.guideTitle" :card="card" />
+            </div>
         </div>
 
         <!-- Recently Added Section -->
-        <h2 v-if="recentlyAdded" class="ml-20 font-semibold mb-2 mt-4">Recently Added</h2>
+        <h2 v-if="recentlyAdded" class="ml-[5vw] font-semibold mb-[2vh] mt-[3vh]">Recently Added</h2>
         <div class="flex flex-wrap justify-center space-x-12">
-        <div class="grid grid-cols-4 gap-12">
-            <!-- <ExploreCard v-for="card in filteredRecentlyAdded" :key="card.guideTitle" :card="card" />  -->
+        <div class="grid grid-cols-4 gap-[3.8vw]">
+            <ExploreCard v-for="card in filteredRecentlyAdded" :key="card.guideTitle" :card="card" /> 
         </div>
         </div>
     </div>
+    <GlobalFooter />
 </template>
+
+
 
 
 <script>
@@ -53,7 +60,8 @@ import ExploreCard from '@/components/ExploreCard.vue'
 
 import { db } from '@/firebase';
 import { getDoc, doc, collection, query, where, getDocs } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import GlobalFooter from '@/components/GlobalFooter.vue'
 
 // import { storage } from '../firebase'
 // import { ref, getDownloadURL, getStorage} from 'firebase/storage'
@@ -62,6 +70,7 @@ export default {
     components: {
         NavBar,
         ExploreCard,
+        GlobalFooter,
     },
     data() {
         return {
@@ -95,75 +104,109 @@ export default {
                 return this.recentlyAdded.filter(guide => guide.guideTitle.toLowerCase().startsWith(this.searchInput.toLowerCase()));
             }
         },
+        userEmail() {
+            const auth = getAuth();
+            const user = auth.currentUser;
+            return user.email;
+        }
+    },
+    async created() {
+        try {
+            let [editorsChoiceData, regionalFavData, recentlyAddedData] = await Promise.all([
+            this.fetchMockGuides(['NewZealand', 'Taipei', 'Luxembourg', 'Mexico']),
+            this.fetchMockGuides(['Osaka,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
+            this.fetchRecentlyAdded(['NewZealand', 'Taipei', 'Luxembourg', 'Mexico', 'Osaka,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
+            ]);
+
+            this.editorsChoices = editorsChoiceData;
+            this.regionalFavs = regionalFavData;
+            this.recentlyAdded = recentlyAddedData;
+            this.isLoading = false
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
     },
     methods: {
         async fetchMockGuides(guideIds) {
-            const guides = [];
-            const auth = getAuth();
-            const user = auth.currentUser;
+            console.log('fetchMockGuides is being called');
+            let guides = [];
 
-            if (user) {
-                for (const id of guideIds) {
-                    const docRef = doc(db, 'guides', id);
-                    const docSnap = await getDoc(docRef);
-                    if (docSnap.exists) {
-                        const data = docSnap.data();
-                        console.log(data)
-                        guides.push({
-                            guidePicPath: data.Cover_Photo,
-                            flagPath: data.Flag_Photo,
-                            profilePicPath: data.Profile_Photo,
-                            guideTitle: data.Guide_Title,
-                            tags: data.Tags,
-                            isLiked: data.Liked_By.includes(user.email),
-                            country: data.Country,
-                            guideId: docRef.id,
-                        });
-                    } else {
-                        console.log(`No such document found with id: ${id}`);
-                    }
+            try {
+            for (const id of guideIds) {
+                const docRef = doc(db, 'guides', id);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists) {
+                const data = docSnap.data();
+                console.log(data);
+                guides.push({
+                    guidePicPath: data.Cover_Photo,
+                    flagPath: data.Flag_Photo,
+                    profilePicPath: data.Profile_Photo,
+                    guideTitle: data.Guide_Title,
+                    tags: data.Tags,
+                    country: data.Country,
+                    guideId: docRef.id,
+                    isLiked: data.Liked_By.includes(this.userEmail) ? true : false,
+                });
+                } else {
+                console.log(`No such document found with id: ${id}`);
                 }
             }
             return guides;
+            } catch (error) {
+            console.error('Error fetching mock guides:', error);
+            throw error; // Rethrow the error to handle it in the caller
+            }
         },
+
         async fetchRecentlyAdded(excludeMock) {
+            console.log('fetchRecentlyAdded is being called');
+            let guides = [];
+
+            try {
             const guidesRef = collection(db, 'guides');
             const queryRef = query(guidesRef, where('__name__', 'not-in', excludeMock));
-
-            const auth = getAuth();
-            const user = auth.currentUser;
-            let guides = [];
-            if (user) {
-                try {
-                    const querySnapshotGuides = await getDocs(queryRef);
-                    guides = querySnapshotGuides.docs.map(doc => ({
-                        guidePicPath: doc.data().Cover_Photo,
-                        flagPath: doc.data().Flag_Photo,
-                        profilePicPath: doc.data().Profile_Photo,
-                        guideTitle: doc.data().Guide_Title,
-                        tags: doc.data().Tags,
-                        isLiked: doc.data().Liked_By.includes(user.email),
-                        country: doc.data().Country,
-                        guideId: doc.id,
-                    }));
-                } catch (error) {
-                    console.log(error);
-                }
-                return guides;
-            }  
+            const querySnapshotGuides = await getDocs(queryRef);
+            guides = querySnapshotGuides.docs.map(doc => ({
+                guidePicPath: doc.data().Cover_Photo,
+                flagPath: doc.data().Flag_Photo,
+                profilePicPath: doc.data().Profile_Photo,
+                guideTitle: doc.data().Guide_Title,
+                tags: doc.data().Tags,
+                country: doc.data().Country,
+                guideId: doc.id,
+                isLiked: doc.data().Liked_By.includes(this.userEmail) ? true : false,
+            }));
+            return guides;
+            } catch (error) {
+            console.error('Error fetching recently added guides:', error);
+            throw error; // Rethrow the error to handle it in the caller
+            }
         },
     },
-    async mounted() {
-        const [editorsChoiceData, regionalFavData, recentlyAddedData] = await Promise.all([
-            this.fetchMockGuides(['MountTaranaki', 'Taipei', 'Luxembourg', 'Mexico']),
-            this.fetchMockGuides(['Matsuno,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
-            this.fetchRecentlyAdded(['MountTaranaki', 'Taipei', 'Luxembourg', 'Mexico', 'Matsuno,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
-        ]);
-        this.editorsChoices = editorsChoiceData;
-        this.regionalFavs = regionalFavData;
-        this.recentlyAdded = recentlyAddedData;
-        this.isLoading = false;
-    },
+    // async mounted() {
+    //     try {
+    //         let [editorsChoiceData, regionalFavData, recentlyAddedData] = await Promise.all([
+    //         this.fetchMockGuides(['NewZealand', 'Taipei', 'Luxembourg', 'Mexico']),
+    //         this.fetchMockGuides(['Osaka,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
+    //         this.fetchRecentlyAdded(['NewZealand', 'Taipei', 'Luxembourg', 'Mexico', 'Osaka,Japan', 'Bangkok', 'Agra,India', 'Marbella']),
+    //         ]);
+
+    //         console.log("Editorschoicesdata", editorsChoiceData)
+    //         console.log("RegionalFavsdata", regionalFavData)
+    //         console.log("RecentlyAddedData", recentlyAddedData)
+    //         this.editorsChoices = editorsChoiceData;
+    //         this.regionalFavs = regionalFavData;
+    //         this.recentlyAdded = recentlyAddedData;
+    //         console.log("Editorschoices", this.editorsChoices)
+    //         console.log("RegionalFavs", this.regionalFavs)
+    //         console.log("RecentlyAdded", this.recentlyAdded)
+    //         this.isLoading = false
+    //     } catch (error) {
+    //         console.error('Error fetching data:', error);
+    //     }
+    // },
 }
 </script>
 
