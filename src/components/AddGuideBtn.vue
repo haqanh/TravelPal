@@ -7,7 +7,7 @@ import {
   TransitionRoot,
   TransitionChild
 } from '@headlessui/vue'
-import { ref, uploadString, getDownloadURL } from 'firebase/storage'
+import { ref, uploadString, getDownloadURL, getStorage } from 'firebase/storage'
 import { db, storage } from '@/firebase'
 import { collection, addDoc, updateDoc, doc, setDoc, serverTimestamp, getDoc , GeoPoint} from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
@@ -16,6 +16,10 @@ import GlobalTag from './GlobalTag.vue';
 
 import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
+
+import defaultAvatar from '@/assets/DefaultAvatar.png';
+import { firebaseApp } from '@/firebase';
+
 
 
 export default {
@@ -50,6 +54,9 @@ export default {
       hovering: null,
       lat: 0,
       lng: 0,
+      defaultAvatar: defaultAvatar,
+      userProfilePhoto: '',
+      userName: '',
     }
   },
   methods: {
@@ -104,12 +111,38 @@ export default {
         })
       }
     },
+    async getUserPhoto(user) {
+      const storage = getStorage(firebaseApp)
+      const fileRef = ref(storage, `users/${user.email}/profile_pic/profile_pic.jpg`)
+      
+      try {
+        const fileUrl = await getDownloadURL(fileRef)
+        this.userProfilePhoto = fileUrl
+      } catch (err) {
+        this.userProfilePhoto = this.defaultAvatar // Use the imported default avatar
+      }
+    },
+    async getUserName(user) {
+      try {
+        const userRef = doc(db, 'users', user.email)
+        const userSnapshot = await getDoc(userRef)
+        this.userName = userSnapshot.data().Name
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    },
     async addGuide() {
       
         try {
           const auth = getAuth()
           const user = auth.currentUser
-          const userRef = doc(db, 'users', user.email)
+          
+          //retrieve user profile photo
+          await this.getUserPhoto(user)
+
+          // retrieve user name
+          await this.getUserName(user)
   
           const docRef = await addDoc(collection(db, 'users', user.email, "guides"), {
             Guide_Title: this.guideTitle,
@@ -121,6 +154,8 @@ export default {
             Country: this.country,
             Tags: this.selectedTags,
             Liked_By: [],
+            Profile_Photo: this.userProfilePhoto,
+            Created_By: this.userName,
           })
           
           console.log('Doc created')
@@ -145,9 +180,9 @@ export default {
 
           console.log('Doc updated in user')
 
-          // const userSnapshot = await getDoc(userRef);
-          // const userProfile = userSnapshot.data().Profile_Photo; 
-          const userProfile = "https://firebasestorage.googleapis.com/v0/b/travelpal-bt3103.appspot.com/o/icons8-user-96.png?alt=media&token=3753cfb2-7430-41de-b2e2-618cd3ca12dd"
+          // // const userSnapshot = await getDoc(userRef);
+          // // const userProfile = userSnapshot.data().Profile_Photo; 
+          // const userProfile = "https://firebasestorage.googleapis.com/v0/b/travelpal-bt3103.appspot.com/o/icons8-user-96.png?alt=media&token=3753cfb2-7430-41de-b2e2-618cd3ca12dd"
 
           const globalGuidesRef = doc(collection(db, 'guides'), this.guideId);
           await setDoc(globalGuidesRef, {
@@ -160,8 +195,9 @@ export default {
               Country: this.country,
               Cover_Photo: photoURL,
               Tags: this.selectedTags,
-              Profile_Photo: userProfile,
+              Profile_Photo: this.userProfilePhoto,
               Liked_By: [],
+              Created_By: this.userName,
           });
           console.log('Doc created in global guides collection');
 
