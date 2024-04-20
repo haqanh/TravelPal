@@ -28,17 +28,16 @@
   </div>
 
   <!-- Loading spinner -->
-  <transition name="fade" mode="out-in">
+  <!-- <transition name="fade" mode="out-in">
     <div
         v-if="isLoading"
         class="loading-spinner fade-in fixed top-0 left-0 w-full h-full flex items-center justify-center z-50"
     >
         <div class="spinner"></div>
     </div>
-  </transition>
-    
+  </transition> -->
 
-  <div v-if="!isLoading" class="mt-[30vh] bg-white text-left mx-auto max-w-7xl">
+  <div class="mt-[30vh] bg-white text-left mx-auto max-w-7xl">
     <!-- Editors' Choice Section -->
     <h2 class="ml-[5vw] font-semibold mb-[2vh] text-base">Editors' Choice</h2>
     <div class="flex flex-wrap justify-center space-x-12">
