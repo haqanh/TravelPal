@@ -59,7 +59,7 @@ import NavBar from '@/components/NavBar.vue'
 import ExploreCard from '@/components/ExploreCard.vue'
 
 import { db } from '@/firebase';
-import { getDoc, doc, collection, query, where, getDocs } from 'firebase/firestore';
+import { getDoc, doc, collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import GlobalFooter from '@/components/GlobalFooter.vue'
 
@@ -160,30 +160,31 @@ export default {
             }
         },
 
-        async fetchRecentlyAdded(excludeMock) {
-            console.log('fetchRecentlyAdded is being called');
-            let guides = [];
+        async fetchRecentlyAdded() {
+    console.log('fetchRecentlyAdded is being called');
+    let guides = [];
 
-            try {
-            const guidesRef = collection(db, 'guides');
-            const queryRef = query(guidesRef, where('__name__', 'not-in', excludeMock));
-            const querySnapshotGuides = await getDocs(queryRef);
-            guides = querySnapshotGuides.docs.map(doc => ({
-                guidePicPath: doc.data().Cover_Photo,
-                flagPath: doc.data().Flag_Photo,
-                profilePicPath: doc.data().Profile_Photo,
-                guideTitle: doc.data().Guide_Title,
-                tags: doc.data().Tags,
-                country: doc.data().Country,
-                guideId: doc.id,
-                isLiked: doc.data().Liked_By.includes(this.userEmail) ? true : false,
-            }));
-            return guides;
-            } catch (error) {
-            console.error('Error fetching recently added guides:', error);
-            throw error; // Rethrow the error to handle it in the caller
-            }
-        },
+    try {
+        const guidesRef = collection(db, 'guides');
+        // Sort by 'Last_Edited' in descending order to get the most recently updated guides
+        const queryRef = query(guidesRef, orderBy('Last_Edited', 'desc'), limit(4));
+        const querySnapshotGuides = await getDocs(queryRef);
+        guides = querySnapshotGuides.docs.map(doc => ({
+            guidePicPath: doc.data().Cover_Photo,
+            flagPath: doc.data().Flag_Photo,
+            profilePicPath: doc.data().Profile_Photo,
+            guideTitle: doc.data().Guide_Title,
+            tags: doc.data().Tags,
+            country: doc.data().Country,
+            guideId: doc.id,
+            isLiked: doc.data().Liked_By.includes(this.userEmail) ? true : false,
+        }));
+        return guides;
+    } catch (error) {
+        console.error('Error fetching recently added guides:', error);
+        throw error; // Rethrow the error to handle it in the caller
+    }
+}
     },
     // async mounted() {
     //     try {
