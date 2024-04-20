@@ -37,7 +37,7 @@
     </div>
   </transition> -->
 
-  <div class="mt-[30vh] bg-white text-left mx-auto max-w-7xl">
+  <div v-if= "!isLoading" class="mt-[30vh] bg-white text-left mx-auto max-w-7xl">
     <!-- Editors' Choice Section -->
     <h2 class="ml-[5vw] font-semibold mb-[2vh] text-base">Editors' Choice</h2>
     <div class="flex flex-wrap justify-center space-x-12">
