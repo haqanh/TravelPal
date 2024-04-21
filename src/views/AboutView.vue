@@ -3,34 +3,33 @@ import { RouterView } from 'vue-router'
 import { useRouter } from 'vue-router'
 
 import { onMounted, ref } from 'vue'
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 import MapInput from '../components/MapInput.vue'
 import MapDisplay from '../components/MapDisplay.vue'
 import GuideComponent from '../components/GuideComponent.vue'
 
 const router = useRouter()
 
-const isLoggedIn = ref(false);
+const isLoggedIn = ref(false)
 
-let auth : any;
+let auth: any
 
 onMounted(() => {
-  auth = getAuth();
+  auth = getAuth()
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      isLoggedIn.value = true;
+      isLoggedIn.value = true
     } else {
-      isLoggedIn.value = false;
+      isLoggedIn.value = false
     }
-  });
-  
-});
+  })
+})
 
 const handleSignOut = () => {
   signOut(auth).then(() => {
-    router.push('/');
-  });
-};
+    router.push('/')
+  })
+}
 </script>
 
 <template>
@@ -40,22 +39,15 @@ const handleSignOut = () => {
     <router-view></router-view>
     <MapInput />
 
-    <div className ="justify-center align-middle m-10 "> 
-
-  </div>
-  
+    <div className="justify-center align-middle m-10 "></div>
   </div>
 
   <div className="m-10">
-    <GuideComponent /> 
+    <GuideComponent />
   </div>
-
-  
-  
-  
 </template>
 
-<style>
+<style scoped>
 @media (min-width: 1024px) {
   .about {
     min-height: 100vh;
@@ -64,4 +56,3 @@ const handleSignOut = () => {
   }
 }
 </style>
-
