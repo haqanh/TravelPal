@@ -252,7 +252,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .dropdown-toggle {
   background-color: transparent;
   border: none;
