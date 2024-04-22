@@ -22,7 +22,7 @@
         <GuideNav :createdBy="createdBy" :profilePicUrl="profilePhoto" :sections="sections" :activeSection="activeSection" class="h-screen overflow-y-auto sticky top-0 bottom-0"/>
       </div>
       <main id="guideContent" class="guide-content mt-[35vh] overflow-auto px-10 w-3/4 ">
-        <h1 class="text-lg italic font-light py-4">
+        <h1 class="text-lg italic font-light text-justify py-4">
         " {{ overview }} "
         </h1>
         <section id="generalAdvice" class="pb-4">
@@ -30,7 +30,7 @@
           <h1 class="text-2xl lg:text-3xl xl:text-4xl font-bold">
             General Advice
           </h1>
-          <h1 class="text-lg my-4">
+          <h1 class="text-lg my-4 text-justify text-gray-600">
             <h1 v-for="advice in generalAdvice" :key="advice.id">
               {{ advice.content }}
             </h1>
