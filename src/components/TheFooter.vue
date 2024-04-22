@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-3 mt-auto w-11/12 mx-auto mb-4">
+  <div class="grid grid-cols-3 mt-3 w-11/12 mx-auto mb-4">
     <div v-if="page != 1" @click="goPrevPage(), pageChange()" class="flex cursor-pointer">
       <svg class="w-7 h-7 text-[#4285F4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
