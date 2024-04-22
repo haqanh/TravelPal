@@ -8,14 +8,11 @@ import LandingPage from '@/views/LandingPage.vue'
 
 // import Home from '../views/Home.vue'
 import ViewTrip from '../views/ViewTrip.vue'
-import Sidebar from '../components/SideBar.vue'
 import Explore from '../views/ExploreView.vue';
 import UserProfilingView from '../views/UserProfilingView.vue'
 import Dashboard from '../views/DashboardView.vue'
 import UserProfile from '../views/UserProfile.vue'
-import AddGuideBtn from '../components/AddGuideBtn.vue'
 import FavouritesView from '../views/FavouritesView.vue'
-import UserProfileVue from '../views/UserProfile.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,24 +36,33 @@ const router = createRouter({
     {
       path: '/add-trip',
       name: 'AddTrip',
-      component: AddTrip
+      component: AddTrip,
+      meta: {
+        requiresAuth: true,
+      }
     },
     {
       path: '/add-guide/second',
       name: 'AddGuide2',
-      component: AddGuide2
+      component: AddGuide2,
+      meta: {
+        requiresAuth: true,
+      }
     },
     {
       path: '/guide/:docRef',
       name: 'GuideView',
-      component: GuideView
+      component: GuideView,
+      meta: {
+        requiresAuth: true,
+      }
     },
     // {
     //   path: '/viewtrip',
     //   name: 'viewtrip',
     //   component: ViewTrip
     // },
-    { path: '/sidebar', name: 'sidebar', component: Sidebar },
+    //{ path: '/sidebar', name: 'sidebar', component: Sidebar },
     {
       path: '/userprofiling',
       name: 'userprofiling',
@@ -64,21 +70,6 @@ const router = createRouter({
       meta: {
         requiresAuth: true
       }
-    },
-    {
-      path: '/explore',
-      name: 'explore',
-      component: Explore
-    },
-    {
-      path: '/edit-trip',
-      name: 'edit-trip',
-      component: EditTrip
-    },
-    {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: Dashboard
     },
     {
       path: '/viewtrip/:id', 
@@ -89,42 +80,43 @@ const router = createRouter({
     {
       path: '/favourites',
       name: 'favourites',
-      component: FavouritesView
-    },
-    {
-      path: '/explore',
-      name: 'explore',
-      component: Explore
-    },
-    {
-      path: '/edit-trip',
-      name: 'edit-trip',
-      component: EditTrip
-    },
-    {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: Dashboard
-
-    },
-    {
-      path: '/user-profile',
-      name: 'user-profile',
-      component: UserProfile,
+      component: FavouritesView,
       meta: {
         requiresAuth: true,
       }
     },
-                              {
-      path: '/add-guide-btn',
-      name: 'add-guide-btn',
-      component: AddGuideBtn,
+    {
+      path: '/explore',
+      name: 'explore',
+      component: Explore,
+      meta: {
+        requiresAuth: true,
+      }
     },
     {
-      path: '/sidebar',
-      name: 'sidebar',
-      component: Sidebar
+      path: '/edit-trip',
+      name: 'edit-trip',
+      component: EditTrip,
+      meta: {
+        requiresAuth: true,
+      }
     },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: UserProfile,
+      meta: {
+        requiresAuth: true,
+      }
+    }
   ]
 })
 

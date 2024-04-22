@@ -1,7 +1,7 @@
 <template>
-  <div class="flex justify-center items-center align-middle min-h-screen min-w-full font-poppins absolute top-0 backdrop-filter backdrop-brightness-75 backdrop-blur-md">
-    <div class="flex flex-col justify-between h-[600px] w-[600px] shadow-2xl rounded-3xl bg-white relative">
-      <hr class="relative h-[1px] border-0 bg-gray-600 top-[6rem]" />
+  <div class="flex h-screen justify-center items-center align-middle min-h-screen min-w-full font-poppins absolute top-0 backdrop-filter backdrop-brightness-75 backdrop-blur-md">
+    <div class="flex flex-col justify-between w-[600px] shadow-2xl rounded-3xl bg-white relative overflow-auto">
+      <!-- <hr class="relative h-[1px] border-0 bg-gray-600 top-[6rem]" /> -->
       <keep-alive>
         <transition name="fade" mode="out-in">
         <keep-alive>
@@ -18,6 +18,7 @@
           :privateOrPublic="privateOrPublic" @update-private-or-public="updatePrivateOrPublic"
           :selectedCountries="selectedCountries" @toggle-country="toggleCountry"
           :selectedInterests="selectedInterests" @toggle-interest="toggleInterest"
+          class="h-[80vh] overflow-auto scrollbar"
         />
         </keep-alive>
         </transition>
@@ -175,5 +176,27 @@ export default {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 10px; 
+  height: 10px; 
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+.scrollbar::-webkit-scrollbar-button {
+  display: none; 
 }
 </style>

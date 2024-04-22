@@ -32,7 +32,7 @@
           My Travels
         </h1>
         <div class="border-b border-[#D9D9D9] w-[100vh] mx-[2.6vh] ml-[10.5vh] flex-shrink-0"></div>
-        <button class="flex-shrink-0" @click="toggleAddTrip">
+        <button class="flex-shrink-0 hover:scale-125" @click="toggleAddTrip">
           <img src="../assets/Add Button.svg" alt="Add Trip" />
         </button>
       </div>
@@ -57,7 +57,7 @@
           My Guides
         </h1>
         <div class="border-b border-[#D9D9D9] w-[90vh] mx-[2.6vh] ml-[20.5vh] flex-shrink-0"></div>
-        <button class="flex-shrink-0" @click="toggleAddGuide">
+        <button class="flex-shrink-0 hover:scale-125" @click="toggleAddGuide">
           <img src="../assets/Add Button.svg" alt="Add Guide" />
         </button>
       </div>

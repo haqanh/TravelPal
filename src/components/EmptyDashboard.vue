@@ -3,7 +3,7 @@
     <div class="NavBarImage pointer-events-none">
       <EmptyNavBar />
     </div>
-    <div class="flex pointer-events-none">
+    <div class="flex pointer-events-none h-[80vh]">
       <EmptySideBar />
       <div class="w-full p-10 my-10 mx-10">
         <div class="DashboardContents flex flex-col lg:flex-row justify-between lg:items-center -mx-10">

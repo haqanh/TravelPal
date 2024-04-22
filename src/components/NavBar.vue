@@ -103,10 +103,15 @@
               v-show="dropdownOpen"
               class="dropdown-menu absolute right-0 bg-white text-gray-700 rounded-lg shadow-lg w-48 mt-2"
             >
-              <a href="/user-profile" class="block px-4 py-2 hover:bg-gray-100 rounded-lg"
+              <a href="/profile" class="block px-4 py-2 hover:bg-gray-100 rounded-lg"
                 >Your Profile</a
               >
-              <a href="/" class="block px-4 py-2 hover:bg-gray-100 rounded-lg">Logout</a>
+              <a
+                href="#"
+                class="block px-4 py-2 hover:bg-gray-100 rounded-lg"
+                @click.prevent="logout"
+                >Logout</a
+              >
             </div>
           </transition>
         </div>
@@ -146,7 +151,7 @@
 
 <script lang="ts">
 import { firebaseApp } from '@/firebase'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 import { getStorage, ref, getDownloadURL } from 'firebase/storage'
 import defaultAvatar from '@/assets/DefaultAvatar.png'
 
@@ -186,6 +191,16 @@ export default {
       } catch (err) {
         this.selectedPhoto = this.defaultAvatar // Use the imported default avatar
       }
+    },
+    logout() {
+      const auth = getAuth()
+      signOut(auth)
+        .then(() => {
+          this.$router.replace('/') // Redirect to homepage or login page after logout
+        })
+        .catch((error) => {
+          console.error('Logout Failed', error)
+        })
     },
     toggleDropdown() {
       this.dropdownOpen = !this.dropdownOpen
@@ -239,7 +254,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .dropdown-toggle {
   background-color: transparent;
   border: none;

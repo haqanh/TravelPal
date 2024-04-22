@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <div class="pt-8 pb-6">
+    <div class="pt-8 pb-6 border-b-[1px] border-black">
       <p class="font-bold text-3xl">Help us learn more about you!</p>
     </div>
     <div class="pt-5 pb-3">

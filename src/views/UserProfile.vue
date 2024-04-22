@@ -44,25 +44,25 @@
           </div>
           <div className='mb-10 mr-10'>
             <h1 className='text-3xl mb-2 text-[#3F3D3D]'>Gender</h1>
-            <h3 className='bg-gray-200 text-black rounded py-4 px-2 text-xl'>{{ this.genderVal }}</h3>
+            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ this.genderVal }}</h3>
           </div>
           <div className='mb-10 mr-10'>
             <h1 className='text-3xl mb-2 text-[#3F3D3D]'>Travel frequency</h1>
-            <h3 className='bg-gray-200 text-black rounded py-4 px-2 text-xl'>{{ this.travelFreqVal }}</h3>
+            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ this.travelFreqVal }}</h3>
           </div>
           <div className='mb-10 mr-10'>
             <h1 className='text-3xl mb-2 text-[#3F3D3D]'>Travel companions</h1>
-            <h3 className='bg-gray-200 text-black rounded py-4 px-2 text-xl'>{{ this.travelCompVal }}</h3>
+            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ this.travelCompVal }}</h3>
           </div>
         </div>
         <div className="w-full">
           <div className='mb-10'>
             <h1 className='text-3xl mb-2 text-[#3F3D3D]'>Steps walked</h1>
-            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>1234</h3>
+            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ formatNumber(this.steps) }}</h3>
           </div>
           <div className='mb-10'>
             <h1 className='text-3xl mb-2 text-[#3F3D3D]'>Number of countries travelled</h1>
-            <h3 className='bg-gray-200 text-black rounded py-4 px-2 text-xl'>3/195</h3>
+            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ formatNumber(this.num_visited) }}/195</h3>
           </div>
           <div className='mb-10'>
             <h1 className='text-3xl mb-2 text-[#3F3D3D]'>Account status</h1>
@@ -98,6 +98,8 @@ export default {
       travel_freq: "",
       travel_comp: "",
       is_public: "",
+      steps: 0,
+      num_visited: 0,
     }
   },
   created() {
@@ -136,7 +138,7 @@ export default {
     travelCompVal: function() {
       const travelCompValDict = {
         "solo": "Solo",
-        "family": "Famliy",
+        "family": "Family",
         "friends": "Friends"
       }
       return travelCompValDict[this.travel_comp] || "Not specified"
@@ -180,6 +182,12 @@ export default {
       } 
       if ("Travel_Comp" in userData.data()) {
         this.travel_comp = userData.data()["Travel_Comp"]
+      } 
+      if ("Steps" in userData.data()) {
+        this.steps = userData.data()["Steps"]
+      } 
+      if ("Num_Visited" in userData.data()) {
+        this.num_visited = userData.data()["Num_Visited"]
       } 
       this.is_public = userData.data()["Is_Public"]
       this.email = user!.email!
@@ -225,6 +233,13 @@ export default {
       const fileRef = ref(storage, `users/${user_email}/profile_pic/${file.name}`);
       const uploadTask = uploadBytesResumable(fileRef, file);
       await uploadTask;
+    },
+    formatNumber(number) {
+      if (number === undefined || isNaN(number)) {
+        // Return a default value, such as '0', or handle the case as needed
+        return '0';
+      }
+      return number.toLocaleString();
     },
   }
 }

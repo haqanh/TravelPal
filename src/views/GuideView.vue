@@ -19,10 +19,10 @@
   <div class="flex flex-grow ">
       <!-- Guide Contents sidebar -->
       <div class="guide-sidebar w-1/5 p-9 sticky top-0 h-1/3 z-20 mt-[32vh]">
-        <GuideNav :sections="sections" :activeSection="activeSection" class="h-screen overflow-y-auto sticky top-0 bottom-0"/>
+        <GuideNav :createdBy="createdBy" :profilePicUrl="profilePhoto" :sections="sections" :activeSection="activeSection" class="h-screen overflow-y-auto sticky top-0 bottom-0"/>
       </div>
       <main id="guideContent" class="guide-content mt-[35vh] overflow-auto px-10 w-3/4 ">
-        <h1 class="text-lg italic font-light py-4">
+        <h1 class="text-lg italic font-light text-justify py-4">
         " {{ overview }} "
         </h1>
         <section id="generalAdvice" class="pb-4">
@@ -30,7 +30,7 @@
           <h1 class="text-2xl lg:text-3xl xl:text-4xl font-bold">
             General Advice
           </h1>
-          <h1 class="text-lg my-4">
+          <h1 class="text-lg my-4 text-justify text-gray-600">
             <h1 v-for="advice in generalAdvice" :key="advice.id">
               {{ advice.content }}
             </h1>
@@ -111,6 +111,9 @@
   const country = ref('');
   const photo = ref('');
 
+  const createdBy = ref('');
+  const profilePhoto = ref('');
+
   const overview = ref('');
 
   const generalAdvice = ref('');
@@ -171,6 +174,9 @@ onMounted(async () => {
       title.value = guideData.value.Guide_Title;
       country.value = guideData.value.Country;
       photo.value = guideData.value.Cover_Photo;
+
+      createdBy.value = guideData.value.Created_By;
+      profilePhoto.value = guideData.value.Profile_Photo;
 
       overview.value = guideData.value.Description;
 

@@ -1,8 +1,8 @@
 <template>
   <div> 
     <span class="flex items-center"> 
-      <img src="@/assets/profiles/ProfileWoman.jpg" alt="Profile Picture" class="w-14 h-14 rounded-full object-cover" />
-      <h1 class="username ml-4 font-bold text-lg xl:text-xl"> Mary Jane </h1>
+      <img :src=profilePicUrl alt="Profile Picture" class="w-14 h-14 rounded-full object-cover" />
+      <h1 class="username ml-4 font-bold text-lg xl:text-xl">{{ createdBy }}</h1>
     </span>
   </div>
   <nav class="guide-nav flex flex-col mt-5">
@@ -35,6 +35,8 @@
 //import commentIcon from '@/assets/comment-icon.svg';
 
 const props = defineProps({
+  createdBy: String,
+  profilePicUrl: String,
   sections: Array,
   activeSection: String
 });
