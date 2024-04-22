@@ -232,10 +232,6 @@ export default {
         console.error("Error adding document: ", e);
       } finally {
         this.isLoading = false;
-        const $toast = useToast()
-        $toast.success('Guide Successfully Added!', {
-          position: 'top'
-        })
         this.isOpen = false
         this.$emit('close')
 

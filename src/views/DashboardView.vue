@@ -3,12 +3,12 @@
     <NavBar />
   </div>
   <div class="flex">
-    <SideBar />
-    <div class="w-80vw p-10 my-10 mx-10">
+    <SideBar class="flex-grow"/>
+    <div class="w-[70vw] p-10 my-10 mx-10">
       <div
         class="DashboardContents flex flex-col lg:flex-row justify-between lg:items-center -mx-10"
       >
-        <h1 class="text-[10.2vh] font-semibold text-[#3F3D3D] mx-10">Home</h1>
+        <h1 class="text-5xl font-semibold text-[#3F3D3D] mx-10">Home</h1>
         <div class="relative flex items-center w-full h-full lg:w-96 group mt-4 lg:mt-0">
           <svg
             class="absolute left-0 z-0 hidden w-4 h-4 ml-4 text-gray-500 pointer-events-none fill-current group-hover:text-gray-400 sm:block"
@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="flex justify-between items-center my-10 mb-10 min-w-full -mx-10">
-        <h1 class="text-[2vw] font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">
+        <h1 class="text-2xl font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">
           My Travels
         </h1>
         <div class="border-b border-[#D9D9D9] w-[100vh] mx-[2.6vh] ml-[10.5vh] flex-shrink-0"></div>
@@ -37,10 +37,10 @@
         </button>
       </div>
       <AddTrip v-if="showAddTrip" @closetrip="resetAddTrip" @closetriponly="backToDashboard" />
-      <div class="TripCardWrapper grid grid-cols-4 min-w-full gap-4">
+      <div class="TripCardWrapper grid grid-cols-3 min-w-full gap-4">
         <TripCard
           class="cursor-pointer"
-          @contextmenu.prevent="openContextMenu($event, trip)"
+          @contextmenu.prevent="openContextMenuTrip($event, trip)"
           @click="viewTrip(trip)"
           v-for="trip in filteredTrips"
           :key="trip.id"
@@ -53,7 +53,7 @@
         />
       </div>
       <div class="flex justify-between items-center my-10 mb-10 min-w-full -mx-10">
-        <h1 class="text-[2vw] font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">
+        <h1 class="text-2xl font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">
           My Guides
         </h1>
         <div class="border-b border-[#D9D9D9] w-[90vh] mx-[2.6vh] ml-[20.5vh] flex-shrink-0"></div>
@@ -61,11 +61,12 @@
           <img src="../assets/Add Button.svg" alt="Add Guide" />
         </button>
       </div>
-      <AddGuide v-if="showAddGuide" @close="resetAddGuide" />
-      <div class="GuideCardWrapper grid grid-cols-4 min-w-full gap-4">
+      <AddGuide v-if="showAddGuide" @close="resetAddGuide" @closeOnly="closeGuideModal" />
+      <div class="GuideCardWrapper grid grid-cols-3 min-w-full gap-4">
         <GuideCard
           class="cursor-pointer"
           @click="viewGuide(guide)"
+          @contextmenu.prevent="openContextMenuGuide($event, guide)"
           v-for="guide in filteredGuides"
           :key="guide.id"
           :GuideName="guide.Guide_Title"
@@ -76,8 +77,8 @@
     </div>
   </div>
   <div
-    v-if="contextMenuOpen"
-    :style="{ top: `${contextMenuPosition.y}px`, left: `${contextMenuPosition.x}px` }"
+    v-if="contextMenuOpenTrip"
+    :style="{ top: `${contextMenuPositionTrip.y}px`, left: `${contextMenuPositionTrip.x}px` }"
     class="absolute bg-white border border-gray-200 rounded-md shadow-lg"
   >
     <button
@@ -101,11 +102,45 @@
       <span class="mt-[0.3vw]">Delete</span>
     </button>
   </div>
+  <div
+    v-if="contextMenuOpenGuide"
+    :style="{ top: `${contextMenuPositionGuide.y}px`, left: `${contextMenuPositionGuide.x}px` }"
+    class="absolute bg-white border border-gray-200 rounded-md shadow-lg"
+  >
+    <button
+      @click="deleteGuide"
+      class="block w-full text-left px-[0.7vw] py-[0.7vw] text-l text-gray-700 hover:bg-gray-100 flex justify-between items-center rounded-md shadow-lg"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-6 h-6 inline-block align-text-bottom mr-[0.7vw]"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+        />
+      </svg>
+      <span class="mt-[0.3vw]">Delete</span>
+    </button>
+  </div>
   <DeleteTripModal
     v-if="showDeleteTripModal"
-    @del="deleteDoc"
-    @closeDel="closeDel"
-    :name="selectedTrip.Name"
+    @delTrip="deleteDocTrip"
+    @closeDelTrip="closeDelTrip"
+    :name="selectedTrip.Name" 
+    :type="type1"
+  />
+  <DeleteTripModal
+    v-if="showDeleteGuideModal"
+    @delGuide="deleteDocGuide"
+    @closeDelGuide="closeDelGuide"
+    :name="selectedGuide.Guide_Title"
+    :type="type2"
   />
 </template>
 
@@ -121,6 +156,10 @@ import { db } from '@/firebase'
 import { doc, collection, getDocs, deleteDoc, updateDoc, increment } from 'firebase/firestore'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { getStorage, ref, deleteObject, listAll } from 'firebase/storage'
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
+
+const $toast = useToast()
 
 export default {
   components: {
@@ -137,13 +176,19 @@ export default {
       showAddGuide: false,
       showAddTrip: false,
       showDeleteTripModal: false,
+      showDeleteGuideModal: false,
       trips: [],
       guides: [],
       searchInput: '',
-      contextMenuOpen: false,
-      contextMenuPosition: { x: 0, y: 0 },
+      contextMenuOpenTrip: false,
+      contextMenuPositionTrip: { x: 0, y: 0 },
+      contextMenuOpenGuide: false,
+      contextMenuPositionGuide: { x: 0, y: 0 },
       selectedTrip: null,
-      userEmail: ''
+      selectedGuide: null,
+      userEmail: '',
+      type1: 'trip',
+      type2: 'guide',
     }
   },
   computed: {
@@ -173,7 +218,12 @@ export default {
 
     resetAddGuide() {
       this.showAddGuide = false
+      localStorage.setItem('showToastGuide', 'true')
       location.reload()
+    },
+
+    closeGuideModal() {
+      this.showAddGuide = false
     },
 
     toggleAddTrip() {
@@ -182,6 +232,7 @@ export default {
 
     resetAddTrip() {
       this.showAddTrip = false
+      localStorage.setItem('showToast', 'true')
       location.reload()
     },
     backToDashboard() {
@@ -199,23 +250,35 @@ export default {
       this.$router.push({
         name: 'GuideView',
         params: {
-          docRef: guide.Guide_Title
+          docRef: guide.id
         }
       })
     },
-    openContextMenu(event, trip) {
-      this.contextMenuOpen = true
-      this.contextMenuPosition = {
+    openContextMenuTrip(event, trip) {
+      this.contextMenuOpenTrip = true
+      this.contextMenuPositionTrip = {
         x: event.clientX + window.scrollX,
         y: event.clientY + window.scrollY
       }
       this.selectedTrip = trip
     },
+    openContextMenuGuide(event, guide) {
+      this.contextMenuOpenGuide = true
+      this.contextMenuPositionGuide = {
+        x: event.clientX + window.scrollX,
+        y: event.clientY + window.scrollY
+      }
+      this.selectedGuide = guide
+    },
     deleteTrip() {
       this.showDeleteTripModal = true
-      this.contextMenuOpen = false
+      this.contextMenuOpenTrip = false
     },
-    async deleteDoc() {
+    deleteGuide() {
+      this.showDeleteGuideModal = true
+      this.contextMenuOpenGuide = false
+    },
+    async deleteDocTrip() {
       this.trips = this.trips.filter((trip) => trip.Name !== this.selectedTrip.Name)
       const tripRef = doc(db, 'users', this.userEmail, 'trips', this.selectedTrip.Name)
       await updateDoc(doc(db, 'users', this.userEmail), {
@@ -232,9 +295,119 @@ export default {
       })
       deleteDoc(tripRef)
       this.showDeleteTripModal = false
+      localStorage.setItem('showToastTripDelete', 'true')
+      location.reload()
     },
-    closeDel() {
+    closeDelTrip() {
       this.showDeleteTripModal = false
+    },
+    closeDelGuide() {
+      this.showDeleteGuideModal = false
+    },
+    async deleteDocGuide() {
+      const documentId = this.selectedGuide.id;
+      this.guides = this.guides.filter((guide) => guide.Guide_Title !== this.selectedGuide.Guide_Title);
+      
+      const guideRef = doc(db, 'users', this.userEmail, 'guides', documentId);
+      const globalGuideRef = doc(db, 'guides', documentId);
+      
+      // Known subcollection (In User)
+      const subcollectionRef1 = collection(guideRef, 'advices');
+      const subcollectionRef2 = collection(guideRef, 'placesNearby');
+      const subcollectionRef3 = collection(guideRef, 'placesToEat');
+      const subcollectionRef4 = collection(guideRef, 'placesToStay');
+      const subcollectionRef5 = collection(guideRef, 'placesToVisit');
+      const subcollectionSnapshot1 = await getDocs(subcollectionRef1);
+      const subcollectionSnapshot2 = await getDocs(subcollectionRef2);
+      const subcollectionSnapshot3 = await getDocs(subcollectionRef3);
+      const subcollectionSnapshot4 = await getDocs(subcollectionRef4);
+      const subcollectionSnapshot5 = await getDocs(subcollectionRef5);
+
+      // Known subcollection (In Global)
+      const subcollectionRef1Global = collection(globalGuideRef, 'advices');
+      const subcollectionRef2Global = collection(globalGuideRef, 'placesNearby');
+      const subcollectionRef3Global = collection(globalGuideRef, 'placesToEat');
+      const subcollectionRef4Global = collection(globalGuideRef, 'placesToStay');
+      const subcollectionRef5Global = collection(globalGuideRef, 'placesToVisit');
+      const subcollectionSnapshot1Global = await getDocs(subcollectionRef1Global);
+      const subcollectionSnapshot2Global = await getDocs(subcollectionRef2Global);
+      const subcollectionSnapshot3Global = await getDocs(subcollectionRef3Global);
+      const subcollectionSnapshot4Global = await getDocs(subcollectionRef4Global);
+      const subcollectionSnapshot5Global = await getDocs(subcollectionRef5Global);
+      
+      if (subcollectionSnapshot1 && !subcollectionSnapshot1.empty) {
+        for (let doc of subcollectionSnapshot1.docs) {
+          await deleteDoc(doc.ref);
+        }
+      }
+
+      if (subcollectionSnapshot2 && !subcollectionSnapshot2.empty) {
+        for (let doc of subcollectionSnapshot2.docs) {
+          await deleteDoc(doc.ref);
+        }
+      }
+
+      if (subcollectionSnapshot3 && !subcollectionSnapshot3.empty) {
+        for (let doc of subcollectionSnapshot3.docs) {
+          await deleteDoc(doc.ref);
+        }
+      }
+
+      if (subcollectionSnapshot4 && !subcollectionSnapshot4.empty) {
+        for (let doc of subcollectionSnapshot4.docs) {
+          await deleteDoc(doc.ref);
+        }
+      }
+
+      if (subcollectionSnapshot5 && !subcollectionSnapshot5.empty) {
+        for (let doc of subcollectionSnapshot5.docs) {
+          await deleteDoc(doc.ref);
+        }
+      }
+
+      if (subcollectionSnapshot1Global && !subcollectionSnapshot1Global.empty) {
+        for (let doc of subcollectionSnapshot1Global.docs) {
+          await deleteDoc(doc.ref);
+        }
+      }
+
+      if (subcollectionSnapshot2Global && !subcollectionSnapshot2Global.empty) {
+        for (let doc of subcollectionSnapshot2Global.docs) {
+          await deleteDoc(doc.ref);
+        }
+      }
+
+      if (subcollectionSnapshot3Global && !subcollectionSnapshot3Global.empty) {
+        for (let doc of subcollectionSnapshot3Global.docs) {
+          await deleteDoc(doc.ref);
+        }
+      }
+
+      if (subcollectionSnapshot4Global && !subcollectionSnapshot4Global.empty) {
+        for (let doc of subcollectionSnapshot4Global.docs) {
+          await deleteDoc(doc.ref);
+        }
+      }
+
+      if (subcollectionSnapshot5Global && !subcollectionSnapshot5Global.empty) {
+        for (let doc of subcollectionSnapshot5Global.docs) {
+          await deleteDoc(doc.ref);
+        }
+      }
+
+      const storage = getStorage()
+      const folderRef = ref(storage, `users/${this.userEmail}/guides/${this.selectedGuide.Guide_Title}`)
+      listAll(folderRef).then((res) => {
+        res.items.forEach((itemRef) => {
+          deleteObject(itemRef)
+        })
+      })
+      
+      await deleteDoc(guideRef);
+      await deleteDoc(globalGuideRef);
+      this.showDeleteGuideModal = false;
+      localStorage.setItem('showToastGuideDelete', 'true')
+      location.reload()
     }
   },
   mounted() {
@@ -254,7 +427,11 @@ export default {
         
         // Fetching guides (no changes here)
         const querySnapshotGuides = await getDocs(collection(userRef, 'guides'));
-        const guides = querySnapshotGuides.docs.map(doc => doc.data());
+        const guides = querySnapshotGuides.docs.map(doc => {
+          const data = doc.data();
+          data.id = doc.id;
+          return data;
+        });
         
         // Update the component state with fetched data
         this.trips = trips;
@@ -262,15 +439,45 @@ export default {
       } else {
         console.log('User is not signed in');
       }
+      if (localStorage.getItem('showToast') === 'true') {
+        $toast.success('Trip Successfully Added!', {
+          position: 'top',
+          duration: 6000
+        })
+        localStorage.removeItem('showToast')
+      }
+      if (localStorage.getItem('showToastTripDelete') === 'true') {
+        $toast.success('Trip Successfully Deleted!', {
+          position: 'top',
+          duration: 6000
+        })
+        localStorage.removeItem('showToastTripDelete')
+      }
+      if (localStorage.getItem('showToastGuide') === 'true') {
+        $toast.success('Guide Successfully Added!', {
+          position: 'top',
+          duration: 6000
+        })
+        localStorage.removeItem('showToastGuide')
+      }
+      if (localStorage.getItem('showToastGuideDelete') === 'true') {
+        $toast.success('Guide Successfully Deleted!', {
+          position: 'top',
+          duration: 6000
+        })
+        localStorage.removeItem('showToastGuideDelete')
+      }
     });
     
     document.addEventListener('click', () => {
-      this.contextMenuOpen = false;
+      this.contextMenuOpenGuide = false;
+      this.contextMenuOpenTrip = false;
     });
   },
   beforeUnmount() {
     document.removeEventListener('click', () => {
-      this.contextMenuOpen = false
+      this.contextMenuOpenGuide = false
+      this.contextMenuOpenTrip = false
     })
   }
 }

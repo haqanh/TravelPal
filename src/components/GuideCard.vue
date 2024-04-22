@@ -1,19 +1,19 @@
 <template>
 
     <div class="flex items-center">
-        <div class="guide-card relative w-[32.8vh] h-[33.4vh] bg-white border border-gray-200 rounded-[2.63vh] custom-shadow">
-            <img class="rounded-t-[2.63vh] h-[23.7vh] w-[32.8vh] custom-shadow object-cover object-bottom" :src="GuideImage" alt="" />
-            <div class="absolute top-0 right-0 mt-[1.05vh] mr-[1.05vh] flex items-center">
-                <img class="h-[1.8vh] w-[1.8vh] relative" src="../assets/map-pin.svg" alt="" />
-                <span class="ml-[0.53vh] font-medium text-sky-50 text-[1.8vh] text-[#E1F1FF]">{{Location}}</span>
+        <div class="guide-card relative lg-w-64 lg-h-64 w-48 h-48 bg-white border border-gray-200 rounded-2xl custom-shadow">
+            <img class="rounded-t-2xl lg-h-48 lg-w-64 w-48 h-32 custom-shadow object-cover object-bottom" :src="GuideImage" alt="" />
+            <div class="absolute top-0 right-0 mt-2 mr-2 flex items-center">
+                <img class="h-auto w-auto relative" src="../assets/map-pin.svg" alt="" />
+                <span class="ml-1 font-medium text-sky-50 text-xs text-[#E1F1FF]">{{Location}}</span>
 
             </div>
-            <div class="p-[1.05vh]">
+            <div class="p-2">
                 <div class="flex justify-between items-center">
-                    <p class="mb-[0.13vh] text-[3vh] font-semibold tracking-tight text-[#3F3D3D]">{{GuideName}}</p>
+                    <p class="mb-0.2 text-m font-semibold tracking-tight text-[#3F3D3D]">{{GuideName}}</p>
                 </div>
-                <div class="flex pt-[0.3vh] justify-end items-right">
-                    <span class="px-[1.05vh] font-semibold text-center text-[1.7vh] rounded-full guide-colour border undefined ">
+                <div class="flex pt-0.2 justify-end items-right">
+                    <span class="px-1 font-semibold text-center text-xs rounded-full guide-colour border undefined ">
                         Guide
                     </span>
                 </div>

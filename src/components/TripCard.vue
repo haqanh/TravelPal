@@ -1,22 +1,22 @@
 <template>
     <div class="flex items-center">
-        <div class="trip-card relative w-[32.8vh] h-[33.4vh] bg-white border border-gray-200 rounded-[2.63vh] custom-shadow">
-            <img class="rounded-t-[2.63vh] h-[23.7vh] w-[32.8vh] custom-shadow object-cover object-bottom" :src="TripImage" alt="No Image" />
-            <div class="absolute top-0 right-0 mt-[1.05vh] mr-[1.05vh] flex items-center">
-                <img class="h-[1.8vh] w-[1.8vh] relative" src="../assets/map-pin.svg" alt="" />
-                <span class="ml-[0.53vh] font-medium text-sky-50 text-[1.8vh] text-[#E1F1FF]">{{ Location }}</span>
+        <div class="trip-card relative lg-w-64 lg-h-64 w-48 h-48 bg-white border border-gray-200 rounded-2xl custom-shadow">
+            <img class="rounded-t-2xl lg-h-48 lg-w-64 w-48 h-32 custom-shadow object-cover object-bottom" :src="TripImage" alt="No Image" />
+            <div class="absolute top-0 right-0 mt-2 mr-2 flex items-center">
+                <img class="h-auto w-auto relative" src="../assets/map-pin.svg" alt="" />
+                <span class="ml-1 font-medium text-sky-50 text-xs text-[#E1F1FF]">{{ Location }}</span>
             </div>
-            <div class="p-[1.05vh]">
+            <div class="p-2">
                 <div class="flex justify-between items-center">
-                    <span class="mb-[0.13vh] text-[3vh] font-semibold tracking-tight text-[#3F3D3D]">{{ TripName }}</span>
+                    <span class="mb-0.2 text-m font-semibold tracking-tight text-[#3F3D3D]">{{ TripName }}</span>
                     <div class="flex items-center flex-shrink-0 space-x-0">
-                        <img class="mb-[0.4vh] mr-[1.05vh] h-[1.1vh] w-[1.1vh]" src="../assets/Dot Split.svg" alt="" />
+                        <img class="lg-mb-0.2 mr-2 h-auto w-auto" src="../assets/Dot Split.svg" alt="" />
                         <div v-for="i in dollarCount" :key="i">
-                            <img src="../assets/Union.svg" class="mb-[0.9vh] h-[2.8vh]" alt="Union" />
+                            <img src="../assets/Union.svg" class="lg-mb-0.8 mb-1 h-auto" alt="Union" />
                         </div>
                     </div>
                 </div>
-                <span class="flex pt-[0.3vh] text-[2vh] font-medium text-[#3F3D3D] text-opacity-60">{{ formattedDate }}</span>
+                <span class="flex pt-1 text-xs font-medium text-[#3F3D3D] text-opacity-60">{{ formattedDate }}</span>
             </div>
         </div>
     </div>

@@ -27,7 +27,7 @@
           <h3 class="text-l font-semibold mb-2">You've been to</h3>
           <div class="stats-container text-white">
             <span class="text-lg font-semibold">{{ formatNumber(userData.Num_Visited) }}</span>
-            Countries
+            <p>Countries</p>
           </div>
         </div>
         <div class="info-card2">
