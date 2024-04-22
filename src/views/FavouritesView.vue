@@ -4,12 +4,19 @@
       <NavBar />
     </div>
     <div class="flex">
-      <div class="w-80vw p-10 my-10 mx-10">
-        <h1 class="text-[60px] font-semibold text-[#3F3D3D] mx-10">Favourited Guides</h1>
-        <div class="flex justify-between items-center my-10 mb-10 min-w-full -mx-10">
-          <div class="mx-20 grid grid-cols-4 min-w-full gap-4">
+      <div class="w-full p-10 my-10 mx-10">
+        <h1 class="w-80vw text-[60px] font-semibold text-[#3F3D3D] mx-10">Favourited Guides</h1>
+        <div class="flex justify-between items-start my-10 mb-10 min-w-full">
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 w-full"
+          >
             <!-- Loop through favorited guides and use ExploreCard component -->
-            <ExploreCard v-for="guide in favoritedGuides" :key="guide.guideId" :card="guide" />
+            <ExploreCard
+              v-for="guide in favoritedGuides"
+              :key="guide.guideId"
+              :card="guide"
+              class="w-full"
+            />
             <div v-if="favoritedGuides.length === 0" class="mx-10 my-6">
               <p class="text-gray-700">No favorited guides yet.</p>
             </div>
