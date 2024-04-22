@@ -17,7 +17,7 @@
             ></GlobalTag>    
           </span>
         </div>
-        <p class="text-gray-600 text-base">{{ place.Description }}</p>
+        <p class="text-gray-600 text-base text-justify">{{ place.Description }}</p>
       </div>
 
       <!-- Photo container -->
