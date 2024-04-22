@@ -262,12 +262,12 @@ export default {
                       ? 'flex items-center justify-center rounded-lg cursor-pointer'
                       : 'flex items-center justify-center border border-gray-300 border-dashed rounded-lg cursor-pointer bg-white dark:hover:bg-bray-800 dark:bg-gray-500 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600'
                     " @contextmenu.prevent="confirmRemove">
-                    <div class="flex flex-col items-center justify-center w-[15vw] h-[17vh]">
+                    <div class="flex flex-col items-center justify-center w-52 h-40">
                       <!-- Show uploaded image or camera icon based on whether an image has been uploaded -->
                       <img v-if="selectedPhoto" :src="selectedPhoto" alt="Uploaded Image"
                         class="object-cover rounded-lg w-52 h-40" />
                       <template v-else>
-                        <img class="text-gray-500 dark:text-gray-400" aria-hidden="true" src="../assets/Camera.svg" />
+                        <img class="text-gray-500 dark:text-gray-400 w-12 h-12" aria-hidden="true" src="../assets/Camera.svg" />
                         <p class="mb-2 text-sm text-gray-500 dark:text-gray-400 font-semibold">
                           Add Photo
                         </p>
@@ -276,6 +276,7 @@ export default {
                     <input id="dropzone-file" type="file" class="hidden" @change="handleFileChange"
                       accept=".jpg, .jpeg, .png" />
                   </label>
+                  
                 </div>
 
                 <br />
