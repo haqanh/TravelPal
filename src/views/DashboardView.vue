@@ -1,15 +1,15 @@
 <template>
-  <div class="NavBarImage">
+  <div class="NavBarImage relative z-20">
     <NavBar />
   </div>
-  <div class="flex">
+  <div class="flex z-10">
     <SideBar class="flex"/>
-    <div class="w-[70vw] p-10 my-10 mx-10">
+    <div class="w-[70vw] p-10 my-5 mx-10 z-5">
       <div
-        class="DashboardContents flex flex-col lg:flex-row justify-between lg:items-center -mx-10"
+        class="DashboardContents flex flex-col lg:flex-row justify-between lg:items-center -mx-10 z-2"
       >
         <h1 class="lg:text-5xl md:text-4xl font-semibold text-[#3F3D3D] mx-10">Home</h1>
-        <div class="relative flex items-center w-full h-full lg:w-96 group mt-4 lg:mt-0">
+        <div class="relative flex items-center w-full h-full lg:w-96 group mt-4 lg:mt-0 z-5">
           <svg
             class="absolute left-0 z-0 hidden w-4 h-4 ml-4 text-gray-500 pointer-events-none fill-current group-hover:text-gray-400 sm:block"
             xmlns="http://www.w3.org/2000/svg"
@@ -31,13 +31,13 @@
         <h1 class="lg:text-3xl md:text-2xl font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">
           My Travels
         </h1>
-        <div class="border-b border-[#D9D9D9] md:w-[48vw] md:mr-12 lg:mr-0 lg:w-[52vw] flex-shrink-0"></div>
+        <div class="border-b border-[#D9D9D9] md:w-[48vw] md:mr-12 lg:mr-0 lg:w-[50vw] flex-shrink-0"></div>
         <button class="flex-shrink-0 hover:scale-125" @click="toggleAddTrip">
           <img src="../assets/Add Button.svg" alt="Add Trip" />
         </button>
       </div>
       <AddTrip v-if="showAddTrip" @closetrip="resetAddTrip" @closetriponly="backToDashboard" />
-      <div class="TripCardWrapper grid grid-cols-3 min-w-full gap-4">
+      <div class="TripCardWrapper grid 2xl:grid-cols-4 grid-cols-3 min-w-full 2xl:gap-4 gap-12">
         <TripCard
           class="cursor-pointer"
           @contextmenu.prevent="openContextMenuTrip($event, trip)"
@@ -56,15 +56,15 @@
         <h1 class="lg:text-3xl md:text-2xl font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">
           My Guides
         </h1>
-        <div class="border-b border-[#D9D9D9] w-[48vw] mr-12 lg:mr-0 lg:w-[52vw] flex-shrink-0"></div>
+        <div class="border-b border-[#D9D9D9] w-[48vw] mr-12 lg:mr-0 lg:w-[50vw] flex-shrink-0"></div>
         <button class="flex-shrink-0 hover:scale-125" @click="toggleAddGuide">
           <img src="../assets/Add Button.svg" alt="Add Guide" />
         </button>
       </div>
       <AddGuide v-if="showAddGuide" @close="resetAddGuide" @closeOnly="closeGuideModal" />
-      <div class="GuideCardWrapper grid grid-cols-3 min-w-full gap-4">
+      <div class="GuideCardWrapper grid xl:grid-cols-3 2xl:grid-cols-4 min-w-full 2xl:gap-4 gap-12">
         <GuideCard
-          class="cursor-pointer"
+          class="cursor-pointer "
           @click="viewGuide(guide)"
           @contextmenu.prevent="openContextMenuGuide($event, guide)"
           v-for="guide in filteredGuides"
