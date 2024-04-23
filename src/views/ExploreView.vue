@@ -83,7 +83,7 @@ import NavBar from '@/components/NavBar.vue'
 import ExploreCard from '@/components/ExploreCard.vue'
 
 import { db } from '@/firebase'
-import { getDoc, doc, collection, query, getDocs, orderBy, limit, where } from 'firebase/firestore'
+import { collection, query, getDocs, orderBy, limit, where } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import GlobalFooter from '@/components/GlobalFooter.vue'
 

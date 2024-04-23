@@ -9,7 +9,7 @@ import {
 } from '@headlessui/vue'
 import { ref, uploadString, getDownloadURL, getStorage } from 'firebase/storage'
 import { db, storage } from '@/firebase'
-import { collection, addDoc, updateDoc, doc, setDoc, serverTimestamp, getDoc , GeoPoint} from 'firebase/firestore'
+import { collection, addDoc, updateDoc, doc, setDoc, serverTimestamp, getDoc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import Datepicker from 'vue3-datepicker'
 import GlobalTag from './GlobalTag.vue';
