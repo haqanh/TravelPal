@@ -14,7 +14,7 @@
     <ul class=" bg-gray-300 list-none rounded-2xl shadow-lg text-justify font-bold p-5">
       <h2 class=" text-gray-900 font-bold lg:text-2xl md:text-xl text-lg text-center"> Guide Contents </h2>
       <li v-for="section in sections" 
-          :key="section" 
+          :key="section.id" 
           class="text-center lg:my-3 md:my-2 my-1 lg:text-base md:text-md text-sm"
           :class="activeSection === section.id ? 'bg-blue-500 text-white rounded-full' : 'text-gray-700 rounded-2xl hover:bg-gray-200'">
         <a
@@ -34,14 +34,19 @@
 //import shareIcon from '@/assets/share-icon.svg';
 //import commentIcon from '@/assets/comment-icon.svg';
 
-const props = defineProps({
-  createdBy: String,
-  profilePicUrl: String,
-  sections: Array,
-  activeSection: String
-});
+interface Section {
+  id: string;
+  name: string;
+}
 
-const scrollToSection = (id) => {
+const props = defineProps<{
+  createdBy: String,
+  profilePicUrl: string,
+  sections: Section[],
+  activeSection: String
+}>();
+
+const scrollToSection = (id : any) => {
   const section = document.getElementById(id);
   if (section) {
     section.scrollIntoView({ behavior: 'smooth' });

@@ -6,7 +6,7 @@
         <div class="flex items-center mb-1 space-x-4"> 
           <img src="@/assets/map-marker.svg" alt="Map Pin" class="w-10 h-10">
           <h2 class="text-2xl font-bold truncate">{{ place.Name }}</h2>
-          <span class="text-xl font-bold">{{ priceSymbol }}</span>
+          <span class="text-xl font-semibold">{{ priceSymbol }}</span>
         </div>
         <div class="flex flex-wrap mb-4">
           <span class="tags px-2 py-1 mt-2 mr-2 mb-2" 
@@ -45,8 +45,11 @@ export default {
   },
   computed: {
     priceSymbol() {
+      if (this.place.Price > 500) {
+        return '$$$$$';
+      }
       // This will display a "$" symbol for each unit of cost.
-      return '$'.repeat(this.place.Cost || 0);
+      return '$'.repeat(this.place.Price / 100 + 1 || 0);
     }
   },
   components: {
