@@ -3,8 +3,8 @@
     <NavBar />
   </div>
   <div class="flex">
-    <SideBar class="flex-grow"/>
-    <div class="w-[70vw] p-10 my-10 mx-10">
+    <SideBar class="flex"/>
+    <div class="w-[80vw] p-10 my-10 mx-10">
       <div
         class="DashboardContents flex flex-col lg:flex-row justify-between lg:items-center -mx-10"
       >
@@ -142,6 +142,7 @@
     :name="selectedGuide.Guide_Title"
     :type="type2"
   />
+  <GlobalFooter class="adjustMargin"/>
 </template>
 
 <script lang="ts">
@@ -152,6 +153,7 @@ import GuideCard from '../components/GuideCard.vue'
 import AddGuide from '../components/AddGuideBtn.vue'
 import AddTrip from '../components/AddTrip.vue'
 import DeleteTripModal from '../components/DeleteTripModal.vue'
+import GlobalFooter from '@/components/GlobalFooter.vue'
 import { db } from '@/firebase'
 import { doc, collection, getDocs, deleteDoc, updateDoc, increment } from 'firebase/firestore'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
@@ -169,7 +171,8 @@ export default {
     GuideCard,
     AddGuide,
     AddTrip,
-    DeleteTripModal
+    DeleteTripModal,
+    GlobalFooter,
   },
   data() {
     return {
@@ -488,5 +491,8 @@ export default {
   background-image: url('@/assets/forest.jpg');
   background-size: cover;
   background-position: center;
+}
+.adjustMargin {
+  margin-top: 0 !important;
 }
 </style>
