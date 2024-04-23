@@ -4,11 +4,11 @@
   </div>
   <div class="flex">
     <SideBar class="flex"/>
-    <div class="w-[80vw] p-10 my-10 mx-10">
+    <div class="w-[70vw] p-10 my-10 mx-10">
       <div
         class="DashboardContents flex flex-col lg:flex-row justify-between lg:items-center -mx-10"
       >
-        <h1 class="text-5xl font-semibold text-[#3F3D3D] mx-10">Home</h1>
+        <h1 class="lg:text-5xl md:text-4xl font-semibold text-[#3F3D3D] mx-10">Home</h1>
         <div class="relative flex items-center w-full h-full lg:w-96 group mt-4 lg:mt-0">
           <svg
             class="absolute left-0 z-0 hidden w-4 h-4 ml-4 text-gray-500 pointer-events-none fill-current group-hover:text-gray-400 sm:block"
@@ -28,10 +28,10 @@
         </div>
       </div>
       <div class="flex justify-between items-center my-10 mb-10 min-w-full -mx-10">
-        <h1 class="text-2xl font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">
+        <h1 class="lg:text-3xl md:text-2xl font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">
           My Travels
         </h1>
-        <div class="border-b border-[#D9D9D9] w-[100vh] mx-[2.6vh] ml-[10.5vh] flex-shrink-0"></div>
+        <div class="border-b border-[#D9D9D9] md:w-[48vw] md:mr-12 lg:mr-0 lg:w-[52vw] flex-shrink-0"></div>
         <button class="flex-shrink-0 hover:scale-125" @click="toggleAddTrip">
           <img src="../assets/Add Button.svg" alt="Add Trip" />
         </button>
@@ -53,10 +53,10 @@
         />
       </div>
       <div class="flex justify-between items-center my-10 mb-10 min-w-full -mx-10">
-        <h1 class="text-2xl font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">
+        <h1 class="lg:text-3xl md:text-2xl font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">
           My Guides
         </h1>
-        <div class="border-b border-[#D9D9D9] w-[90vh] mx-[2.6vh] ml-[20.5vh] flex-shrink-0"></div>
+        <div class="border-b border-[#D9D9D9] w-[48vw] mr-12 lg:mr-0 lg:w-[52vw] flex-shrink-0"></div>
         <button class="flex-shrink-0 hover:scale-125" @click="toggleAddGuide">
           <img src="../assets/Add Button.svg" alt="Add Guide" />
         </button>

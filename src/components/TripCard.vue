@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center">
-        <div class="trip-card relative lg-w-64 lg-h-64 w-48 h-48 bg-white border border-gray-200 rounded-2xl custom-shadow">
-            <img class="rounded-t-2xl lg-h-48 lg-w-64 w-48 h-32 custom-shadow object-cover object-bottom" :src="TripImage" alt="No Image" />
+        <div class="trip-card relative lg:w-64 lg:h-64 md:w-48 md:h-48 bg-white border border-gray-200 rounded-2xl custom-shadow">
+            <img class="rounded-t-2xl lg:h-48 lg:w-64 md:w-48 md:h-32 custom-shadow object-cover object-bottom" :src="TripImage" alt="No Image" />
             <div class="absolute top-0 right-0 mt-2 mr-2 flex items-center">
                 <img class="h-auto w-auto relative" src="../assets/map-pin.svg" alt="" />
                 <span class="ml-1 font-medium text-sky-50 text-xs text-[#E1F1FF]">{{ Location }}</span>
