@@ -260,7 +260,7 @@
   </TransitionRoot>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from 'vue'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 
@@ -284,7 +284,7 @@ const props = defineProps({
   open: Boolean
 })
 
-const open = ref(false)
+open.value = ref(false)
 const login = ref(true)
 
 // Watch for external changes to the `open` prop and update the local state
