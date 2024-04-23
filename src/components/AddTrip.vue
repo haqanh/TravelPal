@@ -13,7 +13,7 @@
         <div class="fixed inset-0 bg-black/25" />
       </TransitionChild>
 
-      <div class="fixed inset-0 flex items-center justify-center overflow-y-auto" v-if="isfirstDialog">
+      <div class="z-50 fixed inset-0 flex items-center justify-center overflow-y-auto" v-if="isfirstDialog">
         <div class="p-[6vh] text-center">
           <TransitionChild
             as="template"
