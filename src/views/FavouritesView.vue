@@ -5,7 +5,7 @@
     </div>
     <div class="flex">
       <div class="w-full p-10 my-10 mx-10">
-        <h1 class="w-80vw text-[60px] font-semibold text-[#3F3D3D] mx-10">Favourited Guides</h1>
+        <h1 class="w-80vw text-5xl font-semibold text-[#3F3D3D] mx-10">Favourited Guides</h1>
         <div class="flex justify-between items-start my-10 mb-10 min-w-full">
           <div
             class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 w-full"
