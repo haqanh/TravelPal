@@ -37,7 +37,8 @@
         </button>
       </div>
       <AddTrip v-if="showAddTrip" @closetrip="resetAddTrip" @closetriponly="backToDashboard" />
-      <div class="TripCardWrapper grid 2xl:grid-cols-4 grid-cols-3 min-w-full 2xl:gap-4 gap-12">
+      <div class="flex flex-wrap justify-center space-x-12">
+      <div class="TripCardWrapper grid 2xl:grid-cols-4 grid-cols-3 min-w-full gap-[3.8vw]">
         <TripCard
           class="cursor-pointer"
           @contextmenu.prevent="openContextMenuTrip($event, trip)"
@@ -52,6 +53,7 @@
           :TripCost="trip.Cost"
         />
       </div>
+      </div>
       <div class="flex justify-between items-center my-10 mb-10 min-w-full -mx-10">
         <h1 class="lg:text-3xl md:text-2xl font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">
           My Guides
@@ -62,7 +64,8 @@
         </button>
       </div>
       <AddGuide v-if="showAddGuide" @close="resetAddGuide" @closeOnly="closeGuideModal" />
-      <div class="GuideCardWrapper grid xl:grid-cols-3 2xl:grid-cols-4 min-w-full 2xl:gap-4 gap-12">
+      <div class="flex flex-wrap justify-center space-x-12">
+      <div class="GuideCardWrapper grid xl:grid-cols-3 2xl:grid-cols-4 min-w-full gap-[3.8vw]">
         <GuideCard
           class="cursor-pointer "
           @click="viewGuide(guide)"
@@ -73,6 +76,7 @@
           :Location="guide.Destination"
           :GuideImage="guide.Cover_Photo"
         />
+      </div>
       </div>
     </div>
   </div>
