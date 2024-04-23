@@ -90,6 +90,10 @@ import { doc, collection, updateDoc, arrayUnion, arrayRemove } from 'firebase/fi
 
 import { getAuth } from 'firebase/auth';
 
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
+const $toast = useToast()
+
 export default {
   components: {
     GlobalTag
@@ -129,6 +133,9 @@ export default {
         })
         .then(() => {
           console.log('Successfully added to Favourites!');
+          $toast.success(`Added ${this.card.guideTitle} to Favorites!`, {
+            position: 'top'
+          })
         })
         .catch((error) => {
           console.error('Error adding to favourites: ', error);
@@ -153,6 +160,9 @@ export default {
         })
         .then(() => {
           console.log('Successfully removed from Favourites!');
+          $toast.success(`Removed ${this.card.guideTitle} from Favorites!`, {
+            position: 'top'
+          })
         })
         .catch((error) => {
           console.error('Error removing from favourites: ', error);
