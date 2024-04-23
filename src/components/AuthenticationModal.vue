@@ -267,7 +267,6 @@ import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessu
 import { firebaseApp, db } from '@/firebase'
 import { doc, setDoc } from 'firebase/firestore'
 import {
-
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -284,7 +283,7 @@ const props = defineProps({
   open: Boolean
 })
 
-open.value = ref(false)
+const open = ref(false);
 const login = ref(true)
 
 // Watch for external changes to the `open` prop and update the local state
@@ -361,6 +360,9 @@ async function SignInWithGoogle() {
     .then((result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
       const credential = GoogleAuthProvider.credentialFromResult(result)
+      if (!credential) {
+        throw new Error('No credentials returned from Google');
+      }
       const token = credential.accessToken
       // The signed-in user info.
       const user = result.user
@@ -406,7 +408,7 @@ async function addUser() {
   }
 }
 
-async function addUserGoogle(email) {
+async function addUserGoogle(email : any) {
   try {
     await setDoc(doc(db, "users", email), {
       email: email,
