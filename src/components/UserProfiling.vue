@@ -35,12 +35,11 @@ import ProvideDestinations from './ProvideDestinations.vue';
 import ProvideInterests from './ProvideInterests.vue';
 import StateFamiliarityAndPrivacy from './StateFamiliarityAndPrivacy.vue';
 import TheFooter from './TheFooter.vue';
-import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
 import { firebaseApp, db } from '@/firebase'
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 
 export default {
   data() {
@@ -56,8 +55,8 @@ export default {
       usedTravelpalBefore: "no",
       usedSimilarAppsBefore: "no",
       privateOrPublic: "private",
-      selectedCountries: [],
-      selectedInterests: [],
+      selectedCountries: [] as string[],
+      selectedInterests: [] as string[],
       auth: null,
     }
   },
@@ -96,7 +95,6 @@ export default {
         }
         this.$router.push('dashboard')
       } else {
-        this.slideRight = page > this.page ? true : false
         this.page = page
       }
     },
@@ -145,9 +143,9 @@ export default {
         this.selectedInterests.push(interest)
       }
     },
-    dataURLtoFile(dataURL, filename) {
+    dataURLtoFile(dataURL: any, filename: any) {
       const arr = dataURL.split(',');
-      const mime = arr[0].match(/:(.*?);/)[1];
+      const mime = arr[0].match(/:(.*?);/)![1];
       const bstr = atob(arr[1]);
       let n = bstr.length;
       const u8arr = new Uint8Array(n);
@@ -156,7 +154,7 @@ export default {
       }
       return new File([u8arr], filename, { type: mime });
     },
-    async uploadImage(file_url, user_email) {
+    async uploadImage(file_url: any, user_email: any) {
       const storage = getStorage(firebaseApp);
       const file = this.dataURLtoFile(file_url, `profile_pic.jpg`);
       const fileRef = ref(storage, `users/${user_email}/profile_pic/${file.name}`);

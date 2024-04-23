@@ -22,7 +22,7 @@
           </div>
           <div class="flex items-center justify-center mx-[0vw] ">
             <div v-for="(photo, index) in selectedPhoto" :key="index">
-              <img :src="photo" alt="Selected Photo" class="h-28 w-28 object-cover cursor-pointer rounded-full" @click="openFileInput">
+              <img :src="photo" alt="Selected Photo" class="h-28 w-28 object-cover cursor-pointer rounded-full">
             </div>
               <div v-if="selectedPhoto.length === 0" class="flex flex-col items-center justify-center">
             </div>
@@ -30,43 +30,43 @@
         </label>
       </div>
       <div className='flex items-center mt-3 text-5xl'>
-        <span className='text-[#3F3D3D]'>{{ this.nameVal }}</span>
+        <span className='text-[#3F3D3D]'>{{ nameVal }}</span>
       </div>
       <div className='w-9/12 mt-10'>
         <h1 className='text-3xl mb-2 text-[#3F3D3D]'>Email</h1>
-        <h3 className='bg-gray-200 rounded py-4 px-2 text-xl text-[#3F3D3D]'>{{ this.email }}</h3>
+        <h3 className='bg-gray-200 rounded py-4 px-2 text-xl text-[#3F3D3D]'>{{ email }}</h3>
       </div>
       <div className="flex mt-10 w-9/12">
         <div className="w-full">
           <div className='mb-10 mr-10'>
             <h1 className='text-3xl mb-2 text-[#3F3D3D]'>Age range</h1>
-            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ this.ageRangeVal }}</h3>
+            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ ageRangeVal }}</h3>
           </div>
           <div className='mb-10 mr-10'>
             <h1 className='text-3xl mb-2 text-[#3F3D3D]'>Gender</h1>
-            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ this.genderVal }}</h3>
+            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ genderVal }}</h3>
           </div>
           <div className='mb-10 mr-10'>
             <h1 className='text-3xl mb-2 text-[#3F3D3D]'>Travel frequency</h1>
-            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ this.travelFreqVal }}</h3>
+            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ travelFreqVal }}</h3>
           </div>
           <div className='mb-10 mr-10'>
             <h1 className='text-3xl mb-2 text-[#3F3D3D]'>Travel companions</h1>
-            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ this.travelCompVal }}</h3>
+            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ travelCompVal }}</h3>
           </div>
         </div>
         <div className="w-full">
           <div className='mb-10'>
             <h1 className='text-3xl mb-2 text-[#3F3D3D]'>Steps walked</h1>
-            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ formatNumber(this.steps) }}</h3>
+            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ formatNumber(steps) }}</h3>
           </div>
           <div className='mb-10'>
             <h1 className='text-3xl mb-2 text-[#3F3D3D]'>Number of countries travelled</h1>
-            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ formatNumber(this.num_visited) }}/195</h3>
+            <h3 className='bg-gray-200 text-[#3F3D3D] rounded py-4 px-2 text-xl'>{{ formatNumber(num_visited) }}/195</h3>
           </div>
           <div className='mb-10'>
             <h1 className='text-3xl mb-2 text-[#3F3D3D]'>Account status</h1>
-            <h3 className='bg-gray-200 rounded py-4 px-2 text-xl text-[#3F3D3D]'>{{ this.isPublicVal }}</h3>
+            <h3 className='bg-gray-200 rounded py-4 px-2 text-xl text-[#3F3D3D]'>{{ isPublicVal }}</h3>
           </div>
         </div>
       </div>
@@ -79,7 +79,7 @@
 import NavBar from '../components/NavBar.vue'
 import GlobalFooter from '@/components/GlobalFooter.vue';
 import { firebaseApp, db } from '@/firebase'
-import { doc, setDoc, collection, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { getAuth } from 'firebase/auth'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
@@ -90,7 +90,7 @@ const $toast = useToast()
 export default {
   data() {
     return {
-      selectedPhoto: [],
+      selectedPhoto: [] as any[],
       name: "",
       email: "",
       age_range: "",
@@ -116,7 +116,7 @@ export default {
         "40to60": "40 - 60",
         "above60": "> 60",
       }
-      return ageRangeValDict[this.age_range] || "Not specified"
+      return (ageRangeValDict as any)[this.age_range] || "Not specified"
     },
     genderVal: function() {
       const genderValDict = {
@@ -124,7 +124,7 @@ export default {
         "female": "Female",
         "others": "Not specified",
       }
-      return genderValDict[this.gender] || "Not specified"
+      return (genderValDict as any)[this.gender] || "Not specified"
     },
     travelFreqVal: function() {
       const travelFreqValDict = {
@@ -133,7 +133,7 @@ export default {
         "threeToFive": "3 - 5 times a year",
         "moreThanFive": "> 5 times a year",
       }
-      return travelFreqValDict[this.travel_freq] || "Not specified"
+      return (travelFreqValDict as any)[this.travel_freq] || "Not specified"
     },
     travelCompVal: function() {
       const travelCompValDict = {
@@ -141,7 +141,7 @@ export default {
         "family": "Family",
         "friends": "Friends"
       }
-      return travelCompValDict[this.travel_comp] || "Not specified"
+      return (travelCompValDict as any)[this.travel_comp] || "Not specified"
     },
     isPublicVal: function() {
       return this.is_public ? "Public" : "Private"
@@ -153,7 +153,7 @@ export default {
     GlobalFooter,
   },
   methods: {
-    async fetchAndRenderImage(user) {
+    async fetchAndRenderImage(user: any) {
       const storage = getStorage(firebaseApp);
       const fileRef = ref(storage, `users/${user!.email}/profile_pic/profile_pic.jpg`);
 
@@ -165,34 +165,34 @@ export default {
         console.log(err)
       }
     },
-    async fetchDetails(user) {
+    async fetchDetails(user: any) {
       const docRef = doc(db, 'users', user!.email!)
       const userData = await getDoc(docRef);
-      if ("Name" in userData.data()) {
-        this.name = userData.data()["Name"]
+      if ("Name" in userData.data()!) {
+        this.name = userData.data()!["Name"]
       }
-      if ("Age_Range" in userData.data()) {
-        this.age_range = userData.data()["Age_Range"]
+      if ("Age_Range" in userData.data()!) {
+        this.age_range = userData.data()!["Age_Range"]
       } 
-      if ("Gender" in userData.data()) {
-        this.gender = userData.data()["Gender"]
+      if ("Gender" in userData.data()!) {
+        this.gender = userData.data()!["Gender"]
       } 
-      if ("Travel_Freq" in userData.data()) {
-        this.travel_freq = userData.data()["Travel_Freq"]
+      if ("Travel_Freq" in userData.data()!) {
+        this.travel_freq = userData.data()!["Travel_Freq"]
       } 
-      if ("Travel_Comp" in userData.data()) {
-        this.travel_comp = userData.data()["Travel_Comp"]
+      if ("Travel_Comp" in userData.data()!) {
+        this.travel_comp = userData.data()!["Travel_Comp"]
       } 
-      if ("Steps" in userData.data()) {
-        this.steps = userData.data()["Steps"]
+      if ("Steps" in userData.data()!) {
+        this.steps = userData.data()!["Steps"]
       } 
-      if ("Num_Visited" in userData.data()) {
-        this.num_visited = userData.data()["Num_Visited"]
+      if ("Num_Visited" in userData.data()!) {
+        this.num_visited = userData.data()!["Num_Visited"]
       } 
-      this.is_public = userData.data()["Is_Public"]
+      this.is_public = userData.data()!["Is_Public"]
       this.email = user!.email!
     },
-    handleFileChange(event) {
+    handleFileChange(event: any) {
       const auth = getAuth()
       const user = auth.currentUser
 
@@ -203,8 +203,8 @@ export default {
         if (file && /\.(jpg|jpeg|png)$/i.test(file.name)) {
           const reader = new FileReader();
           reader.onload = async (e) => {
-            this.selectedPhoto.push(e.target.result); // push the result into the array
-            await this.uploadImage(e.target.result, user!.email)
+            this.selectedPhoto.push(e.target!.result); // push the result into the array
+            await this.uploadImage(e.target!.result, user!.email)
             $toast.success('Profile photo updated successfully!', {
               position: 'top'
             })
@@ -216,7 +216,7 @@ export default {
         }
       }
     },
-    dataURLtoFile(dataURL, filename) {
+    dataURLtoFile(dataURL: any, filename: any) {
       const arr = dataURL.split(',');
       const mime = arr[0].match(/:(.*?);/)[1];
       const bstr = atob(arr[1]);
@@ -227,14 +227,14 @@ export default {
       }
       return new File([u8arr], filename, { type: mime });
     },
-    async uploadImage(file_url, user_email) {
+    async uploadImage(file_url: any, user_email: any) {
       const storage = getStorage(firebaseApp);
       const file = this.dataURLtoFile(file_url, `profile_pic.jpg`);
       const fileRef = ref(storage, `users/${user_email}/profile_pic/${file.name}`);
       const uploadTask = uploadBytesResumable(fileRef, file);
       await uploadTask;
     },
-    formatNumber(number) {
+    formatNumber(number: any) {
       if (number === undefined || isNaN(number)) {
         // Return a default value, such as '0', or handle the case as needed
         return '0';

@@ -14,7 +14,7 @@
             Prefer not to say
           </option>
           <option value="lessThanOnce">
-            < 1 time a year
+            &lt; 1 time a year
           </option>
           <option value="oneToTwo">
             1-2 times a year
@@ -23,7 +23,7 @@
             3-5 times a year
           </option>
           <option value="moreThanFive">
-            > 5 times a year
+            &gt; 5 times a year
           </option>
         </select>
       </div>
