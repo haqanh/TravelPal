@@ -1,8 +1,8 @@
 <template>
   <nav class="top-0 z-50 bg-white bg-opacity-0 backdrop-filter backdrop-blur-lg border-gray-200">
-    <div class="max-w-7xl mx-auto px-1 sm:px-2 lg:px-3">
+    <div class="max-w-7xl mx-auto">
       <div class="flex justify-between h-16 items-center">
-        <div class="flex space-x-4">
+        <div class="flex">
           <!-- Mobile Menu Button -->
           <div class="md:hidden">
             <button
@@ -29,7 +29,7 @@
           <div class="hidden md:flex items-center space-x-4">
             <a
               href="/dashboard"
-              class="text-gray-300 hover:bg-gray-700 hover:bg-opacity-10 hover:text-white px-3 py-2 rounded-md font-bold"
+              class="text-gray-300 hover:bg-gray-700 hover:bg-opacity-10 hover:text-white py-2 rounded-md font-bold"
               >TravelPal</a
             >
             <a
