@@ -22,7 +22,7 @@
 
       <!-- Photo container -->
       <div class="flex-none w-1/3 h-72 px-4 mx-2">
-        <img :src="place.imageUrl" :alt="place.Name" class="aspect-square object-cover rounded-xl">
+        <img :src="place.imageUrl" :alt="place.Name" class="w-full h-full object-cover rounded-xl">
       </div>
 
       <!-- Map container -->
