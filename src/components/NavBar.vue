@@ -150,10 +150,14 @@
 </template>
 
 <script lang="ts">
-import { firebaseApp } from '@/firebase'
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
-import { getStorage, ref, getDownloadURL } from 'firebase/storage'
-import defaultAvatar from '@/assets/DefaultAvatar.png'
+import { firebaseApp } from '@/firebase';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import type { User } from 'firebase/auth'; // Corrected type-only import for User
+import { getStorage, ref, getDownloadURL } from 'firebase/storage';
+import defaultAvatar from '@/assets/DefaultAvatar.png';
+
+// If User type from firebase is not nullable, create an extended type
+type NullableUser = User | null;
 
 export default {
   data() {
@@ -161,94 +165,95 @@ export default {
       dropdownOpen: false,
       mobileMenuOpen: false,
       selectedPhoto: '', // Changed to a string to hold a single photo URL
-      user: null,
-      defaultAvatar: defaultAvatar // Add this line
-    }
+      user: null as NullableUser, // Now explicitly nullable
+      defaultAvatar: defaultAvatar, // Add this line
+      enterInterval: 0 as number, // Add this line for enter interval ID
+      leaveInterval: 0 as number, // Add this line for leave interval ID
+    };
   },
   created() {
-    this.setupAuthListener()
+    this.setupAuthListener();
   },
   methods: {
     setupAuthListener() {
-      const auth = getAuth()
-      onAuthStateChanged(auth, (user) => {
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user: NullableUser) => {
         if (user) {
-          this.user = user
-          this.fetchAndRenderImage(user)
+          this.user = user;
+          this.fetchAndRenderImage(user);
         } else {
           // User is signed out
-          this.selectedPhoto = ''
+          this.selectedPhoto = '';
         }
-      })
+      });
     },
-    async fetchAndRenderImage(user) {
-      const storage = getStorage(firebaseApp)
-      const fileRef = ref(storage, `users/${user!.email}/profile_pic/profile_pic.jpg`)
+    async fetchAndRenderImage(user: User) {
+      const storage = getStorage(firebaseApp);
+      const fileRef = ref(storage, `users/${user.email}/profile_pic/profile_pic.jpg`);
 
       try {
-        const fileUrl = await getDownloadURL(fileRef)
-        this.selectedPhoto = fileUrl
+        const fileUrl = await getDownloadURL(fileRef);
+        this.selectedPhoto = fileUrl;
       } catch (err) {
-        this.selectedPhoto = this.defaultAvatar // Use the imported default avatar
+        this.selectedPhoto = this.defaultAvatar; // Use the imported default avatar
       }
     },
     logout() {
-      const auth = getAuth()
+      const auth = getAuth();
       signOut(auth)
         .then(() => {
-          this.$router.replace('/') // Redirect to homepage or login page after logout
+          this.$router.replace('/'); // Redirect to homepage or login page after logout
         })
         .catch((error) => {
-          console.error('Logout Failed', error)
-        })
+          console.error('Logout Failed', error);
+        });
     },
     toggleDropdown() {
-      this.dropdownOpen = !this.dropdownOpen
+      this.dropdownOpen = !this.dropdownOpen;
     },
     toggleMobileMenu() {
       // Method to toggle mobile menu
-      this.mobileMenuOpen = !this.mobileMenuOpen
+      this.mobileMenuOpen = !this.mobileMenuOpen;
     },
     closeDropdown() {
-      this.dropdownOpen = false
+      this.dropdownOpen = false;
     },
-
-    beforeEnter(el) {
-      el.style.height = 0
-      el.style.overflow = 'hidden'
+    beforeEnter(el: Element) {
+      (el as HTMLElement).style.height = '0';
+      (el as HTMLElement).style.overflow = 'hidden';
     },
-    enter(el, done) {
+    enter(el: Element, done?: () => void) {
       const increaseHeight = () => {
-        if (el.clientHeight < el.scrollHeight) {
-          const height = `${parseInt(el.style.height) + 5}px`
-          el.style.height = height
+        if ((el as HTMLElement).clientHeight < (el as HTMLElement).scrollHeight) {
+          const height = `${parseInt((el as HTMLElement).style.height) + 5}px`;
+          (el as HTMLElement).style.height = height;
         } else {
-          clearInterval(this.enterInterval)
-          done()
+          clearInterval(this.enterInterval);
+          if (done) done();
         }
-      }
-      this.enterInterval = setInterval(increaseHeight, 10)
+      };
+      this.enterInterval = window.setInterval(increaseHeight, 10);
     },
-    afterEnter(el) {},
-    enterCancelled(el) {
-      clearInterval(this.enterInterval)
-    },
-    beforeLeave(el) {},
-    leave(el, done) {
+    afterEnter(el: Element) {},
+    enterCancelled(el: Element) {
+        clearInterval(this.enterInterval);
+      },
+      beforeLeave(el: Element) {},
+    leave(el: Element, done?: () => void) {
       const decreaseHeight = () => {
-        if (el.clientHeight > 0) {
-          const height = `${parseInt(el.style.height) - 5}px`
-          el.style.height = height
+        if ((el as HTMLElement).clientHeight > 0) {
+          const height = `${parseInt((el as HTMLElement).style.height) - 5}px`;
+          (el as HTMLElement).style.height = height;
         } else {
-          clearInterval(this.leaveInterval)
-          done()
+          clearInterval(this.leaveInterval);
+          if (done) done();
         }
-      }
-      this.leaveInterval = setInterval(decreaseHeight, 10)
+      };
+      this.leaveInterval = window.setInterval(decreaseHeight, 10);
     },
-    afterLeave(el) {},
-    leaveCancelled(el) {
-      clearInterval(this.leaveInterval)
+    afterLeave(el: Element) {},
+    leaveCancelled(el: Element) {
+      clearInterval(this.leaveInterval);
     }
   }
 }
