@@ -1,5 +1,5 @@
 <template>
-  <aside class="bg-gray-100 w-72 px-6 py-8 sticky top-0 h-screen">
+  <aside class="bg-gray-100 w-80 px-6 py-8 sticky top-0 h-screen">
     <ul class="space-y-10">
       <li>
         <h5 class="text-xl font-semibold mb-4 text-left">Bucket List 🌍</h5>
@@ -7,9 +7,10 @@
           <li
             v-for="(country, index) in userData.Bucket_List"
             :key="index"
-            class="flex items-center mt-2"
+            class="country-item"
           >
-            <span :class="getFlagClass(country)" class="mr-2"></span> {{ country }}
+            <span :class="getFlagClass(country)"></span>
+            <span class="country-name">{{ country }}</span>
           </li>
         </ul>
       </li>
@@ -27,7 +28,7 @@
           <h3 class="text-l font-semibold mb-2">You've been to</h3>
           <div class="stats-container text-white">
             <span class="text-lg font-semibold">{{ formatNumber(userData.Num_Visited) }}</span>
-            Countries
+            <p>Countries</p>
           </div>
         </div>
         <div class="info-card2">
@@ -312,10 +313,41 @@ export default {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow for depth */
 }
 
-.fi {
-  /* Example to set width and height */
+/* .fi {
   width: 32px;
-  height: 24px; /* Maintain the aspect ratio of 4:3 */
+  height: 24px; 
+} */
+/* Assuming .fi is your flag class */
+.country-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem; /* Increase the bottom margin for more space between rows */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Increase the gap for the grid layout */
+.grid.grid-cols-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem; /* Adjust the gap to increase space between rows and columns */
+}
+
+/* Fixed size for flags */
+.fi {
+  width: 32px;
+  height: 24px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+}
+
+/* Styles for the country name */
+.country-name {
+  margin-left: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
 

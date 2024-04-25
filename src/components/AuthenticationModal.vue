@@ -260,14 +260,13 @@
   </TransitionRoot>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from 'vue'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 
 import { firebaseApp, db } from '@/firebase'
 import { doc, setDoc } from 'firebase/firestore'
 import {
-
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -284,16 +283,12 @@ const props = defineProps({
   open: Boolean
 })
 
-const open = ref(false)
-const login = ref(true)
+const isOpen = ref(props.open);  // Rename 'open' to 'isOpen' to avoid conflict with the prop 'open'
+watch(() => props.open, (newVal) => {
+  isOpen.value = newVal;
+});
 
-// Watch for external changes to the `open` prop and update the local state
-watch(
-  () => props.open,
-  (newVal) => {
-    open.value = newVal
-  }
-)
+const login = ref(true);
 
 const router = useRouter()
 
@@ -361,7 +356,10 @@ async function SignInWithGoogle() {
     .then((result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
       const credential = GoogleAuthProvider.credentialFromResult(result)
-      const token = credential.accessToken
+      if (!credential) {
+        throw new Error('No credentials returned from Google');
+      }
+      //const token = credential.accessToken
       // The signed-in user info.
       const user = result.user
       // IdP data available using getAdditionalUserInfo(result)
@@ -373,12 +371,12 @@ async function SignInWithGoogle() {
     })
     .catch((error) => {
       // Handle Errors here.
-      const errorCode = error.code
+      // const errorCode = error.code
       const errorMessage = error.message
       // The email of the user's account used.
-      const email = error.customData.email
+      // const email = error.customData.email
       // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error)
+      // const credential = GoogleAuthProvider.credentialFromError(error)
       // ...
       $toast.error(errorMessage, {
         position: 'top'
@@ -389,8 +387,8 @@ async function SignInWithGoogle() {
 const emit = defineEmits(['close'])
 
 function closeModal() {
-  open.value = false
-  emit('close')
+  isOpen.value = false;
+  emit('close');
 }
 
 async function addUser() {
@@ -406,7 +404,7 @@ async function addUser() {
   }
 }
 
-async function addUserGoogle(email) {
+async function addUserGoogle(email : any) {
   try {
     await setDoc(doc(db, "users", email), {
       email: email,

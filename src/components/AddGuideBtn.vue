@@ -9,7 +9,7 @@ import {
 } from '@headlessui/vue'
 import { ref, uploadString, getDownloadURL, getStorage } from 'firebase/storage'
 import { db, storage } from '@/firebase'
-import { collection, addDoc, updateDoc, doc, setDoc, serverTimestamp, getDoc , GeoPoint} from 'firebase/firestore'
+import { collection, addDoc, updateDoc, doc, setDoc, serverTimestamp, getDoc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import Datepicker from 'vue3-datepicker'
 import GlobalTag from './GlobalTag.vue';
@@ -23,7 +23,7 @@ import { firebaseApp } from '@/firebase';
 
 
 export default {
-  emits:['close', 'update-guide-id'],
+  emits:['close', 'update-guide-id', 'closeOnly'],
   components: {
     AddGuide2,
     HeadlessDialog,
@@ -77,6 +77,9 @@ export default {
     },
     closeModal() {
       this.$emit('close')
+    },
+    closeModalOnly() {
+      this.$emit('closeOnly')
     },
     clearStartDate() {
       this.selectedStartDate = null
@@ -252,7 +255,7 @@ export default {
             <DialogPanel class="panel_style scrollbar relative">
               <div class="flex justify-between items-center">
                 <DialogTitle class="addGuide_style text-center flex-grow"> Add Guide </DialogTitle>
-                <img src="../assets/Multiply.svg" alt="Close" class="cursor-pointer w-6 h-6" @click="closeModal" />
+                <img src="../assets/Multiply.svg" alt="Close" class="cursor-pointer w-6 h-6" @click="closeModalOnly" />
               </div>
               <br />
 

@@ -36,7 +36,9 @@
 </template>
 
 <script lang="ts">
-// Script setup area for your JavaScript (if necessary)
+export default {
+  name: 'EmptySideBar',
+}
 </script>
 
 <style scoped>

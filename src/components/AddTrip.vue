@@ -13,7 +13,7 @@
         <div class="fixed inset-0 bg-black/25" />
       </TransitionChild>
 
-      <div class="fixed inset-0 flex items-center justify-center overflow-y-auto" v-if="isfirstDialog">
+      <div class="z-50 fixed inset-0 flex items-center justify-center overflow-y-auto" v-if="isfirstDialog">
         <div class="p-[6vh] text-center">
           <TransitionChild
             as="template"
@@ -25,7 +25,7 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="h-[85vh] w-[50vw] overflow-y-auto transform rounded-[3vh] bg-white p-[3.2vh] text-left align-middle shadow-xl transition-all scrollbar"
+              class="h-[85vh] w-[50vw] overflow-y-auto transform rounded-[3vh] bg-white p-20 text-left align-middle shadow-xl transition-all scrollbar"
             >
               <DialogTitle
                 as="h3"
@@ -296,7 +296,7 @@ export default {
       this.tripLocation = this.selectedTempPlace.formatted_address;
       const distance = this.calculateDistance(this.selectedTempPlace.geometry.location.lat(), this.selectedTempPlace.geometry.location.lng(), 
       1.352083, 103.819836); //Latitude and Longitude of Singapore
-      const numDays = Math.round((this.selectedEndDate - this.selectedStartDate) / (1000 * 60 * 60 * 24));
+      const numDays = Math.round((new Date(this.selectedEndDate) - new Date(this.selectedStartDate)) / (1000 * 60 * 60 * 24));
       const steps = this.num_of_steps(numDays);
       const userDoc = await getDoc(userRef);
       if (!userDoc.exists()) {

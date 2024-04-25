@@ -23,7 +23,7 @@
         </div>
         <div class="flex items-center justify-center mx-[0vw] ">
           <div v-for="(photo, index) in selectedPhoto" :key="index">
-            <img :src="photo" alt="Selected Photo" class="h-24 w-24 object-fit-cover cursor-pointer rounded-full" @click="openFileInput">
+            <img :src="photo" alt="Selected Photo" class="h-24 w-24 object-cover cursor-pointer rounded-full" @click="openFileInput">
           </div>
             <div v-if="selectedPhoto.length === 0" class="flex flex-col items-center justify-center">
           </div>

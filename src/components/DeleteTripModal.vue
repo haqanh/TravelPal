@@ -12,23 +12,23 @@
         <div class="fixed inset-0 bg-black/25" />
       </TransitionChild>
     <div class="fixed inset-0 flex items-center justify-center shadow-lg rounded-2xl">
-      <div class="w-[40vw] h-[40vh] text-center border-2 rounded-[4rem] shadow-lg p-8 flex flex-col justify-between bg-white">
-        <div class="flex items-center justify-start h-[10vh]">
-          <img src="../assets/Delete Warning.svg" class="mt-[1.5vh] w-[8vw] h-[8vw]">
-          <p class="mt-[1vw] ml-[1vw] justify-center text-[2.5vw] font-bold text-gray-800">
+      <div class="lg:w-100 xl:h-100 lg:h-80 text-center border-2 rounded-[4rem] shadow-lg p-8 flex flex-col justify-between bg-white">
+        <div class="flex items-center justify-start xl:h-20">
+          <img src="../assets/Delete Warning.svg" class="mt-2 w-auto h-auto">
+          <p class="mt-[1vw] ml-[1vw] justify-center xl:text-4xl font-bold text-gray-800">
             Confirm Deletion
           </p>
         </div>
         <div class="flex flex-col items-center justify-center w-[30vw] h-[5vh] gap-[2vw] mt-[3.5vw]">
-          <p class="text-[1.3vw] text-[#3F3D3D] text-left ml-[1vw] font-medium ">
+          <p class="xl:text-xl text-[#3F3D3D] text-left ml-[1vw] font-medium ">
             Are you sure you would like to delete <strong>{{name}}</strong>? This action cannot be undone.
           </p>
         </div>
         <div class="flex justify-end gap-4 mt-[1.7vw]">
-            <button type="button" @click="handleCancel" class="px-1 py-1 rounded-xl text-[#3F3D3D] border border-[#3F3D3D] undefined hover:bg-gray-300 focus:ring-indigo-500 focus:ring-offset-indigo-200 transition ease-in duration-200 text-center text-[1vw] font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2">
+            <button type="button" @click="handleCancel" class="px-1 py-1 rounded-xl text-[#3F3D3D] border border-[#3F3D3D] undefined hover:bg-gray-300 focus:ring-gray-500 focus:ring-offset-gray-200 transition ease-in duration-200 text-center text-l font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2">
                 Cancel
             </button>
-            <button type="button" @click="handleDelete" class="px-1 py-1 rounded-xl text-[#D80027] border border-[#D80027] undefined hover:bg-red-200 focus:ring-indigo-500 focus:ring-offset-indigo-200 transition ease-in duration-200 text-center text-[1vw] font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2">
+            <button type="button" @click="handleDelete" class="px-1 py-1 rounded-xl text-[#D80027] border border-[#D80027] undefined hover:bg-red-200 focus:ring-red-500 focus:ring-offset-red-200 transition ease-in duration-200 text-center text-l font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2">
                 Delete
             </button>
         </div>
@@ -44,6 +44,10 @@ export default {
       type: String,
       required: true,
     },
+    type: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -52,15 +56,26 @@ export default {
   },
   methods: {
     handleDelete() {
-      console.log('Delete Trip');
-      this.$emit('del');
-      this.isOpen = false;
+      if (this.type == "trip") {
+        console.log('Delete Trip');
+        this.$emit('delTrip');
+        this.isOpen = false;
+      } else if (this.type  == "guide") {
+        console.log('Delete Guide');
+        this.$emit('delGuide');
+        this.isOpen = false;
+      }
     },
     handleCancel() {
-      // Close the modal
-      this.isOpen = false;
-      console.log('Cancel Deletion');
-      this.$emit('closeDel');
+      if (this.type == "trip") {
+        console.log('Close Delete');
+        this.isOpen = false;
+        this.$emit('closeDelTrip');
+      } else if (this.type  == "guide") {
+        console.log('Close Delete');
+        this.isOpen = false;
+        this.$emit('closeDelGuide');
+      }
     },
   },
 };
