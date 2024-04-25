@@ -1,14 +1,14 @@
 <template>
-  <div class="container mx-auto p-4 xl:p-6 2xl:p-8" v-if="place">
+  <div class="container mx-auto p-4 2xl:p-8" v-if="place">
     <div class="flex">
       <!-- Text container -->
       <div class="flex-1 min-w-0 mx-2">
-        <div class="flex items-center mb-1 2xl:space-x-4 xl:space-x-2 space-x-1"> 
-          <img src="@/assets/map-marker.svg" alt="Map Pin" class="2xl:w-10 2xl:h-10 xl:w-8 xl:h-8 w-6 h-6">
-          <h2 class="text-md xl:text-xl 2xl:text-2xl font-bold text-pretty">{{ place.Name }}</h2>
-          <span class="text-sm xl:text-lg 2xl:text-xl font-semibold">{{ priceSymbol }}</span>
+        <div class="flex items-center mb-1 2xl:space-x-4 space-x-1"> 
+          <img src="@/assets/map-marker.svg" alt="Map Pin" class="2xl:w-10 2xl:h-10 w-6 h-6">
+          <h2 class="text-md 2xl:text-2xl font-bold text-pretty">{{ place.Name }}</h2>
+          <span class="text-sm 2xl:text-xl font-semibold">{{ priceSymbol }}</span>
         </div>
-        <div class="flex flex-wrap 2xl:mb-4 xl:mb-2 mb-1">
+        <div class="flex flex-wrap 2xl:mb-4 mb-1">
           <span class="tags 2xl:px-2 2xl:py-1 px-1 py-0.5 2xl:mt-2 2xl:mr-2 2xl:mb-2 mt-1 mr-1 mb-1" 
                 v-for="tag in place.Tags" 
                 :key="tag">

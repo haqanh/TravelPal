@@ -8,7 +8,7 @@
       <div class="absolute inset-0 bg-gray-700 bg-opacity-50 rounded-b-3xl"></div>
       <div class="absolute bottom-0 left-0 w-full p-4 text-center">
         <h1 class="text-6xl font-bold text-white"> {{ title }} </h1>
-        <p class="text-xl text-white my-1 xl:my-2 2xl:my-4"> Country: {{ country }} </p>
+        <p class="text-xl text-white my-1 2xl:my-4"> Country: {{ country }} </p>
       </div>
     </div>
 
@@ -22,23 +22,23 @@
         <GuideNav :createdBy="createdBy" :profilePicUrl="profilePhoto" :sections="sections" :activeSection="activeSection" class="h-screen overflow-y-auto sticky top-0 bottom-0"/>
       </div>
       <main id="guideContent" class="guide-content mt-[35vh] overflow-auto px-10 w-3/4 ">
-        <h1 class="text-base xl:text-md 2xl:text-lg italic font-light text-justify py-1 xl:py-2 2xl:py-4">
+        <h1 class="text-base 2xl:text-lg italic font-light text-justify py-1 2xl:py-4">
         " {{ overview }} "
         </h1>
-        <section id="generalAdvice" class="pb-1 xl:pb-2 2xl:pb-4">
+        <section id="generalAdvice" class="pb-1 2xl:pb-4">
           <!-- General Advice content goes here -->
-          <h1 class="text-2xl xl:text-3xl 2xl:text-4xl font-bold">
+          <h1 class="text-2xl 2xl:text-4xl font-bold">
             General Advice
           </h1>
-          <h1 class="text-sm xl:text-base 2xl:text-lg my-1 xl:my-2 2xl:my-4 text-justify text-gray-600">
+          <h1 class="text-sm 2xl:text-lg my-1 2xl:my-4 text-justify text-gray-600">
             <h1 v-for="advice in generalAdvice" :key="advice.id">
               {{ advice.content }}
             </h1>
           </h1>
         </section>
-        <section id="placesToVisit" class="py-1 xl:py-2 2xl:py-4">
+        <section id="placesToVisit" class="py-1 2xl:py-4">
           <!-- Places to Visit content goes here -->
-          <h1 class="text-2xl xl:text-3xl 2xl:text-4xl font-bold">
+          <h1 class="text-2xl 2xl:text-4xl font-bold">
             Places to Visit
           </h1>
           <GuideComponent
@@ -47,9 +47,9 @@
             :place="place"
           />
         </section>
-        <section id="placesToEat" class="py-1 xl:py-2 2xl:py-4">
+        <section id="placesToEat" class="py-1 2xl:py-4">
           <!-- Places to Eat content goes here -->
-          <h1 class="text-2xl xl:text-3xl 2xl:text-4xl font-bold">
+          <h1 class="text-2xl 2xl:text-4xl font-bold">
             Places to Eat
           </h1>
           <GuideComponent
@@ -58,9 +58,9 @@
             :place="place"
           />
         </section>
-        <section id="placesToStay" class="py-1 xl:py-2 2xl:py-4">
+        <section id="placesToStay" class="py-1 2xl:py-4">
           <!-- Places to Stay content goes here -->
-          <h1 class="text-2xl xl:text-3xl 2xl:text-4xl font-bold">
+          <h1 class="text-2xl 2xl:text-4xl font-bold">
             Places to Stay
           </h1>
           <GuideComponent
@@ -69,9 +69,9 @@
             :place="place"
           />
         </section>
-        <section id="nearbyPlaces" class="py-1 xl:py-2 2xl:py-4">
+        <section id="nearbyPlaces" class="py-1 2xl:py-4">
           <!-- Nearby Places content goes here -->
-          <h1 class="text-2xl xl:text-3xl 2xl:text-4xl font-bold">
+          <h1 class="text-2xl 2xl:text-4xl font-bold">
             Nearby Places
           </h1>
           <GuideComponent
