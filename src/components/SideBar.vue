@@ -45,14 +45,26 @@
 <script lang="ts">
 import { db } from '../firebase'
 import { doc, getDoc } from 'firebase/firestore'
-import { getAuth, onAuthStateChanged } from 'firebase/auth' // Import Firebase Authentication methods
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+
+// Define a type for the user data to resolve the TypeScript errors
+type UserData = {
+  Bucket_List: string[],
+  Distance_Travelled: number,
+  Num_Visited: number,
+  Steps: number,
+}
 
 export default {
   data() {
     return {
+      // Ensure the property names match the case used in the template
       userData: {
-        Bucket_list: [] // Initialize with an empty array
-      }
+        Bucket_List: [],
+        Distance_Travelled: 0,
+        Num_Visited: 0,
+        Steps: 0,
+      } as UserData // Cast the initial object to the UserData type
     }
   },
   created() {
@@ -62,22 +74,22 @@ export default {
     initAuthListener() {
       const auth = getAuth()
       onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          // Fetch user data using the email as the document ID
-          this.fetchUserData(user.email)
-          console.log(user.email)
+        if (user && user.email) { // Check that email is not null
+          this.fetchUserData(user.email);
+          console.log(user.email);
         } else {
-          console.log('User is not logged in')
+          console.log('User is not logged in');
         }
-      })
+      });
     },
-    async fetchUserData(email) {
+    async fetchUserData(email: string) { // Add the string type annotation to email
       try {
-        const userRef = doc(db, 'users', email) // Use email to reference user document
+        const userRef = doc(db, 'users', email)
         const userSnapshot = await getDoc(userRef)
 
         if (userSnapshot.exists()) {
-          this.userData = userSnapshot.data()
+          // Cast the fetched data to the UserData type
+          this.userData = userSnapshot.data() as UserData
           console.log('User data:', this.userData)
         } else {
           console.error('No such user!')
@@ -86,15 +98,16 @@ export default {
         console.error('Error fetching user data:', error)
       }
     },
-    formatNumber(number) {
+    formatNumber(number: number) { // Add the number type annotation to number
       if (number === undefined || isNaN(number)) {
-        // Return a default value, such as '0', or handle the case as needed
         return '0';
       }
       return number.toLocaleString();
     },
-    getFlagClass(country) {
-      const countryCodes = {
+    getFlagClass(country: string): string {
+      if (!country) return 'fi'; // Add a check for null or undefined
+
+      const countryCodes: Record<string, string> = {
         Albania: 'fi fi-al',
         Algeria: 'fi fi-dz',
         Andorra: 'fi fi-ad',
