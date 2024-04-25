@@ -5,8 +5,6 @@ import AddTrip from '../components/AddTrip.vue'
 import EditTrip from '../components/EditTripFirstPopUp.vue'
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import LandingPage from '@/views/LandingPage.vue'
-
-// import Home from '../views/Home.vue'
 import ViewTrip from '../views/ViewTrip.vue'
 import Explore from '../views/ExploreView.vue';
 import UserProfilingView from '../views/UserProfilingView.vue'

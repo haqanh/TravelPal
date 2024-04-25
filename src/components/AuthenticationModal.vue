@@ -359,7 +359,7 @@ async function SignInWithGoogle() {
       if (!credential) {
         throw new Error('No credentials returned from Google');
       }
-      const token = credential.accessToken
+      //const token = credential.accessToken
       // The signed-in user info.
       const user = result.user
       // IdP data available using getAdditionalUserInfo(result)
@@ -371,12 +371,12 @@ async function SignInWithGoogle() {
     })
     .catch((error) => {
       // Handle Errors here.
-      const errorCode = error.code
+      // const errorCode = error.code
       const errorMessage = error.message
       // The email of the user's account used.
-      const email = error.customData.email
+      // const email = error.customData.email
       // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error)
+      // const credential = GoogleAuthProvider.credentialFromError(error)
       // ...
       $toast.error(errorMessage, {
         position: 'top'
