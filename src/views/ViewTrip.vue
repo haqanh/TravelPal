@@ -93,13 +93,27 @@
 </template>
 
 <script lang="ts">
-import { db, firebaseApp } from '../firebase'
-import { getDoc, getDocs, doc, deleteDoc } from 'firebase/firestore'
-import { useRouter } from 'vue-router'
+import { db } from '../firebase'
+import { doc, getDoc } from 'firebase/firestore'
+import type { DocumentData } from 'firebase/firestore'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import type { User } from 'firebase/auth'
 import NavBar from '@/components/NavBar.vue'
 import GlobalFooter from '@/components/GlobalFooter.vue'
 import GlobalTag from '@/components/GlobalTag.vue'
+import type { Timestamp } from 'firebase/firestore'
+
+interface TripData {
+  Photos: string[];
+  Name: string;
+  Location: string;
+  Last_Edit: Timestamp | null;
+  Start_Date: Timestamp | null;
+  End_Date: Timestamp | null;
+  Cost: number;
+  Summary: string;
+  Tags: string[];
+}
 
 export default {
   components: {
@@ -109,13 +123,13 @@ export default {
   },
   data() {
     return {
-      tripData: {},
+      tripData: {} as TripData,
       isModalOpen: false,
       currentPhoto: '',
-      imageError: false, // Track loading errors for images.
-      showAllImages: false, // New data property to control the display of images.,
-      displayedPhotos: [],
-      tags: [],
+      imageError: false,
+      showAllImages: false,
+      displayedPhotos: [] as string[],
+      tags: [] as string[],
     }
   },
   created() {
@@ -124,26 +138,17 @@ export default {
   methods: {
     async fetchTripData() {
       const auth = getAuth()
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          const userRef = doc(db, 'users', user.email)
-          console.log(user.email)
-          console.log(this.$route.params.id)
-          const tripId = this.$route.params.id
-          console.log(userRef)
-          // const userId = 'yNXZbTHBnLNiDu9Wb7EfepEgZTy1'
-          // const tripId = 'EMms9ABgi6i4fUWvA9Yr'
+      onAuthStateChanged(auth, async (user: User | null) => {
+        if (user?.email) {
+          const tripId = this.$route.params.id as string
           try {
-            const tripRef = doc(userRef, 'trips', tripId)
+            const tripRef = doc(doc(db, 'users', user.email), 'trips', tripId)
             const tripSnapshot = await getDoc(tripRef)
 
             if (tripSnapshot.exists()) {
-              this.tripData = tripSnapshot.data()
+              this.tripData = tripSnapshot.data() as TripData
               this.displayedPhotos = this.tripData.Photos.slice(0, 6)
               this.tags = this.tripData.Tags
-              console.log('Trip data:', this.tripData)
-              console.log(this.$route.params.id)
-              console.log('Tags:', this.tripData.Tags)
             } else {
               console.error('No such trip!')
             }
@@ -155,47 +160,33 @@ export default {
         }
       })
     },
-    openModal(photoName) {
-      this.currentPhoto = new URL(`${photoName}`, import.meta.url).href
+    openModal(photoUrl: string) {
+      this.currentPhoto = photoUrl
       this.isModalOpen = true
       this.imageError = false
     },
     closeModal() {
       this.isModalOpen = false
     },
-    toggleImagesDisplay() {
-      this.showAllImages = true // Update this to show all images.
-    },
-    formatDateRange(startTimestamp, endTimestamp) {
-      const options = { year: 'numeric', month: 'long', day: 'numeric' }
-
-      const startDate = startTimestamp
-        ? new Date(startTimestamp.seconds * 1000).toLocaleDateString('en-US', options)
-        : 'N/A'
-
-      const endDate = endTimestamp
-        ? new Date(endTimestamp.seconds * 1000).toLocaleDateString('en-US', options)
-        : 'N/A'
-
+    formatDateRange(startTimestamp: Timestamp | null, endTimestamp: Timestamp | null): string {
+      const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' }
+      const startDate = startTimestamp ? new Date(startTimestamp.toDate()).toLocaleDateString('en-US', options) : 'N/A'
+      const endDate = endTimestamp ? new Date(endTimestamp.toDate()).toLocaleDateString('en-US', options) : 'N/A'
       return `${startDate} - ${endDate}`
     },
-    formatDate(Timestamp) {
-      const options = { year: 'numeric', month: 'long', day: 'numeric' }
-
-      const editDate = Timestamp
-        ? new Date(Timestamp.seconds * 1000).toLocaleDateString('en-US', options)
-        : 'N/A'
-
+    formatDate(timestamp: Timestamp | null): string {
+      const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' }
+      const editDate = timestamp ? new Date(timestamp.toDate()).toLocaleDateString('en-US', options) : 'N/A'
       return editDate
     },
     viewAllPhotos() {
       this.showAllImages = true
-      this.displayedPhotos = this.tripData.Photos // Show all photos
+      this.displayedPhotos = this.tripData.Photos
     }
   },
   computed: {
-    isMobile() {
-      return window.innerWidth < 768 // Example breakpoint for mobile devices
+    isMobile(): boolean {
+      return window.innerWidth < 768
     }
   }
 }
