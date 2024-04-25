@@ -193,12 +193,14 @@ export default {
       }
     },
     logout() {
-      const auth = getAuth();
-      signOut(auth).then(() => {
-        this.$router.replace('/'); // Redirect to homepage or login page after logout
-      }).catch((error) => {
-        console.error('Logout Failed', error);
-      });
+      const auth = getAuth()
+      signOut(auth)
+        .then(() => {
+          this.$router.replace('/') // Redirect to homepage or login page after logout
+        })
+        .catch((error) => {
+          console.error('Logout Failed', error)
+        })
     },
     toggleDropdown() {
       this.dropdownOpen = !this.dropdownOpen
