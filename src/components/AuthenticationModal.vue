@@ -283,16 +283,12 @@ const props = defineProps({
   open: Boolean
 })
 
-const open = ref(false);
-const login = ref(true)
+const isOpen = ref(props.open);  // Rename 'open' to 'isOpen' to avoid conflict with the prop 'open'
+watch(() => props.open, (newVal) => {
+  isOpen.value = newVal;
+});
 
-// Watch for external changes to the `open` prop and update the local state
-watch(
-  () => props.open,
-  (newVal) => {
-    open.value = newVal
-  }
-)
+const login = ref(true);
 
 const router = useRouter()
 
@@ -391,8 +387,8 @@ async function SignInWithGoogle() {
 const emit = defineEmits(['close'])
 
 function closeModal() {
-  open.value = false
-  emit('close')
+  isOpen.value = false;
+  emit('close');
 }
 
 async function addUser() {
