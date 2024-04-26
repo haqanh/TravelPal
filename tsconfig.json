@@ -12,9 +12,10 @@
     }
   ],
   "compilerOptions": {
-    "types": ["vue"],
+    "types": ["vue", "google.maps"],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
+    
   }
 }

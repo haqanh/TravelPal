@@ -1,15 +1,15 @@
 <template>
-  <div class="NavBarImage">
+  <div class="NavBarImage relative z-20">
     <NavBar />
   </div>
-  <div class="flex">
+  <div class="flex z-10">
     <SideBar class="flex"/>
-    <div class="w-[70vw] p-10 my-10 mx-10">
+    <div class="w-[70vw] p-10 my-5 mx-10 z-5">
       <div
-        class="DashboardContents flex flex-col lg:flex-row justify-between lg:items-center -mx-10"
+        class="DashboardContents flex flex-col lg:flex-row justify-between lg:items-center -mx-10 z-2"
       >
         <h1 class="lg:text-5xl md:text-4xl font-semibold text-[#3F3D3D] mx-10">Home</h1>
-        <div class="relative flex items-center w-full h-full lg:w-96 group mt-4 lg:mt-0">
+        <div class="relative flex items-center w-full h-full lg:w-96 group mt-4 lg:mt-0 z-5">
           <svg
             class="absolute left-0 z-0 hidden w-4 h-4 ml-4 text-gray-500 pointer-events-none fill-current group-hover:text-gray-400 sm:block"
             xmlns="http://www.w3.org/2000/svg"
@@ -31,13 +31,14 @@
         <h1 class="lg:text-3xl md:text-2xl font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">
           My Travels
         </h1>
-        <div class="border-b border-[#D9D9D9] md:w-[48vw] md:mr-12 lg:mr-0 lg:w-[52vw] flex-shrink-0"></div>
+        <div class="border-b border-[#D9D9D9] md:w-[48vw] md:mr-12 lg:mr-0 lg:w-[50vw] flex-shrink-0"></div>
         <button class="flex-shrink-0 hover:scale-125" @click="toggleAddTrip">
           <img src="../assets/Add Button.svg" alt="Add Trip" />
         </button>
       </div>
       <AddTrip v-if="showAddTrip" @closetrip="resetAddTrip" @closetriponly="backToDashboard" />
-      <div class="TripCardWrapper grid grid-cols-3 min-w-full gap-4">
+      <div class="flex flex-wrap justify-center space-x-12">
+      <div class="TripCardWrapper grid 2xl:grid-cols-4 grid-cols-3 min-w-full gap-[3.8vw]">
         <TripCard
           class="cursor-pointer"
           @contextmenu.prevent="openContextMenuTrip($event, trip)"
@@ -52,19 +53,21 @@
           :TripCost="trip.Cost"
         />
       </div>
+      </div>
       <div class="flex justify-between items-center my-10 mb-10 min-w-full -mx-10">
         <h1 class="lg:text-3xl md:text-2xl font-semibold text-[#3F3D3D] whitespace-nowrap flex-shrink-0 mx-10">
           My Guides
         </h1>
-        <div class="border-b border-[#D9D9D9] w-[48vw] mr-12 lg:mr-0 lg:w-[52vw] flex-shrink-0"></div>
+        <div class="border-b border-[#D9D9D9] w-[48vw] mr-12 lg:mr-0 lg:w-[50vw] flex-shrink-0"></div>
         <button class="flex-shrink-0 hover:scale-125" @click="toggleAddGuide">
           <img src="../assets/Add Button.svg" alt="Add Guide" />
         </button>
       </div>
       <AddGuide v-if="showAddGuide" @close="resetAddGuide" @closeOnly="closeGuideModal" />
-      <div class="GuideCardWrapper grid grid-cols-3 min-w-full gap-4">
+      <div class="flex flex-wrap justify-center space-x-12">
+      <div class="GuideCardWrapper grid xl:grid-cols-3 2xl:grid-cols-4 min-w-full gap-[3.8vw]">
         <GuideCard
-          class="cursor-pointer"
+          class="cursor-pointer "
           @click="viewGuide(guide)"
           @contextmenu.prevent="openContextMenuGuide($event, guide)"
           v-for="guide in filteredGuides"
@@ -73,6 +76,7 @@
           :Location="guide.Destination"
           :GuideImage="guide.Cover_Photo"
         />
+      </div>
       </div>
     </div>
   </div>
@@ -180,16 +184,16 @@ export default {
       showAddTrip: false,
       showDeleteTripModal: false,
       showDeleteGuideModal: false,
-      trips: [],
-      guides: [],
+      trips: [{id: 0, Name: '', Location:"", Start_Date:0, End_Date:0, Photos: [] as String[],  Cost: 0}] as any[],
+      guides: [{id: 0, Guide_Title: '', Destination: '', Cover_Photo: ''}] as any[],
       searchInput: '',
       contextMenuOpenTrip: false,
       contextMenuPositionTrip: { x: 0, y: 0 },
       contextMenuOpenGuide: false,
       contextMenuPositionGuide: { x: 0, y: 0 },
-      selectedTrip: null,
-      selectedGuide: null,
-      userEmail: '',
+      selectedTrip: null as any | null,
+      selectedGuide: null as any | null,
+      userEmail: null as string | null,
       type1: 'trip',
       type2: 'guide',
     }
@@ -200,7 +204,7 @@ export default {
         return this.trips
       } else {
         return this.trips.filter((trip) => {
-          return trip.Name.toLowerCase().startsWith(this.searchInput.toLowerCase())
+          return (trip as { Name: string }).Name.toLowerCase().startsWith(this.searchInput.toLowerCase());
         })
       }
     },
@@ -209,7 +213,7 @@ export default {
         return this.guides
       } else {
         return this.guides.filter((guide) => {
-          return guide.Guide_Title.toLowerCase().startsWith(this.searchInput.toLowerCase())
+          return (guide as { Guide_Title: string }).Guide_Title.toLowerCase().startsWith(this.searchInput.toLowerCase());
         })
       }
     }
@@ -241,23 +245,23 @@ export default {
     backToDashboard() {
       this.showAddTrip = false
     },
-    viewTrip(trip) {
+    viewTrip(trip: object) {
       this.$router.push({
         name: 'viewtrip',
         params: {
-          id: trip.id
+            id: (trip as { id: string }).id
         }
       })
     },
-    viewGuide(guide) {
+    viewGuide(guide: object) {
       this.$router.push({
         name: 'GuideView',
         params: {
-          docRef: guide.id
+            docRef: (guide as { id: string }).id
         }
       })
     },
-    openContextMenuTrip(event, trip) {
+    openContextMenuTrip(event: MouseEvent, trip: object) {
       this.contextMenuOpenTrip = true
       this.contextMenuPositionTrip = {
         x: event.clientX + window.scrollX,
@@ -265,7 +269,7 @@ export default {
       }
       this.selectedTrip = trip
     },
-    openContextMenuGuide(event, guide) {
+    openContextMenuGuide(event: MouseEvent, guide: object) {
       this.contextMenuOpenGuide = true
       this.contextMenuPositionGuide = {
         x: event.clientX + window.scrollX,
@@ -282,24 +286,26 @@ export default {
       this.contextMenuOpenGuide = false
     },
     async deleteDocTrip() {
-      this.trips = this.trips.filter((trip) => trip.Name !== this.selectedTrip.Name)
-      const tripRef = doc(db, 'users', this.userEmail, 'trips', this.selectedTrip.Name)
-      await updateDoc(doc(db, 'users', this.userEmail), {
-        Distance_Travelled: increment(-this.selectedTrip.Distance_Travelled),
-        Num_Visited: increment(-1),
-        Steps: increment(-this.selectedTrip.Steps)
-      })
-      const storage = getStorage()
-      const folderRef = ref(storage, `users/${this.userEmail}/trips/${this.selectedTrip.Name}`)
-      listAll(folderRef).then((res) => {
-        res.items.forEach((itemRef) => {
-          deleteObject(itemRef)
+      if (this.selectedTrip && this.trips && this.userEmail) {
+        this.trips = this.trips.filter((trip: { Name: string }): boolean => trip.Name !== this.selectedTrip.Name);
+        const tripRef = doc(db, 'users', this.userEmail, 'trips', this.selectedTrip.Name)
+        await updateDoc(doc(db, 'users', this.userEmail), {
+          Distance_Travelled: increment(-this.selectedTrip.Distance_Travelled),
+          Num_Visited: increment(-1),
+          Steps: increment(-this.selectedTrip.Steps)
         })
-      })
-      deleteDoc(tripRef)
-      this.showDeleteTripModal = false
-      localStorage.setItem('showToastTripDelete', 'true')
-      location.reload()
+        const storage = getStorage()
+        const folderRef = ref(storage, `users/${this.userEmail}/trips/${this.selectedTrip.Name}`)
+        listAll(folderRef).then((res) => {
+          res.items.forEach((itemRef) => {
+            deleteObject(itemRef)
+          })
+        })
+        deleteDoc(tripRef)
+        this.showDeleteTripModal = false
+        localStorage.setItem('showToastTripDelete', 'true')
+        location.reload()
+      }
     },
     closeDelTrip() {
       this.showDeleteTripModal = false
@@ -308,115 +314,117 @@ export default {
       this.showDeleteGuideModal = false
     },
     async deleteDocGuide() {
-      const documentId = this.selectedGuide.id;
-      this.guides = this.guides.filter((guide) => guide.Guide_Title !== this.selectedGuide.Guide_Title);
-      
-      const guideRef = doc(db, 'users', this.userEmail, 'guides', documentId);
-      const globalGuideRef = doc(db, 'guides', documentId);
-      
-      // Known subcollection (In User)
-      const subcollectionRef1 = collection(guideRef, 'advices');
-      const subcollectionRef2 = collection(guideRef, 'placesNearby');
-      const subcollectionRef3 = collection(guideRef, 'placesToEat');
-      const subcollectionRef4 = collection(guideRef, 'placesToStay');
-      const subcollectionRef5 = collection(guideRef, 'placesToVisit');
-      const subcollectionSnapshot1 = await getDocs(subcollectionRef1);
-      const subcollectionSnapshot2 = await getDocs(subcollectionRef2);
-      const subcollectionSnapshot3 = await getDocs(subcollectionRef3);
-      const subcollectionSnapshot4 = await getDocs(subcollectionRef4);
-      const subcollectionSnapshot5 = await getDocs(subcollectionRef5);
+      if (this.selectedGuide && this.guides && this.userEmail) {
+        const documentId = this.selectedGuide.id;
+        this.guides = this.guides.filter((guide) => guide.Guide_Title !== this.selectedGuide.Guide_Title);
+        
+        const guideRef = doc(db, 'users', this.userEmail, 'guides', documentId);
+        const globalGuideRef = doc(db, 'guides', documentId);
+        
+        // Known subcollection (In User)
+        const subcollectionRef1 = collection(guideRef, 'advices');
+        const subcollectionRef2 = collection(guideRef, 'placesNearby');
+        const subcollectionRef3 = collection(guideRef, 'placesToEat');
+        const subcollectionRef4 = collection(guideRef, 'placesToStay');
+        const subcollectionRef5 = collection(guideRef, 'placesToVisit');
+        const subcollectionSnapshot1 = await getDocs(subcollectionRef1);
+        const subcollectionSnapshot2 = await getDocs(subcollectionRef2);
+        const subcollectionSnapshot3 = await getDocs(subcollectionRef3);
+        const subcollectionSnapshot4 = await getDocs(subcollectionRef4);
+        const subcollectionSnapshot5 = await getDocs(subcollectionRef5);
 
-      // Known subcollection (In Global)
-      const subcollectionRef1Global = collection(globalGuideRef, 'advices');
-      const subcollectionRef2Global = collection(globalGuideRef, 'placesNearby');
-      const subcollectionRef3Global = collection(globalGuideRef, 'placesToEat');
-      const subcollectionRef4Global = collection(globalGuideRef, 'placesToStay');
-      const subcollectionRef5Global = collection(globalGuideRef, 'placesToVisit');
-      const subcollectionSnapshot1Global = await getDocs(subcollectionRef1Global);
-      const subcollectionSnapshot2Global = await getDocs(subcollectionRef2Global);
-      const subcollectionSnapshot3Global = await getDocs(subcollectionRef3Global);
-      const subcollectionSnapshot4Global = await getDocs(subcollectionRef4Global);
-      const subcollectionSnapshot5Global = await getDocs(subcollectionRef5Global);
-      
-      if (subcollectionSnapshot1 && !subcollectionSnapshot1.empty) {
-        for (let doc of subcollectionSnapshot1.docs) {
-          await deleteDoc(doc.ref);
+        // Known subcollection (In Global)
+        const subcollectionRef1Global = collection(globalGuideRef, 'advices');
+        const subcollectionRef2Global = collection(globalGuideRef, 'placesNearby');
+        const subcollectionRef3Global = collection(globalGuideRef, 'placesToEat');
+        const subcollectionRef4Global = collection(globalGuideRef, 'placesToStay');
+        const subcollectionRef5Global = collection(globalGuideRef, 'placesToVisit');
+        const subcollectionSnapshot1Global = await getDocs(subcollectionRef1Global);
+        const subcollectionSnapshot2Global = await getDocs(subcollectionRef2Global);
+        const subcollectionSnapshot3Global = await getDocs(subcollectionRef3Global);
+        const subcollectionSnapshot4Global = await getDocs(subcollectionRef4Global);
+        const subcollectionSnapshot5Global = await getDocs(subcollectionRef5Global);
+        
+        if (subcollectionSnapshot1 && !subcollectionSnapshot1.empty) {
+          for (let doc of subcollectionSnapshot1.docs) {
+            await deleteDoc(doc.ref);
+          }
         }
-      }
 
-      if (subcollectionSnapshot2 && !subcollectionSnapshot2.empty) {
-        for (let doc of subcollectionSnapshot2.docs) {
-          await deleteDoc(doc.ref);
+        if (subcollectionSnapshot2 && !subcollectionSnapshot2.empty) {
+          for (let doc of subcollectionSnapshot2.docs) {
+            await deleteDoc(doc.ref);
+          }
         }
-      }
 
-      if (subcollectionSnapshot3 && !subcollectionSnapshot3.empty) {
-        for (let doc of subcollectionSnapshot3.docs) {
-          await deleteDoc(doc.ref);
+        if (subcollectionSnapshot3 && !subcollectionSnapshot3.empty) {
+          for (let doc of subcollectionSnapshot3.docs) {
+            await deleteDoc(doc.ref);
+          }
         }
-      }
 
-      if (subcollectionSnapshot4 && !subcollectionSnapshot4.empty) {
-        for (let doc of subcollectionSnapshot4.docs) {
-          await deleteDoc(doc.ref);
+        if (subcollectionSnapshot4 && !subcollectionSnapshot4.empty) {
+          for (let doc of subcollectionSnapshot4.docs) {
+            await deleteDoc(doc.ref);
+          }
         }
-      }
 
-      if (subcollectionSnapshot5 && !subcollectionSnapshot5.empty) {
-        for (let doc of subcollectionSnapshot5.docs) {
-          await deleteDoc(doc.ref);
+        if (subcollectionSnapshot5 && !subcollectionSnapshot5.empty) {
+          for (let doc of subcollectionSnapshot5.docs) {
+            await deleteDoc(doc.ref);
+          }
         }
-      }
 
-      if (subcollectionSnapshot1Global && !subcollectionSnapshot1Global.empty) {
-        for (let doc of subcollectionSnapshot1Global.docs) {
-          await deleteDoc(doc.ref);
+        if (subcollectionSnapshot1Global && !subcollectionSnapshot1Global.empty) {
+          for (let doc of subcollectionSnapshot1Global.docs) {
+            await deleteDoc(doc.ref);
+          }
         }
-      }
 
-      if (subcollectionSnapshot2Global && !subcollectionSnapshot2Global.empty) {
-        for (let doc of subcollectionSnapshot2Global.docs) {
-          await deleteDoc(doc.ref);
+        if (subcollectionSnapshot2Global && !subcollectionSnapshot2Global.empty) {
+          for (let doc of subcollectionSnapshot2Global.docs) {
+            await deleteDoc(doc.ref);
+          }
         }
-      }
 
-      if (subcollectionSnapshot3Global && !subcollectionSnapshot3Global.empty) {
-        for (let doc of subcollectionSnapshot3Global.docs) {
-          await deleteDoc(doc.ref);
+        if (subcollectionSnapshot3Global && !subcollectionSnapshot3Global.empty) {
+          for (let doc of subcollectionSnapshot3Global.docs) {
+            await deleteDoc(doc.ref);
+          }
         }
-      }
 
-      if (subcollectionSnapshot4Global && !subcollectionSnapshot4Global.empty) {
-        for (let doc of subcollectionSnapshot4Global.docs) {
-          await deleteDoc(doc.ref);
+        if (subcollectionSnapshot4Global && !subcollectionSnapshot4Global.empty) {
+          for (let doc of subcollectionSnapshot4Global.docs) {
+            await deleteDoc(doc.ref);
+          }
         }
-      }
 
-      if (subcollectionSnapshot5Global && !subcollectionSnapshot5Global.empty) {
-        for (let doc of subcollectionSnapshot5Global.docs) {
-          await deleteDoc(doc.ref);
+        if (subcollectionSnapshot5Global && !subcollectionSnapshot5Global.empty) {
+          for (let doc of subcollectionSnapshot5Global.docs) {
+            await deleteDoc(doc.ref);
+          }
         }
-      }
 
-      const storage = getStorage()
-      const folderRef = ref(storage, `users/${this.userEmail}/guides/${this.selectedGuide.Guide_Title}`)
-      listAll(folderRef).then((res) => {
-        res.items.forEach((itemRef) => {
-          deleteObject(itemRef)
+        const storage = getStorage()
+        const folderRef = ref(storage, `users/${this.userEmail}/guides/${this.selectedGuide.Guide_Title}`)
+        listAll(folderRef).then((res) => {
+          res.items.forEach((itemRef) => {
+            deleteObject(itemRef)
+          })
         })
-      })
-      
-      await deleteDoc(guideRef);
-      await deleteDoc(globalGuideRef);
-      this.showDeleteGuideModal = false;
-      localStorage.setItem('showToastGuideDelete', 'true')
-      location.reload()
+        
+        await deleteDoc(guideRef);
+        await deleteDoc(globalGuideRef);
+        this.showDeleteGuideModal = false;
+        localStorage.setItem('showToastGuideDelete', 'true')
+        location.reload()
+      }
     }
   },
   mounted() {
     const auth = getAuth();
     onAuthStateChanged(auth, async (user) => {
-      if (user) {
+      if (user && user.email) {
         this.userEmail = user.email;
         const userRef = doc(db, 'users', user.email);
         

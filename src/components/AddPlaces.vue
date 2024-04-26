@@ -257,6 +257,7 @@ export default {
         this.lng = place.geometry.location.lng();
         console.log(this.location);
         console.log("Place:", this.lat, this.lng);
+        this.$emit('location-updated', this.location);
         this.$emit('lat-updated', this.lat);
         this.$emit('lng-updated', this.lng);
       })

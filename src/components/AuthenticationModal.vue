@@ -78,18 +78,31 @@
                   >
                     Password
                   </label>
-                  <input
-                    class="shadow appearance-none border rounded-md w-full py-2 px-3 text-gray-700 mb-3 leading-tight font-['Poppins'] focus:outline-none focus:shadow-outline"
-                    id="password"
-                    type="password"
-                    v-model="password"
-                    placeholder="Enter your password"
-                  />
+                  <div class="relative shadow border rounded-md w-full py-2 px-3 text-gray-700 mb-3 leading-tight font-['Poppins']">
+                    <input
+                      :type="loginPasswordFieldType"
+                      v-model="password"
+                      class="w-full pr-12 focus:outline-none"
+                      placeholder="Enter your password"
+                    />
+                    <button 
+                      type="button"
+                      @click="togglePasswordVisibilityLogin" 
+                      class="absolute inset-y-0 right-0 px-3 py-2"
+                      :aria-label="loginPasswordFieldType === 'password' ? 'Show password' : 'Hide password'"
+                    >
+                      <component :is="loginPasswordFieldType === 'password' ? EyeSlashIcon : EyeIcon" class="h-5 w-5 text-gray-500"/>
+                    </button>
+                  </div>
 
-                  <!--div class="flex text-right items-end justify-end font-bold text-sm text-blue-500 hover:text-blue-800 hover:cursor-pointer">
-                    Forgot Password?
-                  </div-->
+                  <div class="flex items-end justify-end">
+                    <a class="font-semibold text-sm text-blue-500 hover:text-blue-800 hover:cursor-pointer">
+                      Forgot Password?
+                    </a>
+                  </div>
+
                 </div>
+
 
                 <button
                   class="bg-blue-500 hover:bg-blue-700 text-white block w-full py-2 px-4 mb-4 rounded focus:outline-none focus:shadow-outline"
@@ -194,13 +207,22 @@
                   >
                     Password
                   </label>
-                  <input
-                    class="shadow appearance-none border rounded-md w-full py-2 px-3 text-gray-700 mb-3 leading-tight font-['Poppins'] focus:outline-none focus:shadow-outline"
-                    id="signUpPassword"
-                    type="password"
-                    v-model="signUpPassword"
-                    placeholder="Enter your password"
-                  />
+                  <div class="relative shadow border rounded-md w-full py-2 px-3 text-gray-700 mb-3 leading-tight font-['Poppins']">
+                    <input
+                      :type="passwordFieldType"
+                      v-model="signUpPassword"
+                      class="w-full pr-12 focus:outline-none"
+                      placeholder="Enter your password"
+                    />
+                    <button 
+                      type="button"
+                      @click="togglePasswordVisibility" 
+                      class="absolute inset-y-0 right-0 px-3 py-2"
+                      :aria-label="passwordFieldType === 'password' ? 'Show password' : 'Hide password'"
+                    >
+                      <component :is="passwordFieldType === 'password' ? EyeSlashIcon : EyeIcon" class="h-5 w-5 text-gray-500"/>
+                    </button>
+                  </div>
                 </div>
 
                 <div class="mb-4">
@@ -210,13 +232,22 @@
                   >
                     Confirm Password
                   </label>
-                  <input
-                    class="shadow appearance-none border rounded-md w-full py-2 px-3 text-gray-700 mb-3 leading-tight font-['Poppins'] focus:outline-none focus:shadow-outline"
-                    id="signUpConfirmPassword"
-                    type="password"
-                    v-model="signUpConfirmPassword"
-                    placeholder="Confirm your password"
-                  />
+                  <div class="relative shadow border rounded-md w-full py-2 px-3 text-gray-700 mb-3 leading-tight font-['Poppins']">
+                    <input
+                      :type="confirmPasswordFieldType"
+                      v-model="signUpConfirmPassword"
+                      class="w-full pr-12 focus:outline-none"
+                      placeholder="Confirm your password"
+                    />
+                    <button 
+                      type="button"
+                      @click="togglePasswordVisibilityConfirmPassword" 
+                      class="absolute inset-y-0 right-0 px-3 py-2"
+                      :aria-label="confirmPasswordFieldType === 'password' ? 'Show password' : 'Hide password'"
+                    >
+                      <component :is="confirmPasswordFieldType === 'password' ? EyeSlashIcon : EyeIcon" class="h-5 w-5 text-gray-500"/>
+                    </button>
+                  </div>
                 </div>
 
                 <button
@@ -267,7 +298,6 @@ import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessu
 import { firebaseApp, db } from '@/firebase'
 import { doc, setDoc } from 'firebase/firestore'
 import {
-
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -277,6 +307,10 @@ import {
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
+
+import { EyeIcon } from '@heroicons/vue/16/solid'
+import { EyeSlashIcon } from '@heroicons/vue/16/solid'
+
 const $toast = useToast()
 
 // Props declaration if not already done
@@ -284,16 +318,12 @@ const props = defineProps({
   open: Boolean
 })
 
-open.value = ref(false)
-const login = ref(true)
+const isOpen = ref(props.open);  // Rename 'open' to 'isOpen' to avoid conflict with the prop 'open'
+watch(() => props.open, (newVal) => {
+  isOpen.value = newVal;
+});
 
-// Watch for external changes to the `open` prop and update the local state
-watch(
-  () => props.open,
-  (newVal) => {
-    open.value = newVal
-  }
-)
+const login = ref(true);
 
 const router = useRouter()
 
@@ -304,7 +334,25 @@ const signUpEmail = ref('')
 const signUpPassword = ref('')
 const signUpConfirmPassword = ref('')
 
+const passwordFieldType = ref('password')
+const loginPasswordFieldType = ref('password')
+const confirmPasswordFieldType = ref('password')
+
 const provider = new GoogleAuthProvider()
+
+function togglePasswordVisibility() {
+  passwordFieldType.value = passwordFieldType.value === 'password' ? 'text' : 'password'
+}
+
+function togglePasswordVisibilityLogin() {
+  loginPasswordFieldType.value = loginPasswordFieldType.value === 'password' ? 'text' : 'password'
+}
+
+function togglePasswordVisibilityConfirmPassword() {
+  confirmPasswordFieldType.value = confirmPasswordFieldType.value === 'password' ? 'text' : 'password'
+}
+
+
 
 const SignIn = () => {
   const auth = getAuth(firebaseApp)
@@ -361,7 +409,10 @@ async function SignInWithGoogle() {
     .then((result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
       const credential = GoogleAuthProvider.credentialFromResult(result)
-      const token = credential.accessToken
+      if (!credential) {
+        throw new Error('No credentials returned from Google');
+      }
+      //const token = credential.accessToken
       // The signed-in user info.
       const user = result.user
       // IdP data available using getAdditionalUserInfo(result)
@@ -373,12 +424,12 @@ async function SignInWithGoogle() {
     })
     .catch((error) => {
       // Handle Errors here.
-      const errorCode = error.code
+      // const errorCode = error.code
       const errorMessage = error.message
       // The email of the user's account used.
-      const email = error.customData.email
+      // const email = error.customData.email
       // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error)
+      // const credential = GoogleAuthProvider.credentialFromError(error)
       // ...
       $toast.error(errorMessage, {
         position: 'top'
@@ -389,8 +440,8 @@ async function SignInWithGoogle() {
 const emit = defineEmits(['close'])
 
 function closeModal() {
-  open.value = false
-  emit('close')
+  isOpen.value = false;
+  emit('close');
 }
 
 async function addUser() {
@@ -406,7 +457,7 @@ async function addUser() {
   }
 }
 
-async function addUserGoogle(email) {
+async function addUserGoogle(email : any) {
   try {
     await setDoc(doc(db, "users", email), {
       email: email,
