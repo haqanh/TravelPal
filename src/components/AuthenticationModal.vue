@@ -94,7 +94,15 @@
                       <component :is="loginPasswordFieldType === 'password' ? EyeSlashIcon : EyeIcon" class="h-5 w-5 text-gray-500"/>
                     </button>
                   </div>
+
+                  <div class="flex items-end justify-end">
+                    <a class="font-semibold text-sm text-blue-500 hover:text-blue-800 hover:cursor-pointer">
+                      Forgot Password?
+                    </a>
+                  </div>
+
                 </div>
+
 
                 <button
                   class="bg-blue-500 hover:bg-blue-700 text-white block w-full py-2 px-4 mb-4 rounded focus:outline-none focus:shadow-outline"
