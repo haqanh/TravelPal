@@ -4,11 +4,7 @@
       <li>
         <h5 class="text-xl font-semibold mb-4 text-left">Bucket List 🌍</h5>
         <ul class="grid grid-cols-2 gap-2">
-          <li
-            v-for="(country, index) in userData.Bucket_List"
-            :key="index"
-            class="country-item"
-          >
+          <li v-for="(country, index) in userData.Bucket_List" :key="index" class="country-item">
             <span :class="getFlagClass(country)"></span>
             <span class="country-name">{{ country }}</span>
           </li>
@@ -49,10 +45,10 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 // Define a type for the user data to resolve the TypeScript errors
 type UserData = {
-  Bucket_List: string[],
-  Distance_Travelled: number,
-  Num_Visited: number,
-  Steps: number,
+  Bucket_List: string[]
+  Distance_Travelled: number
+  Num_Visited: number
+  Steps: number
 }
 
 export default {
@@ -63,7 +59,7 @@ export default {
         Bucket_List: [],
         Distance_Travelled: 0,
         Num_Visited: 0,
-        Steps: 0,
+        Steps: 0
       } as UserData // Cast the initial object to the UserData type
     }
   },
@@ -74,15 +70,17 @@ export default {
     initAuthListener() {
       const auth = getAuth()
       onAuthStateChanged(auth, async (user) => {
-        if (user && user.email) { // Check that email is not null
-          this.fetchUserData(user.email);
-          console.log(user.email);
+        if (user && user.email) {
+          // Check that email is not null
+          this.fetchUserData(user.email)
+          console.log(user.email)
         } else {
-          console.log('User is not logged in');
+          console.log('User is not logged in')
         }
-      });
+      })
     },
-    async fetchUserData(email: string) { // Add the string type annotation to email
+    async fetchUserData(email: string) {
+      // Add the string type annotation to email
       try {
         const userRef = doc(db, 'users', email)
         const userSnapshot = await getDoc(userRef)
@@ -98,14 +96,15 @@ export default {
         console.error('Error fetching user data:', error)
       }
     },
-    formatNumber(number: number) { // Add the number type annotation to number
+    formatNumber(number: number) {
+      // Add the number type annotation to number
       if (number === undefined || isNaN(number)) {
-        return '0';
+        return '0'
       }
-      return number.toLocaleString();
+      return number.toLocaleString()
     },
     getFlagClass(country: string): string {
-      if (!country) return 'fi'; // Add a check for null or undefined
+      if (!country) return 'fi' // Add a check for null or undefined
 
       const countryCodes: Record<string, string> = {
         Albania: 'fi fi-al',
@@ -309,14 +308,8 @@ export default {
         Congo: 'fi fi-cg',
         Burkina: 'fi fi-bf',
         Bosnia: 'fi fi-ba',
-        Bolivia: 'fi fi-bo',
-        Bhutan: 'fi fi-bt',
-        Belarus: 'fi fi-by',
-        Belize: 'fi fi-bz',
-        Belgium: 'fi fi-be',
-        Barbados: 'fi fi-bb',
         Afghanistan: 'fi fi-af',
-        Antigua: 'fi fi-ag',
+        Antigua: 'fi fi-ag'
       }
       return countryCodes[country] || 'fi' // Default class if country code not found
     }
