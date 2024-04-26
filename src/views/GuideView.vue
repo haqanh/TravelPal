@@ -31,8 +31,8 @@
             General Advice
           </h1>
           <h1 class="text-md 2xl:text-lg my-1 2xl:my-4 text-justify text-gray-600">
-            <h1 v-for="advice in generalAdvice" :key="advice.id">
-              {{ advice.content }}
+            <h1 class="2xl:my-2" v-for="advice in generalAdvice" :key="advice.id">
+              >  {{ advice.content }}
             </h1>
           </h1>
         </section>
