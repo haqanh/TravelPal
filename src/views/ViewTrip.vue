@@ -20,7 +20,7 @@
       <div class="p-6">
         <div class="tags-dates-cost mb-8">
           <div class="tags text-xl mb-4">
-            <GlobalTag v-for="tag in tags" :tagCategory="tag"/>
+            <GlobalTag v-for="(tag, index) in tags" :key="index" :tagCategory="tag" :style="{ marginRight: '0.5rem', marginBottom: '0.5rem' }"/>
           </div>
           <div class="dates mb-4">
             <span class="date text-xl"
@@ -204,13 +204,6 @@ export default {
   flex-direction: column;
 }
 
-.tag {
-  display: inline-block;
-  background-color: #efefef;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  margin-right: 0.25rem;
-}
 .photo-card {
   border-radius: 30px;
   width: 100%;
