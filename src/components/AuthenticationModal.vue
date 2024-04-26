@@ -78,17 +78,22 @@
                   >
                     Password
                   </label>
-                  <input
-                    class="shadow appearance-none border rounded-md w-full py-2 px-3 text-gray-700 mb-3 leading-tight font-['Poppins'] focus:outline-none focus:shadow-outline"
-                    id="password"
-                    type="password"
-                    v-model="password"
-                    placeholder="Enter your password"
-                  />
-
-                  <!--div class="flex text-right items-end justify-end font-bold text-sm text-blue-500 hover:text-blue-800 hover:cursor-pointer">
-                    Forgot Password?
-                  </div-->
+                  <div class="relative shadow border rounded-md w-full py-2 px-3 text-gray-700 mb-3 leading-tight font-['Poppins']">
+                    <input
+                      :type="loginPasswordFieldType"
+                      v-model="password"
+                      class="w-full pr-12 focus:outline-none"
+                      placeholder="Enter your password"
+                    />
+                    <button 
+                      type="button"
+                      @click="togglePasswordVisibilityLogin" 
+                      class="absolute inset-y-0 right-0 px-3 py-2"
+                      :aria-label="loginPasswordFieldType === 'password' ? 'Show password' : 'Hide password'"
+                    >
+                      <component :is="loginPasswordFieldType === 'password' ? EyeSlashIcon : EyeIcon" class="h-5 w-5 text-gray-500"/>
+                    </button>
+                  </div>
                 </div>
 
                 <button
@@ -194,13 +199,22 @@
                   >
                     Password
                   </label>
-                  <input
-                    class="shadow appearance-none border rounded-md w-full py-2 px-3 text-gray-700 mb-3 leading-tight font-['Poppins'] focus:outline-none focus:shadow-outline"
-                    id="signUpPassword"
-                    type="password"
-                    v-model="signUpPassword"
-                    placeholder="Enter your password"
-                  />
+                  <div class="relative shadow border rounded-md w-full py-2 px-3 text-gray-700 mb-3 leading-tight font-['Poppins']">
+                    <input
+                      :type="passwordFieldType"
+                      v-model="signUpPassword"
+                      class="w-full pr-12 focus:outline-none"
+                      placeholder="Enter your password"
+                    />
+                    <button 
+                      type="button"
+                      @click="togglePasswordVisibility" 
+                      class="absolute inset-y-0 right-0 px-3 py-2"
+                      :aria-label="passwordFieldType === 'password' ? 'Show password' : 'Hide password'"
+                    >
+                      <component :is="passwordFieldType === 'password' ? EyeSlashIcon : EyeIcon" class="h-5 w-5 text-gray-500"/>
+                    </button>
+                  </div>
                 </div>
 
                 <div class="mb-4">
@@ -210,13 +224,22 @@
                   >
                     Confirm Password
                   </label>
-                  <input
-                    class="shadow appearance-none border rounded-md w-full py-2 px-3 text-gray-700 mb-3 leading-tight font-['Poppins'] focus:outline-none focus:shadow-outline"
-                    id="signUpConfirmPassword"
-                    type="password"
-                    v-model="signUpConfirmPassword"
-                    placeholder="Confirm your password"
-                  />
+                  <div class="relative shadow border rounded-md w-full py-2 px-3 text-gray-700 mb-3 leading-tight font-['Poppins']">
+                    <input
+                      :type="confirmPasswordFieldType"
+                      v-model="signUpConfirmPassword"
+                      class="w-full pr-12 focus:outline-none"
+                      placeholder="Confirm your password"
+                    />
+                    <button 
+                      type="button"
+                      @click="togglePasswordVisibilityConfirmPassword" 
+                      class="absolute inset-y-0 right-0 px-3 py-2"
+                      :aria-label="confirmPasswordFieldType === 'password' ? 'Show password' : 'Hide password'"
+                    >
+                      <component :is="confirmPasswordFieldType === 'password' ? EyeSlashIcon : EyeIcon" class="h-5 w-5 text-gray-500"/>
+                    </button>
+                  </div>
                 </div>
 
                 <button
@@ -276,6 +299,10 @@ import {
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
+
+import { EyeIcon } from '@heroicons/vue/16/solid'
+import { EyeSlashIcon } from '@heroicons/vue/16/solid'
+
 const $toast = useToast()
 
 // Props declaration if not already done
@@ -299,7 +326,25 @@ const signUpEmail = ref('')
 const signUpPassword = ref('')
 const signUpConfirmPassword = ref('')
 
+const passwordFieldType = ref('password')
+const loginPasswordFieldType = ref('password')
+const confirmPasswordFieldType = ref('password')
+
 const provider = new GoogleAuthProvider()
+
+function togglePasswordVisibility() {
+  passwordFieldType.value = passwordFieldType.value === 'password' ? 'text' : 'password'
+}
+
+function togglePasswordVisibilityLogin() {
+  loginPasswordFieldType.value = loginPasswordFieldType.value === 'password' ? 'text' : 'password'
+}
+
+function togglePasswordVisibilityConfirmPassword() {
+  confirmPasswordFieldType.value = confirmPasswordFieldType.value === 'password' ? 'text' : 'password'
+}
+
+
 
 const SignIn = () => {
   const auth = getAuth(firebaseApp)
