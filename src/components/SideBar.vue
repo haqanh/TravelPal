@@ -298,7 +298,9 @@ export default {
         Vietnam: 'fi fi-vn',
         Yemen: 'fi fi-ye',
         Zambia: 'fi fi-zm',
-        Zimbabwe: 'fi fi-zw'
+        Zimbabwe: 'fi fi-zw',
+        USA: 'fi fi-us',
+        'Holy See': 'fi fi-va',
       }
       return countryCodes[country] || 'fi' // Default class if country code not found
     }
