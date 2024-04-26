@@ -22,7 +22,7 @@ export default {
         'Fiji', 'Finland', 'France',
         'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada', 'Guatemala', 'Guinea', 'Guyana',
         'Haiti', 'Holy See', 'Honduras', 'Hungary',
-        'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy',
+        'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Italy',
         'Jamaica', 'Japan', 'Jordan',
         'Kazakhstan', 'Kenya', 'Kiribati', 'Korea, South', 'Kosovo', 'Kuwait', 'Kyrgyzstan',
         'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg',
