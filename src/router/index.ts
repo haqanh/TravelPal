@@ -44,12 +44,6 @@ const router = createRouter({
         requiresAuth: true,
       }
     },
-    // {
-    //   path: '/viewtrip',
-    //   name: 'viewtrip',
-    //   component: ViewTrip
-    // },
-    //{ path: '/sidebar', name: 'sidebar', component: Sidebar },
     {
       path: '/userprofiling',
       name: 'userprofiling',
