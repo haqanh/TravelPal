@@ -255,6 +255,9 @@ export default {
 </script>
 
 <style scoped>
+nav {
+  z-index: 9999999; /* Adjust as needed */
+}
 .dropdown-toggle {
   background-color: transparent;
   border: none;
@@ -265,6 +268,7 @@ export default {
   max-height: 100vh; /* Set to a large value */
   overflow: hidden;
   transition: max-height 0.3s ease; /* Increased duration to 0.6s */
+  z-index: 99999999; /* Set a high z-index value */
 }
 
 .dropdown-menu.slide-enter-active,
